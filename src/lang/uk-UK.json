@@ -1,0 +1,50 @@
+{
+    "MESSAGES": {
+        "START_MESSAGE": "Привіт, я бот!",
+        "SUCCESSFULL_REGISTER": "Успішна реєстрація!",
+        "INFO_REGISTER": "Інформація про реєстрацію...",
+        "MENU_OPEN": "Меню '{}'. Оберіть потрібну опцію.",
+        "BACK": "Повернулись в {}. Оберіть потрібну опцію."
+    },
+    "BUTTONS": {
+        "REGISTRATION_MENU": {
+            "REGISTER": "➕ Реєстрація",
+            "INFO": "❓ Що буде з моїми даними?"
+        },
+        "MAIN_MENU": {
+            "DONATION": "🩸 Донація",
+            "SETTINGS": "⚙️ Налаштування",
+            "FEEDBACK": "📞 Зворотній зв’язок",
+            "LANGUAGES": "🌐 Мовна підтримка"
+        },
+        "DONATION_MENU": {
+            "REGISTER": "🙋 Запис на донацію",
+            "FIND_CENTERS": "🔎 Пошук центрів",
+            "WORK_TIME": "🕰 Графік роботи",
+            "SEND_RESULTS": "✅ Надіслати",
+            "INFO": "ℹ️ Інформація"
+        },
+        "SETTINGS_MENU": {
+            "NOTIFICATIONS": "💡 Сповіщення та нагадування",
+            "SECURITY": "🔒 Безпека і конфіденційність"
+        },
+        "FEEDBACK_MENU": {
+            "FAST_ANS1": "🐶 Проблема",
+            "FAST_ANS2": "🐭 Проблема",
+            "FAST_ANS3": "🦑 Проблема",
+            "FAST_ANS4": "🦊 Проблема",
+            "FAST_ANS5": "🐥 Проблема",
+            "FAST_ANS6": "🐌 Проблема",
+            "NEED_OPERATOR": "🎧 Звернутись до оператора"
+        },
+        "LANGUAGES_MENU": {
+            "UK": "🇺🇦 Український",
+            "EN": "🇬🇧 English",
+            "RU": "🇷🇺 Русский",
+            "DE": "🇩🇪 Deutsch",
+            "CN": "🇨🇳 中国人",
+            "FR": "🇫🇷 Français"
+        },
+        "MENU": "🏠 Головне меню"
+    }
+}
