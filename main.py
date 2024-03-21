@@ -5,9 +5,9 @@ from aiogram import Bot, Dispatcher
 
 from src.classes.HandlersController import HandlersController
 from src.classes.KeyboardsController import KeyboardsController, KB
-# from src.classes.DatabaseController import DatabaseController
+from src.classes.DatabaseController import DatabaseController
 
-# DatabaseController().setup_database()
+DatabaseController().setup_database()
 
 from handlers_imports import *
 from keyboards_imports import *

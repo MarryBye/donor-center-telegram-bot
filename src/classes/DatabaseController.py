@@ -26,6 +26,10 @@ class DatabaseController(metaclass=Singleton):
         
         self.connect()
         
+        query = 'DELETE FROM crm.blood'
+        
+        self.__cursor.execute(query)
+        
         bloods = (
             (1, "AB", "+"),
             (2, "AB", "-"),
@@ -48,6 +52,10 @@ class DatabaseController(metaclass=Singleton):
         
         self.connect()
         
+        query = 'DELETE FROM crm.language'
+        
+        self.__cursor.execute(query)
+        
         languages = (
             (1, "cn-CN"),
             (2, "de-DE"),
@@ -68,6 +76,10 @@ class DatabaseController(metaclass=Singleton):
         
         self.connect()
         
+        query = 'DELETE FROM crm.city'
+        
+        self.__cursor.execute(query)
+        
         cities = (
             (1, "Odessa"),
             (2, "Kiyv"),
@@ -84,6 +96,10 @@ class DatabaseController(metaclass=Singleton):
     def add_regions(self):
         
         self.connect()
+        
+        query = 'DELETE FROM crm.region'
+        
+        self.__cursor.execute(query)
         
         regions = (
             (1, "Odes`ka Oblast"),
@@ -102,6 +118,10 @@ class DatabaseController(metaclass=Singleton):
         
         self.connect()
         
+        query = 'DELETE FROM crm.street'
+        
+        self.__cursor.execute(query)
+        
         streets = (
             (1, "Generala Petrova, 66"),
             (2, "Akademika Koroliova, 3"),
@@ -119,6 +139,10 @@ class DatabaseController(metaclass=Singleton):
     def add_areas(self):
         
         self.connect()
+        
+        query = 'DELETE FROM crm.area'
+        
+        self.__cursor.execute(query)
         
         areas = (
             (1, "Area1"),
@@ -140,6 +164,10 @@ class DatabaseController(metaclass=Singleton):
         
         self.connect()
         
+        query = 'DELETE FROM crm.address'
+        
+        self.__cursor.execute(query)
+        
         addresses = (
             (1, 2, 2, 2, 2),
             (2, 2, 3, 1, 2),
@@ -154,6 +182,72 @@ class DatabaseController(metaclass=Singleton):
         self.__connection.commit()
         
         self.disconnect()
+        
+    def add_statuses(self):
+        
+        self.connect()
+        
+        query = 'DELETE FROM crm.status'
+        
+        self.__cursor.execute(query)
+        
+        statuses = (
+            (1, "Success"),
+            (2, "Unsuccess")
+        )
+        
+        query = 'INSERT INTO crm.status ("ID", "status_name") VALUES (%s, %s)'
+        
+        self.__cursor.executemany(query, statuses)
+        self.__connection.commit()
+        
+        self.disconnect()
+        
+    def add_clinics(self):
+        
+        self.connect()
+        
+        query = 'DELETE FROM crm.clinic'
+        
+        self.__cursor.execute(query)
+        
+        clinics = (
+            (1, "Клиника АДЫН", "12:00:00", 1),
+            (2, "Клиника СЕКОНД", "15:00:00", 2),
+            (3, "Клиника ТРЫЫЫЫ", "13:00:00", 3),
+            (4, "Клиника ЧОТЫРИ", "14:00:00", 4),
+            (5, "Клиника ФАААААЙФФВВВ", "16:30:00", 5)
+        )
+        
+        query = 'INSERT INTO crm.clinic ("ID", "clinic_name", "working_hours", "address_ID") VALUES (%s, %s, %s, %s)'
+        
+        self.__cursor.executemany(query, clinics)
+        self.__connection.commit()
+        
+        self.disconnect()
+        
+    def add_doctors(self):
+        
+        self.connect()
+        
+        query = 'DELETE FROM crm.doctor'
+        
+        self.__cursor.execute(query)
+        
+        doctors = (
+            (1, "Иван", "Пипабоди", 1, 1),
+            (2, "Ванька", "Фистер", 2, 2),
+            (3, "Женя", "Эйналщик", 3, 3),
+            (4, "Михаил", "Темщик-Схемщик", 4, 4),
+            (5, "Кчаур", "Автобус", 5, 5)
+        )
+        
+        query = 'INSERT INTO crm.doctor ("ID", "doctor_name", "specialization", "address_ID", "clinic_ID") VALUES (%s, %s, %s, %s, %s)'
+        
+        self.__cursor.executemany(query, doctors)
+        self.__connection.commit()
+        
+        self.disconnect() 
         
     def get_user(self, id: Union[int, str]) -> Union[tuple, bool]:
         
@@ -197,11 +291,35 @@ class DatabaseController(metaclass=Singleton):
         
     def setup_database(self):
         
+        print("\t\tНАСТРОЙКА БАЗЫ ДАННЫХ")
+        print("Выполняется заполнение таблиц стандартными значениями")
+        
         self.add_bloods()
+        print("Таблица крови заполнена!")
+        
         self.add_languages()
+        print("Таблица языков заполнена!")
+        
+        self.add_statuses()
+        print("Таблица статусов заполнена!")
         
         self.add_streets()
+        print("Таблица улиц заполнена!")
+        
         self.add_areas()
+        print("Таблица ХЗ запонена!")
+        
         self.add_regions()
+        print("Таблица регионов заполнена!")
+        
         self.add_cities()
+        print("Таблица городов заполнена!")
+        
         self.add_addresses()
+        print("Таблица адресов заполнена!")
+        
+        self.add_clinics()
+        print("Таблица клиник заполнена!")
+        
+        self.add_doctors()
+        print("Таблица докторов заполнена!")
