@@ -4,6 +4,7 @@ import config as cfg
 from typing import Union
 
 from src.classes.Singleton import Singleton
+from src.classes.Keyboards import KeyboardController
 
 class DatabaseController(metaclass=Singleton):
     def __init__(self):
@@ -249,13 +250,13 @@ class DatabaseController(metaclass=Singleton):
         
         self.disconnect() 
         
-    def get_user(self, id: Union[int, str]) -> Union[tuple, bool]:
+    def get_user(self, user_id: Union[int, str]) -> Union[tuple, bool]:
         
         self.connect()
 
         query = 'SELECT * FROM crm.donor WHERE "ID" = %s'
 
-        self.__cursor.execute(query, (id, ))
+        self.__cursor.execute(query, (user_id, ))
         data = self.__cursor.fetchone()
         
         self.disconnect()
@@ -284,7 +285,7 @@ class DatabaseController(metaclass=Singleton):
         
         self.disconnect()
         
-    def set_user_language(self, id: Union[int, str], language: str):
+    def set_user_language(self, user_id: Union[int, str], language: str):
         self.connect()
         
         query = 'SELECT "ID" FROM crm.language WHERE language."language_name" = %s'
@@ -294,19 +295,19 @@ class DatabaseController(metaclass=Singleton):
         
         query = 'UPDATE crm.donor SET "language_ID" = %s WHERE "ID" = %s'
         
-        self.__cursor.execute(query, (data, id))
+        self.__cursor.execute(query, (data, user_id))
         self.__connection.commit()
         
         self.disconnect()
         
-    def get_user_language(self, id: Union[int, str]) -> str:
+    def get_user_language(self, user_id: Union[int, str]) -> str:
         '''Повертає назву мови, яку хоче використовувати користувач. Назва співпадає з назвами файлів у директорії lang.'''
         
         self.connect()
         
         query = 'SELECT language_name FROM crm.donor, crm.language WHERE donor."language_ID" = language."ID" AND donor."ID" = %s'
         
-        self.__cursor.execute(query, (id, ))
+        self.__cursor.execute(query, (user_id, ))
         data = self.__cursor.fetchone()
         
         self.disconnect()

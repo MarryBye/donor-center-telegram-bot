@@ -7,8 +7,8 @@
         "BACK": "Повернулись в {}. Оберіть потрібну опцію."
     },
     "BUTTONS": {
-        "REG_MENU_REGISTER": "➕ Реєстрація",
-        "REG_MENU_INFO": "❓ Що буде з моїми даними?",
+        "REG_MENU_REGISTER": "➕ Inscription",
+        "REG_MENU_INFO": "❓ Qu'adviendra-t-il de mes données?",
 
         "MAIN_MENU_DONATION": "🩸 Донація",
         "MAIN_MENU_SETTINGS": "⚙️ Налаштування",
