@@ -284,10 +284,34 @@ class DatabaseController(metaclass=Singleton):
         
         self.disconnect()
         
-    def set_user_language(self, ind: Union[int, str], language_ID: int):
+    def set_user_language(self, id: Union[int, str], language: str):
         self.connect()
         
+        query = 'SELECT "ID" FROM crm.language WHERE language."language_name" = %s'
+        
+        self.__cursor.execute(query, (language, ))
+        data = self.__cursor.fetchone()[0]
+        
+        query = 'UPDATE crm.donor SET "language_ID" = %s WHERE "ID" = %s'
+        
+        self.__cursor.execute(query, (data, id))
+        self.__connection.commit()
+        
         self.disconnect()
+        
+    def get_user_language(self, id: Union[int, str]) -> str:
+        '''Повертає назву мови, яку хоче використовувати користувач. Назва співпадає з назвами файлів у директорії lang.'''
+        
+        self.connect()
+        
+        query = 'SELECT language_name FROM crm.donor, crm.language WHERE donor."language_ID" = language."ID" AND donor."ID" = %s'
+        
+        self.__cursor.execute(query, (id, ))
+        data = self.__cursor.fetchone()
+        
+        self.disconnect()
+        
+        return data or (cfg.DEFAULT_LANGUAGE, )
         
     def setup_database(self):
         

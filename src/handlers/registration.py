@@ -5,20 +5,21 @@ from aiogram.filters import Command
 from src.classes.HandlersController import HandlersController
 from src.classes.KeyboardsController import KeyboardsController, KB
 from src.classes.DatabaseController import DatabaseController
-from config import MESSAGES_TEXT, BUTTONS_TEXT
+
+from src.funcs.core import get_language_phrases, is_authorized
 
 router = Router()
 
 rt_controller = HandlersController()
 kb_controller = KeyboardsController()
 
-MENU_BUTTONS = BUTTONS_TEXT["REGISTRATION_MENU"]
-REGISTER_BTN = MENU_BUTTONS["REGISTER"]
-INFO_BTN = MENU_BUTTONS["INFO"]
+MENU_BUTTONS = get_language_phrases()["BUTTONS"]["REGISTRATION_MENU"]
+REGISTER_BTN = get_language_phrases()["BUTTONS"]["REGISTER"]
+INFO_BTN = get_language_phrases()["BUTTONS"]["INFO"]
 
-start_msg = MESSAGES_TEXT["START_MESSAGE"]
-success_msg = MESSAGES_TEXT["SUCCESSFULL_REGISTER"]
-info_msg = MESSAGES_TEXT["INFO_REGISTER"]
+start_msg = get_language_phrases()["MESSAGES"]["START_MESSAGE"]
+success_msg = get_language_phrases()["MESSAGES"]["SUCCESSFULL_REGISTER"]
+info_msg = get_language_phrases()["MESSAGES"]["INFO_REGISTER"]
 
 @router.message(Command("start"))
 async def register_handler(msg: Message):

@@ -5,6 +5,9 @@ from aiogram.filters import Command
 from src.classes.HandlersController import HandlersController
 from src.classes.KeyboardsController import KeyboardsController, KB
 from src.classes.DatabaseController import DatabaseController
+
+from src.funcs.core import is_authorized
+
 from config import MESSAGES_TEXT, BUTTONS_TEXT
 
 router = Router()
@@ -22,15 +25,17 @@ menuOpen_msg = MESSAGES_TEXT["MENU_OPEN"]
 
 @router.message(F.text.startswith(DONATION_BTN))
 async def on_command(msg: Message):
-       if not DatabaseController().get_user(id=msg.from_user.id):
+       if not is_authorized(id=msg.from_user.id):
+              await msg.answer("Спочатку необхідно зареєструватись!", reply_markup=kb_controller.get_keyboard(KB.register))
               return
-       
+              
        await msg.answer(menuOpen_msg.format(DONATION_BTN), 
                      reply_markup=kb_controller.get_keyboard(KB.donation))
 
 @router.message(F.text.startswith(SETTINGS_BTN))
 async def on_command(msg: Message):
-       if not DatabaseController().get_user(id=msg.from_user.id):
+       if not is_authorized(id=msg.from_user.id):
+              await msg.answer("Спочатку необхідно зареєструватись!", reply_markup=kb_controller.get_keyboard(KB.register))
               return
        
        await msg.answer(menuOpen_msg.format(SETTINGS_BTN), 
@@ -46,7 +51,8 @@ async def on_command(msg: Message):
 
 @router.message(F.text.startswith(LANGUAGES_BTN))
 async def on_command(msg: Message):
-       if not DatabaseController().get_user(id=msg.from_user.id):
+       if not is_authorized(id=msg.from_user.id):
+              await msg.answer("Спочатку необхідно зареєструватись!", reply_markup=kb_controller.get_keyboard(KB.register))
               return
        
        await msg.answer(menuOpen_msg.format(LANGUAGES_BTN), 
