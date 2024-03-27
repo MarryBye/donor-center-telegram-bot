@@ -8,9 +8,7 @@ from src.classes.DatabaseController import DatabaseController
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController
 
-from src.funcs.core import get_language, is_authorized, get_multilang_button
-
-from src.lang.languages import LANGUAGES
+from src.funcs.core import get_multilang_button
 
 router = Router()
 

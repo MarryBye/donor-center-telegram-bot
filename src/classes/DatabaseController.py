@@ -311,7 +311,7 @@ class DatabaseController(metaclass=Singleton):
         
         self.disconnect()
         
-        return data or (cfg.DEFAULT_LANGUAGE, )
+        return data[0] if len(data) > 0 else cfg.DEFAULT_LANGUAGE
         
     def setup_database(self):
         

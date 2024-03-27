@@ -8,8 +8,6 @@ from src.classes.HandlersController import HandlersController
 from handlers_imports import *
 from keyboards_imports import *
 
-from src.lang.languages import LANGUAGES
-
 # id_my = 482613937
 
 async def main():

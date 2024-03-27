@@ -2,7 +2,7 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from typing import Union
 
 from src.classes.Singleton import Singleton
-from src.funcs.core import get_language
+from src.classes.DatabaseController import DatabaseController
 
 from src.lang.languages import LANGUAGES
 
@@ -21,9 +21,13 @@ class Keyboard:
         for buttons_row in self.name_scheme:
             scheme_buttons_row = []
             for button in buttons_row:
-                button_text_translated = LANGUAGES[get_language(user_id=user_id)]["BUTTONS"][button]
+                
+                user_language = DatabaseController().get_user_language(user_id=user_id)
+                button_text_translated = LANGUAGES[user_language]["BUTTONS"][button]
+                
                 scheme_buttons_row.append(KeyboardButton(text=button_text_translated))
             self.scheme.append(scheme_buttons_row)
+            
         return self.create_keyboard()
             
 class KeyboardController(metaclass=Singleton):
