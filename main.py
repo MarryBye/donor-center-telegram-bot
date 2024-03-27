@@ -5,12 +5,12 @@ from aiogram import Bot, Dispatcher
 
 from src.classes.HandlersController import HandlersController
 
-# DatabaseController().setup_database()
-
-id_my = 482613937
-
 from handlers_imports import *
 from keyboards_imports import *
+
+from src.lang.languages import LANGUAGES
+
+# id_my = 482613937
 
 async def main():
     

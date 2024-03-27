@@ -1,18 +1,31 @@
+from random import choice
+
 from aiogram import types, F, Router
 from aiogram.types import Message
 from aiogram.filters import Command
 
+from src.classes.DatabaseController import DatabaseController
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController
 
-from src.funcs.core import get_language_phrases, is_authorized
+from src.funcs.core import get_language, is_authorized, get_multilang_button
+
+from src.lang.languages import LANGUAGES
 
 router = Router()
 
 @router.message(Command("start"))
 async def register_handler(msg: Message):
-       await msg.reply(text="abob", reply_markup=KeyboardController().get_keyboard(KeyboardController().REGISTRATION))
        
-@router.message(F.text.startswith())
+       new_keyboard = KeyboardController().get_keyboard(KeyboardController().REGISTRATION).reload_for(msg.from_user.id)
+       await msg.reply(text="abob", reply_markup=new_keyboard)
+       
+@router.message(F.text.in_(get_multilang_button("REG_MENU_INFO")))
+async def register_info_handler(msg: Message):
+       
+       DatabaseController().set_user_language(user_id=msg.from_user.id, language=choice(["cn-CN", "en-EN", "ru-RU"]))
+       
+       new_keyboard = KeyboardController().get_keyboard(KeyboardController().REGISTRATION).reload_for(msg.from_user.id)
+       await msg.reply(text="abob", reply_markup=new_keyboard)
 
 HandlersController().add_router(router)

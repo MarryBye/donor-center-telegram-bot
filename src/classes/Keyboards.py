@@ -2,7 +2,9 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from typing import Union
 
 from src.classes.Singleton import Singleton
-from src.funcs.core import get_language_phrases
+from src.funcs.core import get_language
+
+from src.lang.languages import LANGUAGES
 
 class Keyboard:
     def __init__(self, scheme: list):
@@ -11,7 +13,7 @@ class Keyboard:
         
         self.reload_for(user_id=-1)
         
-    def get_keyboard(self) -> ReplyKeyboardMarkup:
+    def create_keyboard(self) -> ReplyKeyboardMarkup:
         return ReplyKeyboardMarkup(keyboard=self.scheme, resize_keyboard=True)
 
     def reload_for(self, user_id: Union[int, str]):
@@ -19,8 +21,10 @@ class Keyboard:
         for buttons_row in self.name_scheme:
             scheme_buttons_row = []
             for button in buttons_row:
-                scheme_buttons_row.append(KeyboardButton(text=get_language_phrases(user_id=user_id)["BUTTONS"][button]))
+                button_text_translated = LANGUAGES[get_language(user_id=user_id)]["BUTTONS"][button]
+                scheme_buttons_row.append(KeyboardButton(text=button_text_translated))
             self.scheme.append(scheme_buttons_row)
+        return self.create_keyboard()
             
 class KeyboardController(metaclass=Singleton):
     REGISTRATION = "REGISTRATION"
@@ -32,7 +36,7 @@ class KeyboardController(metaclass=Singleton):
         self.keyboards[name] = keyboard
         
     def get_keyboard(self, name: str) -> Keyboard:
-        return self.keyboards[name].get_keyboard()
+        return self.keyboards[name]
         
     
         

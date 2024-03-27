@@ -4,7 +4,6 @@ import config as cfg
 from typing import Union
 
 from src.classes.Singleton import Singleton
-from src.classes.Keyboards import KeyboardController
 
 class DatabaseController(metaclass=Singleton):
     def __init__(self):
