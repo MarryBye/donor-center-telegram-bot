@@ -7,6 +7,9 @@ from src.classes.Singleton import Singleton
 
 class DatabaseController(metaclass=Singleton):
     def __init__(self):
+        
+        self.cache = {}
+        
         self.__connection = None
         self.__cursor = None
         
@@ -311,7 +314,7 @@ class DatabaseController(metaclass=Singleton):
         
         self.disconnect()
         
-        return data[0] if len(data) > 0 else cfg.DEFAULT_LANGUAGE
+        return data[0] if type(data) == tuple and len(data) > 0 else cfg.DEFAULT_LANGUAGE
         
     def setup_database(self):
         

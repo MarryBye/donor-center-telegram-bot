@@ -20,7 +20,9 @@ async def main():
         dispatcher.include_router(rt)
     
     await bot.delete_webhook(drop_pending_updates=True)
+    print(await bot.get_my_name(), " уже работает!")
     await dispatcher.start_polling(bot)
     
 if __name__ == "__main__":
+    # DatabaseController().setup_database()
     asyncio.run(main())
