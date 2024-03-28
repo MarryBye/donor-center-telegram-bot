@@ -15,3 +15,6 @@ def is_pressed_kb_button(key: str):
 
 def message_translated(user_id: Union[int, str], key: str):
     return LANGUAGES[db.get_user_language(user_id=user_id)]["MESSAGES"][key]
+
+def button_translated(user_id: Union[int, str], key: str):
+    return LANGUAGES[db.get_user_language(user_id=user_id)]["BUTTONS"][key]

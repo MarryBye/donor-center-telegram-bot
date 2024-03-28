@@ -241,7 +241,7 @@ class DatabaseController(metaclass=Singleton):
     def set_user_language(self, user_id: Union[int, str], language: str):
         if (not str(user_id) in self.languages_cache) or (self.languages_cache[str(user_id)] != language):
             self.languages_cache[str(user_id)] = language
-            json.dump(self.languages_cache, open("bot/cache/user_languages.json", "r", encoding="UTF-8"))
+            json.dump(self.languages_cache, open("bot/cache/user_languages.json", "w", encoding="UTF-8"))
         
     def get_user_language(self, user_id: Union[int, str]) -> str:
         return self.languages_cache[str(user_id)] if str(user_id) in self.languages_cache else cfg.DEFAULT_LANGUAGE

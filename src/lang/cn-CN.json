@@ -7,23 +7,24 @@
         "SUCCESSFULL_REGISTER": "Отлично, %s! Вы закончили регистрацию в боте и получаете полный доступ ко всем возможностям.\nТакже, вы были сразу записаны на прием!",
         "INFO_REGISTER": "Інформація про реєстрацію...",
         "CHANGE_LANGUAGE": "Оберіть одну з мов, наведених нижче...",
+        "SUCCESFULLY_CHANGED_LANGUAGE": "Язык успешно изменен!",
         "MENU_OPEN": "Меню '%s'. Оберіть потрібну опцію.",
         "BACK": "Повернулись в %s. Оберіть потрібну опцію."
     },
     "BUTTONS": {
-        "MAIN_MENU_DONATION": "🩸 Донація",
-        "MAIN_MENU_SETTINGS": "⚙️ Налаштування",
-        "MAIN_MENU_FEEDBACK": "📞 Зворотній зв’язок",
-        "MAIN_MENU_LANGUAGES": "🌐 Змінити мову",
-        "MAIN_MENU_INFO": "❓ Что будет с моими данными?",
+        "MAIN_MENU_DONATION": "🩸 捐款",
+        "MAIN_MENU_SETTINGS": "⚙️ 设置",
+        "MAIN_MENU_FEEDBACK": "📞 支持",
+        "MAIN_MENU_INFO": "❓ 我的数据会怎样?",
 
         "DONATION_MENU_REGISTER": "🙋 Запис на донацію",
         "DONATION_MENU_FIND_CENTER": "🔎 Пошук центрів",
         "DONATION_MENU_WORKTIME": "🕰 Графік роботи",
         "DONATION_MENU_SEND_RESULTS": "✅ Надіслати",
 
-        "SETTINGS_MENU_NOTIFICATIONS": "💡 Сповіщення та нагадування",
-        "SETTINGS_MENU_SECURITY": "🔒 Безпека і конфіденційність",
+        "SETTINGS_MENU_NOTIFICATIONS": "💡 通知和提醒",
+        "SETTINGS_MENU_SECURITY": "🔒 安全和隐私",
+        "SETTINGS_MENU_LANGUAGES": "🌐 更改您的语言",
 
         "FEEDBACK_MENU_FAST_ANS1": "🐶 Проблема",
         "FEEDBACK_MENU_FAST_ANS2": "🐭 Проблема",
@@ -40,6 +41,7 @@
         "LANGUAGES_MENU_CN": "🇨🇳 中国人",
         "LANGUAGES_MENU_FR": "🇫🇷 Français",
         
-        "BUTTON_MENU": "🏠 Головне меню"
+        "BUTTON_HOME": "🏠 主菜单",
+        "BUTTON_BACK": "⬅️ 后退"
     }
 }

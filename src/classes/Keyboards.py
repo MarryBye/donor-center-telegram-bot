@@ -33,6 +33,8 @@ class Keyboard:
             
 class KeyboardController(metaclass=Singleton):
     MAIN = "MAIN"
+    LANGUAGES = "LANGUAGES"
+    SETTINGS = "SETTINGS"
     
     def __init__(self):
         self.keyboards = {}

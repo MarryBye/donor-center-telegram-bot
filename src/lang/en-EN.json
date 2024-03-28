@@ -7,6 +7,7 @@
         "SUCCESSFULL_REGISTER": "Great, %s! You have completed registration in the bot and have full access to all features.\nAlso, you were immediately booked for an appointment!",
         "INFO_REGISTER": "Інформація про реєстрацію...",
         "CHANGE_LANGUAGE": "Take one of the lines, placing them below...",
+        "SUCCESFULLY_CHANGED_LANGUAGE": "The language has been successfully changed!",
         "MENU_OPEN": "Меню '%s'. Оберіть потрібну опцію.",
         "BACK": "Повернулись в %s. Оберіть потрібну опцію."
     },
@@ -14,7 +15,6 @@
         "MAIN_MENU_DONATION": "🩸 Donation",
         "MAIN_MENU_SETTINGS": "⚙️ Settings",
         "MAIN_MENU_FEEDBACK": "📞 Support",
-        "MAIN_MENU_LANGUAGES": "🌐 Change your language",
         "MAIN_MENU_INFO": "❓ What will happen to my data?",
 
         "DONATION_MENU_REGISTER": "🙋 Запис на донацію",
@@ -22,8 +22,9 @@
         "DONATION_MENU_WORKTIME": "🕰 Графік роботи",
         "DONATION_MENU_SEND_RESULTS": "✅ Надіслати",
 
-        "SETTINGS_MENU_NOTIFICATIONS": "💡 Сповіщення та нагадування",
-        "SETTINGS_MENU_SECURITY": "🔒 Безпека і конфіденційність",
+        "SETTINGS_MENU_NOTIFICATIONS": "💡 Notifications and reminders",
+        "SETTINGS_MENU_SECURITY": "🔒 Security and privacy",
+        "SETTINGS_MENU_LANGUAGES": "🌐 Change your language",
 
         "FEEDBACK_MENU_FAST_ANS1": "🐶 Проблема",
         "FEEDBACK_MENU_FAST_ANS2": "🐭 Проблема",
@@ -40,6 +41,7 @@
         "LANGUAGES_MENU_CN": "🇨🇳 中国人",
         "LANGUAGES_MENU_FR": "🇫🇷 Français",
         
-        "BUTTON_MENU": "🏠 Головне меню"
+        "BUTTON_HOME": "🏠 Main menu",
+        "BUTTON_BACK": "⬅️ Back"
     }
 }

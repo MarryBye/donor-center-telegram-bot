@@ -10,7 +10,7 @@ from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController
 from src.classes.Form import RegisterForm
 
-from src.funcs.core import is_pressed_kb_button, message_translated
+from src.funcs.core import is_pressed_kb_button, message_translated, button_translated
 
 db = DatabaseController()
 hnd = HandlersController()
@@ -19,42 +19,23 @@ kb = KeyboardController()
 router = Router()
 
 @router.message(Command("start"))
-async def register_handler(msg: Message):
+async def main_handler(msg: Message):
        
-       new_keyboard = kb.get_keyboard(kb.MAIN).reload_for(msg.from_user.id)
-       bot_message = message_translated(user_id=msg.from_user.id, key="START_MESSAGE")
+       user_id = msg.from_user.id
+       
+       new_keyboard = kb.get_keyboard(kb.MAIN).reload_for(user_id)
+       bot_message = message_translated(user_id=user_id, key="START_MESSAGE")
               
        await msg.reply(text=bot_message, reply_markup=new_keyboard)
        
-# @router.message(is_pressed_kb_button("REG_MENU_REGISTER"))
-# async def register_button_handler(msg: Message):
-#        # db.add_user(id=msg.from_user.id, name="@" + msg.from_user.username, date="18-09-2004", gender="Male", language=5, blood=1)
+@router.message(is_pressed_kb_button("MAIN_MENU_SETTINGS"))
+async def main_handler(msg: Message):
        
-#        await RegisterForm.
+       user_id = msg.from_user.id
        
-#        new_keyboard = kb.get_keyboard(kb.REGISTRATION).reload_for(msg.from_user.id)
-#        bot_message = message_translated(user_id=msg.from_user.id, key="SUCCESSFULL_REGISTER")
+       new_keyboard = kb.get_keyboard(kb.SETTINGS).reload_for(user_id)
+       bot_message = message_translated(user_id=user_id, key="MENU_OPEN") % button_translated(user_id=user_id, key="MAIN_MENU_SETTINGS")
               
-#        await msg.reply(text=bot_message, reply_markup=new_keyboard)
-       
-# @router.message(is_pressed_kb_button("REG_MENU_INFO"))
-# async def register_info_handler(msg: Message):
-       
-#        print("Язык:", db.get_user_language(user_id=msg.from_user.id), db.get_user(user_id=msg.from_user.id))
-       
-#        new_keyboard = kb.get_keyboard(kb.REGISTRATION).reload_for(msg.from_user.id)
-#        bot_message = message_translated(user_id=msg.from_user.id, key="INFO_REGISTER")
-              
-#        await msg.reply(text=bot_message, reply_markup=new_keyboard)
-       
-# @router.message(is_pressed_kb_button("REG_MENU_LANGUAGES"))
-# async def register_info_handler(msg: Message):
-       
-#        db.set_user_language(user_id=msg.from_user.id, language=choice(["cn-CN", "en-EN", "ru-RU"]))
-       
-#        new_keyboard = kb.get_keyboard(kb.REGISTRATION).reload_for(msg.from_user.id)
-#        bot_message = message_translated(user_id=msg.from_user.id, key="CHANGE_LANGUAGE")
-       
-#        await msg.reply(text=bot_message, reply_markup=new_keyboard)
+       await msg.reply(text=bot_message, reply_markup=new_keyboard)
 
 hnd.add_router(router)
