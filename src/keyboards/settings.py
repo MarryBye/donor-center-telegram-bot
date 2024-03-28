@@ -6,7 +6,7 @@ kb_scheme = [
     ["SETTINGS_MENU_NOTIFICATIONS"],
     ["SETTINGS_MENU_SECURITY"],
     ["SETTINGS_MENU_LANGUAGES"],
-    ["BUTTON_BACK"]
+    ["BUTTON_HOME"]
 ]
 
 keyboard = Keyboard(keyboard=kb_scheme)

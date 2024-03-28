@@ -8,7 +8,7 @@ from aiogram.fsm.state import State, StatesGroup
 from src.classes.DatabaseController import DatabaseController
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController
-from src.classes.Form import RegisterForm
+from src.classes.Form import Form
 
 from src.funcs.core import is_pressed_kb_button, message_translated, button_translated
 
