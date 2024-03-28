@@ -269,9 +269,9 @@ class DatabaseController(metaclass=Singleton):
         
         self.connect()
         
-        query = 'INSERT INTO crm.donor ("ID", "donor_name", "date_of_birth", "gender", "language_ID", "blood_ID") VALUES (%s, %s, %s, %s, %s, %s)'
+        query = 'INSERT INTO crm.donor ("ID", "donor_name", "date_of_birth", "gender", "language_ID", "blood_ID") SELECT %s, %s, %s, %s, %s, %s WHERE NOT EXISTS (SELECT "ID" FROM crm.donor WHERE "ID" = %s)'
         
-        self.__cursor.execute(query, (id, name, date, gender, language, blood))
+        self.__cursor.execute(query, (id, name, date, gender, language, blood, id))
         self.__connection.commit()
         
         self.disconnect()
