@@ -1,1 +1,1 @@
-from src.keyboards.registration import *
+from src.keyboards.main import *

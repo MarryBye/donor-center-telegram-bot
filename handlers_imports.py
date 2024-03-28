@@ -1,1 +1,1 @@
-from src.handlers.registration import *
+from src.handlers.main import *

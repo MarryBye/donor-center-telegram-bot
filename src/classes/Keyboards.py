@@ -32,7 +32,7 @@ class Keyboard:
         return self.create_keyboard()
             
 class KeyboardController(metaclass=Singleton):
-    REGISTRATION = "REGISTRATION"
+    MAIN = "MAIN"
     
     def __init__(self):
         self.keyboards = {}

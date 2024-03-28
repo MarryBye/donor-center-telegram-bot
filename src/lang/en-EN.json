@@ -1,21 +1,21 @@
 {
     "MESSAGES": {
-        "START_MESSAGE": "Привіт, я бот!",
-        "SUCCESSFULL_REGISTER": "Успішна реєстрація!",
+        "START_MESSAGE": "Hello, I'm a bot!",
+        "REGISTER_STEP_1": "%s, you have started the bot registration process!\nIn order to access the bot's features, you must enter some information.\n\nImportant information!\nIf you register now, you will be immediately scheduled for an appointment. If you do not attend, you will be deleted from the database; otherwise, the history of your donations will be saved.\n\nTo register in the system, please enter your name (not your real name).",
+        "REGISTER_STEP_2": "Great, %s! Now write your date of birth in the format DD-MM-YYYY",
+        "REGISTER_STEP_3": "Great, %s! Now please select your blood type",
+        "SUCCESSFULL_REGISTER": "Great, %s! You have completed registration in the bot and have full access to all features.\nAlso, you were immediately booked for an appointment!",
         "INFO_REGISTER": "Інформація про реєстрацію...",
-        "CHANGE_LANGUAGE": "Оберіть одну з мов, наведених нижче...",
-        "MENU_OPEN": "Меню '{}'. Оберіть потрібну опцію.",
-        "BACK": "Повернулись в {}. Оберіть потрібну опцію."
+        "CHANGE_LANGUAGE": "Take one of the lines, placing them below...",
+        "MENU_OPEN": "Меню '%s'. Оберіть потрібну опцію.",
+        "BACK": "Повернулись в %s. Оберіть потрібну опцію."
     },
     "BUTTONS": {
-        "REG_MENU_REGISTER": "➕ Registration",
-        "REG_MENU_INFO": "❓ What will happen to my data?",
-        "REG_MENU_LANGUAGES": "🌐 Змінити мову",
-
-        "MAIN_MENU_DONATION": "🩸 Донація",
-        "MAIN_MENU_SETTINGS": "⚙️ Налаштування",
-        "MAIN_MENU_FEEDBACK": "📞 Зворотній зв’язок",
-        "MAIN_MENU_LANGUAGES": "🌐 Мовна підтримка",
+        "MAIN_MENU_DONATION": "🩸 Donation",
+        "MAIN_MENU_SETTINGS": "⚙️ Settings",
+        "MAIN_MENU_FEEDBACK": "📞 Support",
+        "MAIN_MENU_LANGUAGES": "🌐 Change your language",
+        "MAIN_MENU_INFO": "❓ What will happen to my data?",
 
         "DONATION_MENU_REGISTER": "🙋 Запис на донацію",
         "DONATION_MENU_FIND_CENTER": "🔎 Пошук центрів",

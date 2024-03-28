@@ -1,5 +1,6 @@
 import psycopg2 as psql
 import config as cfg
+import json
 
 from typing import Union
 
@@ -8,9 +9,7 @@ from src.classes.Singleton import Singleton
 class DatabaseController(metaclass=Singleton):
     def __init__(self):
         
-        self.languages_cache = {
-            "-1": cfg.DEFAULT_LANGUAGE
-        }
+        self.languages_cache = json.load(open("bot/cache/user_languages.json", "r", encoding="UTF-8"))
         
         self.__connection = None
         self.__cursor = None
@@ -215,8 +214,8 @@ class DatabaseController(metaclass=Singleton):
         
         self.__cursor.executemany(query, doctors)
         self.__connection.commit()
-        
-    def get_user(self, user_id: Union[int, str]) -> Union[tuple, bool]:
+    
+    def get_donor(self, user_id: Union[int, str]) -> Union[tuple, bool]:
 
         query = 'SELECT * FROM crm.donor WHERE "ID" = %s'
 
@@ -225,14 +224,14 @@ class DatabaseController(metaclass=Singleton):
         
         return data or False
     
-    def add_user(self, id: Union[int, str], name: str, date: str, gender: str, language: int, blood: int):
+    def register_donor(self, id: Union[int, str], name: str, date: str, gender: str, language: int, blood: int):
         
         query = 'INSERT INTO crm.donor ("ID", "donor_name", "date_of_birth", "gender", "language_ID", "blood_ID") SELECT %s, %s, %s, %s, %s, %s WHERE NOT EXISTS (SELECT "ID" FROM crm.donor WHERE "ID" = %s)'
         
         self.__cursor.execute(query, (id, name, date, gender, language, blood, id))
         self.__connection.commit()
         
-    def delete_user(self, id: Union[int, str]):
+    def delete_donor(self, id: Union[int, str]):
         
         query = 'DELETE FROM crm.donor WHERE "ID" = %s'
         
@@ -240,45 +239,12 @@ class DatabaseController(metaclass=Singleton):
         self.__connection.commit()
         
     def set_user_language(self, user_id: Union[int, str], language: str):
-        
-        if not str(user_id) in self.languages_cache:
+        if (not str(user_id) in self.languages_cache) or (self.languages_cache[str(user_id)] != language):
             self.languages_cache[str(user_id)] = language
-        elif str(user_id) in self.languages_cache and self.languages_cache[str(user_id)] != language:
-            self.languages_cache[str(user_id)] = language
-
-        query = 'SELECT "ID" FROM crm.language WHERE language."language_name" = %s'
-        
-        self.__cursor.execute(query, (language, ))
-        data = self.__cursor.fetchone()[0]
-        
-        query = 'UPDATE crm.donor SET "language_ID" = %s WHERE "ID" = %s'
-        
-        self.__cursor.execute(query, (data, user_id))
-        self.__connection.commit()
+            json.dump(self.languages_cache, open("bot/cache/user_languages.json", "r", encoding="UTF-8"))
         
     def get_user_language(self, user_id: Union[int, str]) -> str:
-        '''Повертає назву мови, яку хоче використовувати користувач. Назва співпадає з назвами файлів у директорії lang.'''
-        
-        if not str(user_id) in self.languages_cache:
-            
-            print("Язык человека не кеширован, медленный метод.")
-        
-            query = 'SELECT language_name FROM crm.donor, crm.language WHERE donor."language_ID" = language."ID" AND donor."ID" = %s'
-            
-            self.__cursor.execute(query, (user_id, ))
-            data = self.__cursor.fetchone()
-            
-            user_language = data[0] if type(data) == tuple and len(data) > 0 else cfg.DEFAULT_LANGUAGE
-            
-            self.languages_cache[str(user_id)] = user_language
-            
-            return user_language
-
-        else:
-            
-            print("Язык человека кеширован, быстрый метод.")
-            
-            return self.languages_cache[str(user_id)]
+        return self.languages_cache[str(user_id)] if str(user_id) in self.languages_cache else cfg.DEFAULT_LANGUAGE
         
     def setup_database(self):
         
