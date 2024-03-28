@@ -9,11 +9,12 @@
     "BUTTONS": {
         "REG_MENU_REGISTER": "➕ Регистрация",
         "REG_MENU_INFO": "❓ Что будет с моими данными?",
+        "REG_MENU_LANGUAGES": "🌐 Змінити мову",
 
         "MAIN_MENU_DONATION": "🩸 Донація",
         "MAIN_MENU_SETTINGS": "⚙️ Налаштування",
         "MAIN_MENU_FEEDBACK": "📞 Зворотній зв’язок",
-        "MAIN_MENU_LANGUAGES": "🌐 Мовна підтримка",
+        "MAIN_MENU_LANGUAGES": "🌐 Змінити мову",
 
         "DONATION_MENU_REGISTER": "🙋 Запис на донацію",
         "DONATION_MENU_FIND_CENTER": "🔎 Пошук центрів",

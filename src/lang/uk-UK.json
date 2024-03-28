@@ -9,6 +9,7 @@
     "BUTTONS": {
         "REG_MENU_REGISTER": "➕ Реєстрація",
         "REG_MENU_INFO": "❓ Що буде з моїми даними?",
+        "REG_MENU_LANGUAGES": "🌐 Змінити мову",
 
         "MAIN_MENU_DONATION": "🩸 Донація",
         "MAIN_MENU_SETTINGS": "⚙️ Налаштування",

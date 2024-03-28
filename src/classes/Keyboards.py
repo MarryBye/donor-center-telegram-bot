@@ -1,5 +1,5 @@
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from typing import Union
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 from src.classes.Singleton import Singleton
 from src.classes.DatabaseController import DatabaseController
@@ -7,8 +7,8 @@ from src.classes.DatabaseController import DatabaseController
 from src.lang.languages import LANGUAGES
 
 class Keyboard:
-    def __init__(self, scheme: list):
-        self.name_scheme = scheme
+    def __init__(self, keyboard: list):
+        self.name_scheme = keyboard
         self.scheme = []
         
         self.reload_for(user_id=-1)
