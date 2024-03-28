@@ -18,11 +18,12 @@ class Keyboard:
 
     def reload_for(self, user_id: Union[int, str]):
         self.scheme = []
+        user_language = DatabaseController().get_user_language(user_id=user_id)
+        
         for buttons_row in self.name_scheme:
             scheme_buttons_row = []
             for button in buttons_row:
-                
-                user_language = DatabaseController().get_user_language(user_id=user_id)
+            
                 button_text_translated = LANGUAGES[user_language]["BUTTONS"][button]
                 
                 scheme_buttons_row.append(KeyboardButton(text=button_text_translated))

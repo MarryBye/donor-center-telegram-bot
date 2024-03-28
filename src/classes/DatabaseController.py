@@ -8,10 +8,14 @@ from src.classes.Singleton import Singleton
 class DatabaseController(metaclass=Singleton):
     def __init__(self):
         
-        self.cache = {}
+        self.languages_cache = {
+            "-1": cfg.DEFAULT_LANGUAGE
+        }
         
         self.__connection = None
         self.__cursor = None
+        
+        self.connect()
         
     def connect(self):
         self.__connection = psql.connect(database=cfg.DATABASE_NAME,
@@ -26,8 +30,6 @@ class DatabaseController(metaclass=Singleton):
         self.__connection.close()
     
     def add_bloods(self):
-        
-        self.connect()
         
         query = 'DELETE FROM crm.blood'
         
@@ -49,11 +51,7 @@ class DatabaseController(metaclass=Singleton):
         self.__cursor.executemany(query, bloods)
         self.__connection.commit()
         
-        self.disconnect()
-        
     def add_languages(self):
-        
-        self.connect()
         
         query = 'DELETE FROM crm.language'
         
@@ -73,11 +71,7 @@ class DatabaseController(metaclass=Singleton):
         self.__cursor.executemany(query, languages)
         self.__connection.commit()
         
-        self.disconnect()
-        
     def add_cities(self):
-        
-        self.connect()
         
         query = 'DELETE FROM crm.city'
         
@@ -94,11 +88,7 @@ class DatabaseController(metaclass=Singleton):
         self.__cursor.executemany(query, cities)
         self.__connection.commit()
         
-        self.disconnect()
-        
     def add_regions(self):
-        
-        self.connect()
         
         query = 'DELETE FROM crm.region'
         
@@ -115,11 +105,7 @@ class DatabaseController(metaclass=Singleton):
         self.__cursor.executemany(query, regions)
         self.__connection.commit()
         
-        self.disconnect()
-        
     def add_streets(self):
-        
-        self.connect()
         
         query = 'DELETE FROM crm.street'
         
@@ -137,11 +123,7 @@ class DatabaseController(metaclass=Singleton):
         self.__cursor.executemany(query, streets)
         self.__connection.commit()
         
-        self.disconnect()
-        
     def add_areas(self):
-        
-        self.connect()
         
         query = 'DELETE FROM crm.area'
         
@@ -161,11 +143,7 @@ class DatabaseController(metaclass=Singleton):
         self.__cursor.executemany(query, areas)
         self.__connection.commit() 
         
-        self.disconnect()
-        
     def add_addresses(self):
-        
-        self.connect()
         
         query = 'DELETE FROM crm.address'
         
@@ -184,11 +162,7 @@ class DatabaseController(metaclass=Singleton):
         self.__cursor.executemany(query, addresses)
         self.__connection.commit()
         
-        self.disconnect()
-        
     def add_statuses(self):
-        
-        self.connect()
         
         query = 'DELETE FROM crm.status'
         
@@ -204,11 +178,7 @@ class DatabaseController(metaclass=Singleton):
         self.__cursor.executemany(query, statuses)
         self.__connection.commit()
         
-        self.disconnect()
-        
     def add_clinics(self):
-        
-        self.connect()
         
         query = 'DELETE FROM crm.clinic'
         
@@ -227,11 +197,7 @@ class DatabaseController(metaclass=Singleton):
         self.__cursor.executemany(query, clinics)
         self.__connection.commit()
         
-        self.disconnect()
-        
     def add_doctors(self):
-        
-        self.connect()
         
         query = 'DELETE FROM crm.doctor'
         
@@ -250,46 +216,36 @@ class DatabaseController(metaclass=Singleton):
         self.__cursor.executemany(query, doctors)
         self.__connection.commit()
         
-        self.disconnect() 
-        
     def get_user(self, user_id: Union[int, str]) -> Union[tuple, bool]:
-        
-        self.connect()
 
         query = 'SELECT * FROM crm.donor WHERE "ID" = %s'
 
         self.__cursor.execute(query, (user_id, ))
         data = self.__cursor.fetchone()
         
-        self.disconnect()
-        
         return data or False
     
     def add_user(self, id: Union[int, str], name: str, date: str, gender: str, language: int, blood: int):
-        
-        self.connect()
         
         query = 'INSERT INTO crm.donor ("ID", "donor_name", "date_of_birth", "gender", "language_ID", "blood_ID") SELECT %s, %s, %s, %s, %s, %s WHERE NOT EXISTS (SELECT "ID" FROM crm.donor WHERE "ID" = %s)'
         
         self.__cursor.execute(query, (id, name, date, gender, language, blood, id))
         self.__connection.commit()
         
-        self.disconnect()
-        
     def delete_user(self, id: Union[int, str]):
-        
-        self.connect()
         
         query = 'DELETE FROM crm.donor WHERE "ID" = %s'
         
         self.__cursor.execute(query, (id, ))
         self.__connection.commit()
         
-        self.disconnect()
-        
     def set_user_language(self, user_id: Union[int, str], language: str):
-        self.connect()
         
+        if not str(user_id) in self.languages_cache:
+            self.languages_cache[str(user_id)] = language
+        elif str(user_id) in self.languages_cache and self.languages_cache[str(user_id)] != language:
+            self.languages_cache[str(user_id)] = language
+
         query = 'SELECT "ID" FROM crm.language WHERE language."language_name" = %s'
         
         self.__cursor.execute(query, (language, ))
@@ -300,21 +256,29 @@ class DatabaseController(metaclass=Singleton):
         self.__cursor.execute(query, (data, user_id))
         self.__connection.commit()
         
-        self.disconnect()
-        
     def get_user_language(self, user_id: Union[int, str]) -> str:
         '''Повертає назву мови, яку хоче використовувати користувач. Назва співпадає з назвами файлів у директорії lang.'''
         
-        self.connect()
+        if not str(user_id) in self.languages_cache:
+            
+            print("Язык человека не кеширован, медленный метод.")
         
-        query = 'SELECT language_name FROM crm.donor, crm.language WHERE donor."language_ID" = language."ID" AND donor."ID" = %s'
-        
-        self.__cursor.execute(query, (user_id, ))
-        data = self.__cursor.fetchone()
-        
-        self.disconnect()
-        
-        return data[0] if type(data) == tuple and len(data) > 0 else cfg.DEFAULT_LANGUAGE
+            query = 'SELECT language_name FROM crm.donor, crm.language WHERE donor."language_ID" = language."ID" AND donor."ID" = %s'
+            
+            self.__cursor.execute(query, (user_id, ))
+            data = self.__cursor.fetchone()
+            
+            user_language = data[0] if type(data) == tuple and len(data) > 0 else cfg.DEFAULT_LANGUAGE
+            
+            self.languages_cache[str(user_id)] = user_language
+            
+            return user_language
+
+        else:
+            
+            print("Язык человека кеширован, быстрый метод.")
+            
+            return self.languages_cache[str(user_id)]
         
     def setup_database(self):
         
