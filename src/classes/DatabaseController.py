@@ -35,20 +35,9 @@ class DatabaseController(metaclass=Singleton):
         
         self.__cursor.execute(query)
         
-        bloods = (
-            (1, "AB", "+"),
-            (2, "AB", "-"),
-            (3, "A", "+"),
-            (4, "A", "-"),
-            (5, "B", "+"),
-            (6, "B", "-"),
-            (7, "O", "+"),
-            (8, "O", "-")
-        )
-        
         query = 'INSERT INTO crm.blood ("ID", "blood_name", "rh_factor") VALUES (%s, %s, %s)'
         
-        self.__cursor.executemany(query, bloods)
+        self.__cursor.executemany(query, cfg.BLOODS)
         self.__connection.commit()
         
     def add_languages(self):
@@ -57,18 +46,9 @@ class DatabaseController(metaclass=Singleton):
         
         self.__cursor.execute(query)
         
-        languages = (
-            (1, "cn-CN"),
-            (2, "de-DE"),
-            (3, "en-EN"),
-            (4, "fr-FR"),
-            (5, "ru-RU"),
-            (6, "uk-UK")
-        )
-        
         query = 'INSERT INTO crm.language ("ID", "language_name") VALUES (%s, %s)'
         
-        self.__cursor.executemany(query, languages)
+        self.__cursor.executemany(query, cfg.LANGUAGES)
         self.__connection.commit()
         
     def add_cities(self):
@@ -77,15 +57,9 @@ class DatabaseController(metaclass=Singleton):
         
         self.__cursor.execute(query)
         
-        cities = (
-            (1, "Odessa"),
-            (2, "Kiyv"),
-            (3, "Lviv")
-        )
-        
         query = 'INSERT INTO crm.city ("ID", "city_name") VALUES (%s, %s)'
         
-        self.__cursor.executemany(query, cities)
+        self.__cursor.executemany(query, cfg.CITIES)
         self.__connection.commit()
         
     def add_regions(self):
@@ -94,15 +68,9 @@ class DatabaseController(metaclass=Singleton):
         
         self.__cursor.execute(query)
         
-        regions = (
-            (1, "Odes`ka Oblast"),
-            (2, "Kiyvska Oblast"),
-            (3, "Lvivska Oblast")
-        )
-        
         query = 'INSERT INTO crm.region ("ID", "region_name") VALUES (%s, %s)'
         
-        self.__cursor.executemany(query, regions)
+        self.__cursor.executemany(query, cfg.REGIONS)
         self.__connection.commit()
         
     def add_streets(self):
@@ -111,16 +79,9 @@ class DatabaseController(metaclass=Singleton):
         
         self.__cursor.execute(query)
         
-        streets = (
-            (1, "Generala Petrova, 66"),
-            (2, "Akademika Koroliova, 3"),
-            (3, "Jopa Bobra, 8"),
-            (4, "Abobakar pepe abobakar, 88")
-        )
-        
         query = 'INSERT INTO crm.street ("ID", "street_name") VALUES (%s, %s)'
         
-        self.__cursor.executemany(query, streets)
+        self.__cursor.executemany(query, cfg.STREETS)
         self.__connection.commit()
         
     def add_areas(self):
@@ -129,18 +90,9 @@ class DatabaseController(metaclass=Singleton):
         
         self.__cursor.execute(query)
         
-        areas = (
-            (1, "Area1"),
-            (2, "Area2"),
-            (3, "Area3"),
-            (4, "Area4"),
-            (5, "Area5"),
-            (6, "Area6")
-        )
-        
         query = 'INSERT INTO crm.area ("ID", "area_name") VALUES (%s, %s)'
         
-        self.__cursor.executemany(query, areas)
+        self.__cursor.executemany(query, cfg.AREAS)
         self.__connection.commit() 
         
     def add_addresses(self):
@@ -149,17 +101,9 @@ class DatabaseController(metaclass=Singleton):
         
         self.__cursor.execute(query)
         
-        addresses = (
-            (1, 2, 2, 2, 2),
-            (2, 2, 3, 1, 2),
-            (3, 1, 1, 1, 1),
-            (4, 1, 2, 1, 3),
-            (5, 2, 1, 2, 1)
-        )
-        
         query = 'INSERT INTO crm.address ("ID", "region_ID", "city_ID", "area_ID", "street_ID") VALUES (%s, %s, %s, %s, %s)'
         
-        self.__cursor.executemany(query, addresses)
+        self.__cursor.executemany(query, cfg.ADDRESSES)
         self.__connection.commit()
         
     def add_statuses(self):
@@ -168,14 +112,9 @@ class DatabaseController(metaclass=Singleton):
         
         self.__cursor.execute(query)
         
-        statuses = (
-            (1, "Success"),
-            (2, "Unsuccess")
-        )
-        
         query = 'INSERT INTO crm.status ("ID", "status_name") VALUES (%s, %s)'
         
-        self.__cursor.executemany(query, statuses)
+        self.__cursor.executemany(query, cfg.STATUSES)
         self.__connection.commit()
         
     def add_clinics(self):
@@ -184,17 +123,9 @@ class DatabaseController(metaclass=Singleton):
         
         self.__cursor.execute(query)
         
-        clinics = (
-            (1, "Клиника АДЫН", "12:00:00", 1),
-            (2, "Клиника СЕКОНД", "15:00:00", 2),
-            (3, "Клиника ТРЫЫЫЫ", "13:00:00", 3),
-            (4, "Клиника ЧОТЫРИ", "14:00:00", 4),
-            (5, "Клиника ФАААААЙФФВВВ", "16:30:00", 5)
-        )
-        
         query = 'INSERT INTO crm.clinic ("ID", "clinic_name", "working_hours", "address_ID") VALUES (%s, %s, %s, %s)'
         
-        self.__cursor.executemany(query, clinics)
+        self.__cursor.executemany(query, cfg.CLINICS)
         self.__connection.commit()
         
     def add_doctors(self):
@@ -203,17 +134,9 @@ class DatabaseController(metaclass=Singleton):
         
         self.__cursor.execute(query)
         
-        doctors = (
-            (1, "Иван", "Пипабоди", 1, 1),
-            (2, "Ванька", "Фистер", 2, 2),
-            (3, "Женя", "Эйналщик", 3, 3),
-            (4, "Михаил", "Темщик-Схемщик", 4, 4),
-            (5, "Кчаур", "Автобус", 5, 5)
-        )
-        
         query = 'INSERT INTO crm.doctor ("ID", "doctor_name", "specialization", "address_ID", "clinic_ID") VALUES (%s, %s, %s, %s, %s)'
         
-        self.__cursor.executemany(query, doctors)
+        self.__cursor.executemany(query, cfg.DOCTORS)
         self.__connection.commit()
     
     def get_donor(self, user_id: Union[int, str]) -> Union[tuple, bool]:

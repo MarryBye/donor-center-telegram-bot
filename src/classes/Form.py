@@ -6,6 +6,7 @@ class Form(StatesGroup):
     enter_birthMonth = State()
     enter_birthYear = State()
     enter_blood = State()
+    enter_gender = State()
 
 
 class Feedback(StatesGroup):

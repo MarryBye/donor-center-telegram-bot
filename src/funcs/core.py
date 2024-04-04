@@ -1,3 +1,5 @@
+import config as cfg
+
 from datetime import date
 
 from typing import Union
@@ -9,6 +11,8 @@ from src.classes.Keyboards import Keyboard, ReplyKeyboardMarkup, KeyboardButton
 from src.lang.languages import LANGUAGES
 
 db = DatabaseController()
+
+# Language translations for buttons and messages
 
 def get_command_variations(key: str):
     command_variations = []
@@ -25,10 +29,40 @@ def message_translated(user_id: Union[int, str], key: str):
 def button_translated(user_id: Union[int, str], key: str):
     return LANGUAGES[db.get_user_language(user_id=user_id)]["BUTTONS"][key]
 
+# Data tranformation
+
 def month_name_to_number(month: str):
     for i in range(12):
         if month in get_command_variations("REGISTER_MONTH_" + str(i + 1)):
             return i + 1
+        
+def language_name_to_number(language: str):
+    for language_tuple in cfg.LANGUAGES:
+        if language in language_tuple:
+            return language_tuple[0]
+
+def blood_name_to_number(blood: str):
+    for blood_tuple in cfg.BLOODS:
+        if blood == blood_tuple[1] + blood_tuple[2]:
+            return blood_tuple[0]
+        
+def gender_name_to_number(gender: str):
+    # немного костыльно, можно сравнивать конец названия кнопки но помоему это еще хуже
+    
+    if gender in get_command_variations("REGISTER_GENDER_MALE"):
+        gender = "Male"
+    if gender in get_command_variations("REGISTER_GENDER_FEMALE"):
+        gender = "Female"
+    if gender in get_command_variations("REGISTER_GENDER_OTHER"):
+        gender = "Other"
+    if gender in get_command_variations("REGISTER_GENDER_SECRET"):
+        gender = "Secret"
+        
+    for gender_tuple in cfg.GENDERS:
+        if gender in gender_tuple:
+            return gender_tuple[0]
+
+# Keyboards generation
 
 def generate_keyboard_months():
     kb_scheme = [
@@ -75,7 +109,7 @@ def generate_keyboard_days(month: int, year: int):
 
 def generate_keyboard_years():
     current_year = date.today().year
-    minimum_year = current_year - 80
+    minimum_year = current_year - cfg.DONATION_MAXIMUM_YEAR
     
     kb_scheme = []
     
@@ -88,3 +122,22 @@ def generate_keyboard_years():
             row = []
     
     return ReplyKeyboardMarkup(keyboard=kb_scheme, resize_keyboard=True)
+
+def generate_keyboard_bloods():
+    
+    kb_scheme = []
+    
+    for blood in cfg.BLOODS:
+        kb_scheme.append([KeyboardButton(text=blood[1] + blood[2])])
+        
+    return ReplyKeyboardMarkup(keyboard=kb_scheme, resize_keyboard=True)
+
+def generate_keyboard_genders():
+    
+    kb_scheme = [
+        ["REGISTER_GENDER_MALE", "REGISTER_GENDER_FEMALE"],
+        ["REGISTER_GENDER_OTHER"],
+        ["REGISTER_GENDER_SECRET"]
+    ]
+        
+    return Keyboard(keyboard=kb_scheme)

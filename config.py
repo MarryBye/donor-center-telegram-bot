@@ -7,6 +7,7 @@ TOKEN = open("TOKEN", "r").read()
 # BOT CONFIGURATION
 
 DEFAULT_LANGUAGE = "en-EN"
+DONATION_MAXIMUM_YEAR = 80 # for example today 2024 year, so the minimum year is 2024 - 80 = 1944
 
 # PostgreSQL Server Configuration
 
@@ -15,3 +16,89 @@ IP_ADDRESS = "108.181.157.247"
 PORT = "19991"
 USERNAME = "temshik_shemshik"
 PASSWORD = "3211234545priora"
+
+# Database integration
+
+BLOODS = (
+    (1, "AB", "+"),
+    (2, "AB", "-"),
+    (3, "A", "+"),
+    (4, "A", "-"),
+    (5, "B", "+"),
+    (6, "B", "-"),
+    (7, "O", "+"),
+    (8, "O", "-")
+)
+
+LANGUAGES = (
+    (1, "cn-CN"),
+    (2, "de-DE"),
+    (3, "en-EN"),
+    (4, "fr-FR"),
+    (5, "ru-RU"),
+    (6, "uk-UK")
+)
+
+CITIES = (
+    (1, "Odessa"),
+    (2, "Kiyv"),
+    (3, "Lviv")
+)
+
+REGIONS = (
+    (1, "Odes`ka Oblast"),
+    (2, "Kiyvska Oblast"),
+    (3, "Lvivska Oblast")
+)
+
+STREETS = (
+    (1, "Generala Petrova, 66"),
+    (2, "Akademika Koroliova, 3"),
+    (3, "Jopa Bobra, 8"),
+    (4, "Abobakar pepe abobakar, 88")
+)
+
+AREAS = (
+    (1, "Area1"),
+    (2, "Area2"),
+    (3, "Area3"),
+    (4, "Area4"),
+    (5, "Area5"),
+    (6, "Area6")
+)
+
+ADDRESSES = (
+    (1, 2, 2, 2, 2),
+    (2, 2, 3, 1, 2),
+    (3, 1, 1, 1, 1),
+    (4, 1, 2, 1, 3),
+    (5, 2, 1, 2, 1)
+)
+
+STATUSES = (
+    (1, "Success"),
+    (2, "Unsuccess")
+)
+
+CLINICS = (
+    (1, "Клиника АДЫН", "12:00:00", 1),
+    (2, "Клиника СЕКОНД", "15:00:00", 2),
+    (3, "Клиника ТРЫЫЫЫ", "13:00:00", 3),
+    (4, "Клиника ЧОТЫРИ", "14:00:00", 4),
+    (5, "Клиника ФАААААЙФФВВВ", "16:30:00", 5)
+)
+
+DOCTORS = (
+    (1, "Иван", "Пипабоди", 1, 1),
+    (2, "Ванька", "Фистер", 2, 2),
+    (3, "Женя", "Эйналщик", 3, 3),
+    (4, "Михаил", "Темщик-Схемщик", 4, 4),
+    (5, "Кчаур", "Автобус", 5, 5)
+)
+
+GENDERS = (
+    (1, "Male"),
+    (2, "Female"),
+    (3, "Other"),
+    (4, "Secret")
+)
