@@ -5,6 +5,7 @@ from random import choice
 from aiogram import Router
 from aiogram.types import Message
 from aiogram.filters import Command
+from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
 from src.classes.DatabaseController import DatabaseController
@@ -61,5 +62,27 @@ async def main_handler(msg: Message):
        bot_message = message_translated(user_id=user_id, key="MENU_OPEN") % button_translated(user_id=user_id, key="MAIN_MENU_SETTINGS")
               
        await msg.reply(text=bot_message, reply_markup=new_keyboard)
+       
+@router.message(is_pressed_kb_button("MAIN_MENU_FEEDBACK"))
+async def feedback_handler(msg: Message, state: FSMContext):
+
+    user_id = msg.from_user.id
+
+    new_keyboard = kb.get_keyboard(kb.FEEDBACK).reload_for(user_id)
+    bot_message = message_translated(
+        user_id=user_id, key="FEEDBACK_MENU_OPEN"
+    ) % button_translated(user_id=user_id, key="MAIN_MENU_FEEDBACK")
+
+    await msg.reply(bot_message, reply_markup=new_keyboard)
+
+    # TODO: если имя есть в бд, то пропустить шаг с ним
+    # if not name_in_db:
+
+    await state.set_state(Feedback.name)
+    await msg.answer(
+        message_translated(user_id, key="NAME_SENT"),
+        reply_markup=kb.get_keyboard(kb.MENUBACK).reload_for(user_id),
+    )
+
 
 hnd.add_router(router)
