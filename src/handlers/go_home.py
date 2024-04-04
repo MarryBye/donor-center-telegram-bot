@@ -20,6 +20,7 @@ router = Router()
        
 @router.message(is_pressed_kb_button("BUTTON_HOME"))
 async def main_handler(msg: Message):
+       await state.clear()
        
        user_id = msg.from_user.id
        
