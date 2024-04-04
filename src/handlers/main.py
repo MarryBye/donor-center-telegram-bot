@@ -1,3 +1,5 @@
+import config as cfg
+
 from random import choice
 
 from aiogram import Router
@@ -22,6 +24,9 @@ router = Router()
 async def main_handler(msg: Message):
        
        user_id = msg.from_user.id
+       
+       db.set_user_notifications(user_id=user_id, option=True)
+       db.set_user_language(user_id=msg.from_user.id, language=cfg.DEFAULT_LANGUAGE)
        
        new_keyboard = kb.get_keyboard(kb.MAIN).reload_for(user_id)
        bot_message = message_translated(user_id=user_id, key="START_MESSAGE")
