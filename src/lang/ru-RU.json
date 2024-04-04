@@ -54,12 +54,8 @@
         "NOTIFICATIONS_MENU_ON": "✅ Включить уведомления",
         "NOTIFICATIONS_MENU_OFF": "❎ Выключить уведомления",
 
-        "FEEDBACK_MENU_FAST_ANS1": "🐶 Проблема",
-        "FEEDBACK_MENU_FAST_ANS2": "🐭 Проблема",
-        "FEEDBACK_MENU_FAST_ANS3": "🦑 Проблема",
-        "FEEDBACK_MENU_FAST_ANS4": "🦊 Проблема",
-        "FEEDBACK_MENU_FAST_ANS5": "🐥 Проблема",
-        "FEEDBACK_MENU_FAST_ANS6": "🐌 Проблема",
+        "FEEDBACK_MENU_PHONE": "📞 Залишити номер телефону",
+        "FEEDBACK_MENU_MAIL": "📧 Залишити адрес пошти",
         "FEEDBACK_MENU_NEED_OPERATOR": "🎧 Звернутись до оператора",
 
         "LANGUAGES_MENU_UK": "🇺🇦 Український",
