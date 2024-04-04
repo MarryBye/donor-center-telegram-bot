@@ -4,7 +4,7 @@ kb = KeyboardController()
 
 kb_scheme = [
     ["DONATION_MENU_REGISTER", "DONATION_MENU_HISTORY"],
-    ["DONATION_MENU_FIND_CENTER", "DONATION_MENU_WORKTIME"],
+    ["DONATION_MENU_FIND_CENTER"],
     ["BUTTON_HOME"]
 ]
 

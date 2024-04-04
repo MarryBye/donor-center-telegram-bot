@@ -11,7 +11,9 @@
         "MENU_OPEN": "Меню '%s'. Оберіть потрібну опцію.",
         "BACK": "Повернулись в %s. Оберіть потрібну опцію.",
         "NOTIFICATIONS_ON": "Включили уведомления!",
-        "NOTIFICATIONS_OFF": "Выключили уведомления!"
+        "NOTIFICATIONS_OFF": "Выключили уведомления!",
+        "DONATION_HISTORY_MESSAGE": "%s, Вы пожертвовали %s раз свою кровь в следующих центрах:\n%s",
+        "DONATION_FIND_CENTERS_MESSAGE": "%s, Вы можете найти центры по сдачи крови по следующим адресам:\n%s"
     },
     "BUTTONS": {
         "MAIN_MENU_DONATION": "🩸 Донация",
@@ -21,7 +23,6 @@
 
         "DONATION_MENU_REGISTER": "🙋 Запис на донацію",
         "DONATION_MENU_FIND_CENTER": "🔎 Пошук центрів",
-        "DONATION_MENU_WORKTIME": "🕰 Графік роботи",
         "DONATION_MENU_HISTORY": "📗 История донаций",
 
         "SETTINGS_MENU_NOTIFICATIONS": "💡 Оповещения и напоминания",

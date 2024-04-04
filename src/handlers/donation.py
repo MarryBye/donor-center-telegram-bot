@@ -24,7 +24,7 @@ async def main_handler(msg: Message):
        user_id = msg.from_user.id
        
        new_keyboard = kb.get_keyboard(kb.DONATION).reload_for(user_id)
-       bot_message = message_translated(user_id=user_id, key="MENU_OPEN") % button_translated(user_id=user_id, key="MAIN_MENU_DONATION")
+       bot_message = message_translated(user_id=user_id, key="REGISTER_STEP_1") % msg.from_user.username
               
        await msg.reply(text=bot_message, reply_markup=new_keyboard)
 
@@ -33,17 +33,8 @@ async def main_handler(msg: Message):
        
        user_id = msg.from_user.id
        
-       bot_message = message_translated(user_id=user_id, key="INFO_REGISTER")
-              
-       await msg.reply(text=bot_message)
-       
-@router.message(is_pressed_kb_button("DONATION_MENU_WORKTIME"))
-async def main_handler(msg: Message):
-       
-       user_id = msg.from_user.id
-       
-       new_keyboard = kb.get_keyboard(kb.SETTINGS).reload_for(user_id)
-       bot_message = message_translated(user_id=user_id, key="MENU_OPEN") % button_translated(user_id=user_id, key="MAIN_MENU_SETTINGS")
+       new_keyboard = kb.get_keyboard(kb.DONATION).reload_for(user_id)
+       bot_message = message_translated(user_id=user_id, key="DONATION_FIND_CENTERS_MESSAGE") % (msg.from_user.username, "абоба\nабоба\nабоба")
               
        await msg.reply(text=bot_message, reply_markup=new_keyboard)
        
@@ -52,8 +43,8 @@ async def main_handler(msg: Message):
        
        user_id = msg.from_user.id
        
-       new_keyboard = kb.get_keyboard(kb.SETTINGS).reload_for(user_id)
-       bot_message = message_translated(user_id=user_id, key="MENU_OPEN") % button_translated(user_id=user_id, key="MAIN_MENU_SETTINGS")
+       new_keyboard = kb.get_keyboard(kb.DONATION).reload_for(user_id)
+       bot_message = message_translated(user_id=user_id, key="DONATION_HISTORY_MESSAGE") % (msg.from_user.username, "7", "абоба\nабоба\nабоба")
               
        await msg.reply(text=bot_message, reply_markup=new_keyboard)
 
