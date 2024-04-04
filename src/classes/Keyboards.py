@@ -41,6 +41,8 @@ class KeyboardController(metaclass=Singleton):
     SETTINGS = "SETTINGS"
     NOTIFICATIONS = "NOTIFICATIONS"
     DONATION = "DONATION"
+    FEEDBACK = "FEEDBACK"
+    MENUBACK = "MENUBACK"
     
     def __init__(self):
         self.keyboards = {}
