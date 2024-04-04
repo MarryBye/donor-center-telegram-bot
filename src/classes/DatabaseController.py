@@ -10,6 +10,7 @@ class DatabaseController(metaclass=Singleton):
     def __init__(self):
         
         self.languages_cache = json.load(open("bot/cache/user_languages.json", "r", encoding="UTF-8"))
+        self.notifications_cache = json.load(open("bot/cache/user_notifications.json", "r", encoding="UTF-8"))
         
         self.__connection = None
         self.__cursor = None
@@ -245,6 +246,14 @@ class DatabaseController(metaclass=Singleton):
         
     def get_user_language(self, user_id: Union[int, str]) -> str:
         return self.languages_cache[str(user_id)] if str(user_id) in self.languages_cache else cfg.DEFAULT_LANGUAGE
+    
+    def set_user_notifications(self, user_id: Union[int, str], option: bool):
+        if (not str(user_id) in self.notifications_cache) or (self.notifications_cache[str(user_id)] != option):
+            self.notifications_cache[str(user_id)] = option
+            json.dump(self.notifications_cache, open("bot/cache/user_notifications.json", "w", encoding="UTF-8"))
+            
+    def get_user_notifications(self, user_id: Union[int, str]) -> bool:
+        return self.notifications_cache[str(user_id)] if str(user_id) in self.notifications_cache else True
         
     def setup_database(self):
         

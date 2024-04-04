@@ -21,14 +21,12 @@ router = Router()
 @router.message(is_pressed_kb_button("SETTINGS_MENU_NOTIFICATIONS"))
 async def main_handler(msg: Message):
        
-    user_id = msg.from_user.id
-    return
+       user_id = msg.from_user.id
        
-@router.message(is_pressed_kb_button("SETTINGS_MENU_SECURITY"))
-async def main_handler(msg: Message):
-       
-    user_id = msg.from_user.id
-    return
+       new_keyboard = kb.get_keyboard(kb.NOTIFICATIONS).reload_for(user_id)
+       bot_message = message_translated(user_id=user_id, key="MENU_OPEN") % button_translated(user_id=user_id, key="SETTINGS_MENU_NOTIFICATIONS")
+              
+       await msg.reply(text=bot_message, reply_markup=new_keyboard)
        
 @router.message(is_pressed_kb_button("SETTINGS_MENU_LANGUAGES"))
 async def main_handler(msg: Message):

@@ -12,19 +12,21 @@
         "BACK": "Повернулись в %s. Оберіть потрібну опцію."
     },
     "BUTTONS": {
-        "MAIN_MENU_DONATION": "🩸 捐款",
-        "MAIN_MENU_SETTINGS": "⚙️ 设置",
-        "MAIN_MENU_FEEDBACK": "📞 支持",
-        "MAIN_MENU_INFO": "❓ 我的数据会怎样?",
+        "MAIN_MENU_DONATION": "🩸 Донация",
+        "MAIN_MENU_SETTINGS": "⚙️ Настройки",
+        "MAIN_MENU_FEEDBACK": "📞 Поддержка",
+        "MAIN_MENU_INFO": "❓ Что будет с моими данными?",
 
         "DONATION_MENU_REGISTER": "🙋 Запис на донацію",
         "DONATION_MENU_FIND_CENTER": "🔎 Пошук центрів",
         "DONATION_MENU_WORKTIME": "🕰 Графік роботи",
         "DONATION_MENU_SEND_RESULTS": "✅ Надіслати",
 
-        "SETTINGS_MENU_NOTIFICATIONS": "💡 通知和提醒",
-        "SETTINGS_MENU_SECURITY": "🔒 安全和隐私",
-        "SETTINGS_MENU_LANGUAGES": "🌐 更改您的语言",
+        "SETTINGS_MENU_NOTIFICATIONS": "💡 Оповещения и напоминания",
+        "SETTINGS_MENU_LANGUAGES": "🌐 Сменить язык",
+
+        "NOTIFICATIONS_MENU_ON": "✅ Включить уведомления",
+        "NOTIFICATIONS_MENU_OFF": "❎ Выключить уведомления",
 
         "FEEDBACK_MENU_FAST_ANS1": "🐶 Проблема",
         "FEEDBACK_MENU_FAST_ANS2": "🐭 Проблема",
@@ -41,7 +43,7 @@
         "LANGUAGES_MENU_CN": "🇨🇳 中国人",
         "LANGUAGES_MENU_FR": "🇫🇷 Français",
         
-        "BUTTON_HOME": "🏠 主菜单",
-        "BUTTON_BACK": "⬅️ 后退"
+        "BUTTON_HOME": "🏠 Главное меню",
+        "BUTTON_BACK": "⬅️ Назад"
     }
 }

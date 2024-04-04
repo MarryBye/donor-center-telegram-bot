@@ -24,7 +24,7 @@ async def main_handler(msg: Message):
        user_id = msg.from_user.id
        
        new_keyboard = kb.get_keyboard(kb.MAIN).reload_for(user_id)
-       bot_message = message_translated(user_id=user_id, key="MENU_OPEN") % button_translated(user_id=user_id, key="MAIN_MENU_SETTINGS")
+       bot_message = message_translated(user_id=user_id, key="MENU_OPEN") % button_translated(user_id=user_id, key="BUTTON_HOME")
               
        await msg.reply(text=bot_message, reply_markup=new_keyboard)
 

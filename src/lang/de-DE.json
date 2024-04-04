@@ -23,8 +23,10 @@
         "DONATION_MENU_SEND_RESULTS": "✅ Надіслати",
 
         "SETTINGS_MENU_NOTIFICATIONS": "💡 Оповещения и напоминания",
-        "SETTINGS_MENU_SECURITY": "🔒 Безопасность и конфиденцальность",
         "SETTINGS_MENU_LANGUAGES": "🌐 Сменить язык",
+
+        "NOTIFICATIONS_MENU_ON": "✅ Включить уведомления",
+        "NOTIFICATIONS_MENU_OFF": "❎ Выключить уведомления",
 
         "FEEDBACK_MENU_FAST_ANS1": "🐶 Проблема",
         "FEEDBACK_MENU_FAST_ANS2": "🐭 Проблема",
