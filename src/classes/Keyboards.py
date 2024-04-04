@@ -7,9 +7,10 @@ from src.classes.DatabaseController import DatabaseController
 from src.lang.languages import LANGUAGES
 
 class Keyboard:
-    def __init__(self, keyboard: list):
+    def __init__(self, keyboard: list, needTranslation=True):
         self.name_scheme = keyboard
         self.scheme = []
+        self.needTranslation = needTranslation
         
         self.reload_for(user_id=-1)
         
@@ -17,17 +18,20 @@ class Keyboard:
         return ReplyKeyboardMarkup(keyboard=self.scheme, resize_keyboard=True)
 
     def reload_for(self, user_id: Union[int, str]):
-        self.scheme = []
-        user_language = DatabaseController().get_user_language(user_id=user_id)
-        
-        for buttons_row in self.name_scheme:
-            scheme_buttons_row = []
-            for button in buttons_row:
+        if self.needTranslation:
+            self.scheme = []
+            user_language = DatabaseController().get_user_language(user_id=user_id)
             
-                button_text_translated = LANGUAGES[user_language]["BUTTONS"][button]
+            for buttons_row in self.name_scheme:
+                scheme_buttons_row = []
+                for button in buttons_row:
                 
-                scheme_buttons_row.append(KeyboardButton(text=button_text_translated))
-            self.scheme.append(scheme_buttons_row)
+                    button_text_translated = LANGUAGES[user_language]["BUTTONS"][button]
+                    
+                    scheme_buttons_row.append(KeyboardButton(text=button_text_translated))
+                self.scheme.append(scheme_buttons_row)
+        else:
+            self.scheme = self.name_scheme.copy()
             
         return self.create_keyboard()
             

@@ -4,13 +4,14 @@ from aiogram import Router
 from aiogram.types import Message
 from aiogram.filters import Command
 from aiogram.fsm.state import State, StatesGroup
+from aiogram.fsm.context import FSMContext
 
 from src.classes.DatabaseController import DatabaseController
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController
 from src.classes.Form import Form
 
-from src.funcs.core import is_pressed_kb_button, message_translated, button_translated
+from src.funcs.core import is_pressed_kb_button, message_translated, button_translated, generate_keyboard_days, generate_keyboard_months, generate_keyboard_years, month_name_to_number
 
 db = DatabaseController()
 hnd = HandlersController()
@@ -19,14 +20,60 @@ kb = KeyboardController()
 router = Router()
 
 @router.message(is_pressed_kb_button("DONATION_MENU_REGISTER"))
-async def main_handler(msg: Message):
+async def main_handler(msg: Message, state: FSMContext):
        
        user_id = msg.from_user.id
+       
+       await state.set_state(Form.enter_name)
        
        new_keyboard = kb.get_keyboard(kb.DONATION).reload_for(user_id)
        bot_message = message_translated(user_id=user_id, key="REGISTER_STEP_1") % msg.from_user.username
               
        await msg.reply(text=bot_message, reply_markup=new_keyboard)
+       
+@router.message(Form.enter_name)
+async def process_register(msg: Message, state: FSMContext):
+       
+       user_id = msg.from_user.id
+       
+       await state.update_data(name=msg.text)
+       await state.set_state(Form.enter_birthYear)
+       
+       new_keyboard = generate_keyboard_years()
+       bot_message = message_translated(user_id=user_id, key="REGISTER_STEP_2") % msg.from_user.username
+              
+       await msg.reply(text=bot_message, reply_markup=new_keyboard)
+       
+@router.message(Form.enter_birthYear)
+async def process_register(msg: Message, state: FSMContext):
+       
+       user_id = msg.from_user.id
+       
+       await state.update_data(year=int(msg.text))
+       await state.set_state(Form.enter_birthMonth)
+       
+       new_keyboard = generate_keyboard_months().create_keyboard()
+       bot_message = message_translated(user_id=user_id, key="REGISTER_STEP_3") % msg.from_user.username
+              
+       await msg.reply(text=bot_message, reply_markup=new_keyboard)
+       
+@router.message(Form.enter_birthMonth)
+async def process_register(msg: Message, state: FSMContext):
+       
+       user_id = msg.from_user.id
+       
+       await state.update_data(month=month_name_to_number(month=msg.text))
+       await state.set_state(Form.enter_birthDay)
+       
+       data = await state.get_data()
+       
+       year, month = data["year"], data["month"]
+       
+       new_keyboard = generate_keyboard_days(month=month, year=year)
+       bot_message = message_translated(user_id=user_id, key="REGISTER_STEP_3") % msg.from_user.username
+              
+       await msg.reply(text=bot_message, reply_markup=new_keyboard)
+       
 
 @router.message(is_pressed_kb_button("DONATION_MENU_FIND_CENTER"))
 async def main_handler(msg: Message):
