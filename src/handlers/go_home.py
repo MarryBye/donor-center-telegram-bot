@@ -3,6 +3,7 @@ from random import choice
 from aiogram import Router
 from aiogram.types import Message
 from aiogram.filters import Command
+from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
 from src.classes.DatabaseController import DatabaseController
@@ -19,7 +20,7 @@ kb = KeyboardController()
 router = Router()
        
 @router.message(is_pressed_kb_button("BUTTON_HOME"))
-async def main_handler(msg: Message):
+async def main_handler(msg: Message, state: FSMContext):
        await state.clear()
        
        user_id = msg.from_user.id
