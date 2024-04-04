@@ -58,7 +58,7 @@ async def process_phone(msg: Message, state: FSMContext):
     new_keyboard = kb.get_keyboard(kb.MENUBACK).reload_for(user_id)
     bot_message = message_translated(user_id, key="PHONE_SENT")
 
-    if match(r"^(\+?\d{1,4}[\s-])?(?!0+\d)\d{10,15}$", phone):
+    if match(r"^\+?(\d{10,15})$", phone):
         await msg.answer(bot_message, reply_markup=new_keyboard)
         await state.clear()
 
