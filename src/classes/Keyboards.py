@@ -36,6 +36,7 @@ class KeyboardController(metaclass=Singleton):
     LANGUAGES = "LANGUAGES"
     SETTINGS = "SETTINGS"
     NOTIFICATIONS = "NOTIFICATIONS"
+    DONATION = "DONATION"
     
     def __init__(self):
         self.keyboards = {}
