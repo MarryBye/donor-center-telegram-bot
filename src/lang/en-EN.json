@@ -46,6 +46,8 @@
         "REGISTER_MONTH_11": "Ноябрь",
         "REGISTER_MONTH_12": "Декабрь",
 
+        "SEND_CONTACT": "Отправить контактные данные",
+
         "REGISTER_GENDER_MALE": "Мужчина",
         "REGISTER_GENDER_FEMALE": "Женщина",
         "REGISTER_GENDER_OTHER": "БОЕВОЙ ВЕРТОЛЕТ",

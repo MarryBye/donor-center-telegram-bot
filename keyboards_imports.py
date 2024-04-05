@@ -5,3 +5,4 @@ from src.keyboards.notifications import *
 from src.keyboards.donation import *
 from src.keyboards.feedback import *
 from src.keyboards.menuback import *
+from src.keyboards.send_contact import *

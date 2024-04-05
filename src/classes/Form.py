@@ -1,12 +1,7 @@
 from aiogram.fsm.state import State, StatesGroup
 
 class Form(StatesGroup):
-    enter_name = State()
-    enter_birthDay = State()
-    enter_birthMonth = State()
-    enter_birthYear = State()
-    enter_blood = State()
-    enter_gender = State()
+    sendContact = State()
 
 
 class Feedback(StatesGroup):

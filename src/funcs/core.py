@@ -23,6 +23,9 @@ def get_command_variations(key: str):
 def is_pressed_kb_button(key: str):
     return F.text.in_(get_command_variations(key=key))
 
+def is_sended_callback(key: str):
+    return F.data == key
+
 def message_translated(user_id: Union[int, str], key: str):
     return LANGUAGES[db.get_user_language(user_id=user_id)]["MESSAGES"][key]
 
