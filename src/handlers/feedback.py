@@ -1,5 +1,4 @@
 from re import match
-import string
 from aiocache import Cache
 
 from aiogram import Router
@@ -53,7 +52,6 @@ async def feedback_phone_handler(msg: Message, state: FSMContext):
 async def process_phone(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     phone = msg.text
-    allowed_chars = set(string.ascii_letters)
 
     new_keyboard = kb.get_keyboard(kb.MENUBACK).reload_for(user_id)
     bot_message = message_translated(user_id, key="PHONE_SENT")
