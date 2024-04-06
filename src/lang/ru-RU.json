@@ -23,10 +23,10 @@
         "FEEDBACK_AFTER_NAME_MESSAGE": "Ім'я прийнято. Тепер Ви можете вибрати один з способів для зворотнього зв'язку."
     },
     "BUTTONS": {
-        "MAIN_MENU_DONATION": "🩸 Донация",
-        "MAIN_MENU_SETTINGS": "⚙️ Настройки",
-        "MAIN_MENU_FEEDBACK": "📞 Поддержка",
-        "MAIN_MENU_INFO": "❓ Что будет с моими данными?",
+        "MAIN_MENU_DONATION": "🩸 Донация RU",
+        "MAIN_MENU_SETTINGS": "⚙️ Настройки RU",
+        "MAIN_MENU_FEEDBACK": "📞 Поддержка RU",
+        "MAIN_MENU_INFO": "❓ Что будет с моими данными? RU",
 
         "SEND_CONTACT": "Отправить контактные данные",
 

@@ -7,7 +7,7 @@ from aiogram.fsm.state import State, StatesGroup
 
 from src.classes.DatabaseController import DatabaseController
 from src.classes.HandlersController import HandlersController
-from src.classes.Keyboards import KeyboardController
+from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
 from src.classes.Form import Form
 
 from src.funcs.core import is_pressed_kb_button, message_translated, button_translated
@@ -22,22 +22,26 @@ router = Router()
 async def main_handler(msg: Message):
        
        user_id = msg.from_user.id
+       user_language = db.get_user_language(user_id=user_id)
        
        db.set_user_notifications(user_id=user_id, option=True)
        
+       new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MAIN, keyboardType=KeyboardType.REPLY, languageName=user_language)
        bot_message = message_translated(user_id=user_id, key="NOTIFICATIONS_ON")
               
-       await msg.reply(text=bot_message)
+       await msg.reply(text=bot_message, reply_markup=new_keyboard)
        
 @router.message(is_pressed_kb_button("NOTIFICATIONS_MENU_OFF"))
 async def main_handler(msg: Message):
        
        user_id = msg.from_user.id
+       user_language = db.get_user_language(user_id=user_id)
        
        db.set_user_notifications(user_id=user_id, option=False)
        
-       bot_message = message_translated(user_id=user_id, key="NOTIFICATIONS_OFF")
+       new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MAIN, keyboardType=KeyboardType.REPLY, languageName=user_language)
+       bot_message = message_translated(user_id=user_id, key="NOTIFICATIONS_ON")
               
-       await msg.reply(text=bot_message)
+       await msg.reply(text=bot_message, reply_markup=new_keyboard)
 
 hnd.add_router(router)

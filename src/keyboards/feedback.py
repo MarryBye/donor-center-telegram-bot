@@ -1,9 +1,9 @@
-from src.classes.Keyboards import Keyboard, KeyboardController
+from src.classes.Keyboards import Keyboard, KeyboardController, KeyboardName
 
 kb = KeyboardController()
 
-kb_scheme = [["FEEDBACK_MENU_PHONE", "FEEDBACK_MENU_MAIL"], 
-             ["BUTTON_HOME"]]
+kb_scheme = [[{"FEEDBACK_MENU_PHONE": {}}, {"FEEDBACK_MENU_MAIL": {}}], 
+             [{"BUTTON_HOME": {}}]]
 
-keyboard = Keyboard(keyboard=kb_scheme)
-kb.add_keyboard(name=kb.FEEDBACK, keyboard=keyboard)
+keyboard = Keyboard(keyboardScheme=kb_scheme)
+kb.add_keyboard(keyboardName=KeyboardName.FEEDBACK, keyboard=keyboard)

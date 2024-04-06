@@ -2,74 +2,13 @@ from typing import Union
 from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, KeyboardButton, InlineKeyboardButton
 
 from src.classes.Singleton import Singleton
-from src.classes.DatabaseController import DatabaseController
-
 from src.lang.languages import LANGUAGES
 
-class Keyboard:
-    def __init__(self, keyboard: list, needTranslation=True):
-        self.name_scheme = keyboard
-        self.scheme = []
-        self.needTranslation = needTranslation
-        
-        self.reload_for(user_id=-1)
-        
-    def create_keyboard(self) -> ReplyKeyboardMarkup:
-        return ReplyKeyboardMarkup(keyboard=self.scheme, resize_keyboard=True)
-
-    def reload_for(self, user_id: Union[int, str]):
-        if self.needTranslation:
-            self.scheme = []
-            user_language = DatabaseController().get_user_language(user_id=user_id)
-            
-            for buttons_row in self.name_scheme:
-                scheme_buttons_row = []
-                for button in buttons_row:
-                
-                    button_text_translated = LANGUAGES[user_language]["BUTTONS"][button]
-                    
-                    scheme_buttons_row.append(KeyboardButton(text=button_text_translated))
-                self.scheme.append(scheme_buttons_row)
-        else:
-            self.scheme = self.name_scheme.copy()
-            
-        return self.create_keyboard()
+class KeyboardType:
+    INLINE = 0
+    REPLY = 1
     
-class MessageKeyboard:
-    def __init__(self, keyboard: list, needTranslation=True):
-        self.name_scheme = keyboard
-        self.scheme = []
-        self.needTranslation = needTranslation
-        
-        self.reload_for(user_id=-1)
-        
-    def create_keyboard(self) -> InlineKeyboardMarkup:
-        return InlineKeyboardMarkup(inline_keyboard=self.scheme)
-
-    def reload_for(self, user_id: Union[int, str]):
-        if self.needTranslation:
-            self.scheme = []
-            user_language = DatabaseController().get_user_language(user_id=user_id)
-            
-            for buttons_row in self.name_scheme:
-                scheme_buttons_row = []
-                for button in buttons_row:
-                    
-                    button_name = list(button.keys())[0]
-                    
-                    button_callback = button[button_name]["callback"]
-                    button_request_contact = button[button_name]["request_contact"]
-                    
-                    button_text_translated = LANGUAGES[user_language]["BUTTONS"][button_name]
-                    
-                    scheme_buttons_row.append(InlineKeyboardButton(text=button_text_translated, callback_data=button_callback, request_contact=button_request_contact))
-                self.scheme.append(scheme_buttons_row)
-        else:
-            self.scheme = self.name_scheme.copy()
-            
-        return self.create_keyboard()
-            
-class KeyboardController(metaclass=Singleton):
+class KeyboardName:
     MAIN = "MAIN"
     LANGUAGES = "LANGUAGES"
     SETTINGS = "SETTINGS"
@@ -78,15 +17,57 @@ class KeyboardController(metaclass=Singleton):
     FEEDBACK = "FEEDBACK"
     MENUBACK = "MENUBACK"
     MSG_SHARECONTACT = "MSG_SHARECONTACT"
+
+class Keyboard:
+    def __init__(self, keyboardScheme: list[dict[str, dict]], needTranslation=True):
+        self.__nameScheme = keyboardScheme
+        self.needTranslation = needTranslation
+        
+    def regenerate_inline_keyboard(self, languageName: str) -> InlineKeyboardMarkup:
+        self.scheme = []
+        
+        if self.needTranslation:
+            for buttons_row in self.__nameScheme:
+                scheme_buttons_row = []
+                
+                for buttonDictionary in buttons_row:
+                    buttonName = list(buttonDictionary.keys())[0]
+                    button_text_translated = LANGUAGES[languageName]["BUTTONS"][buttonName]
+                    scheme_buttons_row.append(InlineKeyboardButton(text=button_text_translated, **buttonDictionary[buttonName]))
+                    
+                self.scheme.append(scheme_buttons_row)
+        else:
+            self.scheme = self.__nameScheme.copy()
+            
+        return InlineKeyboardMarkup(inline_keyboard=self.scheme)
     
+    def regenerate_reply_keyboard(self, languageName: str) -> ReplyKeyboardMarkup:
+        self.scheme = []
+        
+        if self.needTranslation:
+            for buttons_row in self.__nameScheme:
+                scheme_buttons_row = []
+                
+                for buttonDictionary in buttons_row:
+                    buttonName = list(buttonDictionary.keys())[0]
+                    button_text_translated = LANGUAGES[languageName]["BUTTONS"][buttonName]
+                    scheme_buttons_row.append(KeyboardButton(text=button_text_translated, **buttonDictionary[buttonName]))
+                    
+                self.scheme.append(scheme_buttons_row)
+        else:
+            self.scheme = self.__nameScheme.copy()
+            
+        return ReplyKeyboardMarkup(keyboard=self.scheme, resize_keyboard=True)
+            
+class KeyboardController(metaclass=Singleton):    
     def __init__(self):
         self.keyboards = {}
         
-    def add_keyboard(self, name: str, keyboard: Keyboard):
-        self.keyboards[name] = keyboard
+    def add_keyboard(self, keyboardName: str, keyboard: Keyboard):
+        self.keyboards[keyboardName] = keyboard
         
-    def get_keyboard(self, name: str) -> Keyboard:
-        return self.keyboards[name]
+    def get_keyboard(self, keyboardName: str, keyboardType: int, languageName: str) -> Union[InlineKeyboardMarkup, ReplyKeyboardMarkup]:
+        return self.keyboards[keyboardName].regenerate_reply_keyboard(languageName=languageName) if keyboardType == KeyboardType.REPLY else self.keyboards[keyboardName].regenerate_inline_keyboard(languageName=languageName)
         
     
         

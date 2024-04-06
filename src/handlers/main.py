@@ -10,7 +10,7 @@ from aiogram.fsm.state import State, StatesGroup
 
 from src.classes.DatabaseController import DatabaseController
 from src.classes.HandlersController import HandlersController
-from src.classes.Keyboards import KeyboardController
+from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
 from src.classes.Form import Form, Feedback
 
 from src.funcs.core import is_pressed_kb_button, message_translated, button_translated
@@ -29,7 +29,7 @@ async def main_handler(msg: Message):
        db.set_user_notifications(user_id=user_id, option=True)
        db.set_user_language(user_id=msg.from_user.id, language=cfg.DEFAULT_LANGUAGE)
        
-       new_keyboard = kb.get_keyboard(kb.MAIN).reload_for(user_id)
+       new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MAIN, keyboardType=KeyboardType.REPLY, languageName=cfg.DEFAULT_LANGUAGE)
        bot_message = message_translated(user_id=user_id, key="START_MESSAGE")
               
        await msg.reply(text=bot_message, reply_markup=new_keyboard)
@@ -38,8 +38,9 @@ async def main_handler(msg: Message):
 async def main_handler(msg: Message):
        
        user_id = msg.from_user.id
+       user_language = db.get_user_language(user_id=user_id)
        
-       new_keyboard = kb.get_keyboard(kb.DONATION).reload_for(user_id)
+       new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.DONATION, keyboardType=KeyboardType.REPLY, languageName=user_language)
        bot_message = message_translated(user_id=user_id, key="MENU_OPEN") % button_translated(user_id=user_id, key="MAIN_MENU_DONATION")
               
        await msg.reply(text=bot_message, reply_markup=new_keyboard)
@@ -48,6 +49,7 @@ async def main_handler(msg: Message):
 async def main_handler(msg: Message):
        
        user_id = msg.from_user.id
+       user_language = db.get_user_language(user_id=user_id)
        
        bot_message = message_translated(user_id=user_id, key="INFO_REGISTER")
               
@@ -57,8 +59,9 @@ async def main_handler(msg: Message):
 async def main_handler(msg: Message):
        
        user_id = msg.from_user.id
+       user_language = db.get_user_language(user_id=user_id)
        
-       new_keyboard = kb.get_keyboard(kb.SETTINGS).reload_for(user_id)
+       new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.SETTINGS, keyboardType=KeyboardType.REPLY, languageName=user_language)
        bot_message = message_translated(user_id=user_id, key="MENU_OPEN") % button_translated(user_id=user_id, key="MAIN_MENU_SETTINGS")
               
        await msg.reply(text=bot_message, reply_markup=new_keyboard)
@@ -67,8 +70,9 @@ async def main_handler(msg: Message):
 async def feedback_handler(msg: Message, state: FSMContext):
 
     user_id = msg.from_user.id
+    user_language = db.get_user_language(user_id=user_id)
 
-    new_keyboard = kb.get_keyboard(kb.FEEDBACK).reload_for(user_id)
+    new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.FEEDBACK, keyboardType=KeyboardType.REPLY, languageName=user_language)
     bot_message = message_translated(
         user_id=user_id, key="FEEDBACK_MENU_OPEN"
     ) % button_translated(user_id=user_id, key="MAIN_MENU_FEEDBACK")

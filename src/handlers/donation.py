@@ -9,7 +9,7 @@ from aiogram.fsm.context import FSMContext
 from src.classes.CRMBot import CRMBot
 from src.classes.DatabaseController import DatabaseController
 from src.classes.HandlersController import HandlersController
-from src.classes.Keyboards import KeyboardController
+from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
 from src.classes.Form import Form
 
 from src.funcs.core import is_pressed_kb_button, is_sended_callback, message_translated
@@ -26,16 +26,17 @@ router = Router()
 async def main_handler(msg: Message, state: FSMContext):
        
        user_id = msg.from_user.id
+       user_language = db.get_user_language(user_id=user_id)
        
        if not db.get_donor(user_id=user_id):
               await state.set_state(Form.sendContact)
               
-              new_keyboard = kb.get_keyboard(kb.MSG_SHARECONTACT).reload_for(user_id)
+              new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MSG_SHARECONTACT, keyboardType=KeyboardType.REPLY, languageName=user_language)
               bot_message = message_translated(user_id=user_id, key="REGISTER_STEP_1") % msg.from_user.username
               
               await msg.reply(text=bot_message, reply_markup=new_keyboard)
        else:
-              new_keyboard = kb.get_keyboard(kb.DONATION).reload_for(user_id)
+              new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.DONATION, keyboardType=KeyboardType.REPLY, languageName=user_language)
               bot_message = message_translated(user_id=user_id, key="CANNOT_REGISTER")
                      
               await msg.reply(text=bot_message, reply_markup=new_keyboard)
@@ -45,7 +46,8 @@ async def main_handler(callback: CallbackQuery, state: FSMContext):
        await state.clear()
        
        user = callback.from_user
-       print(user)
+       contact = callback.from_user.contact
+       print(user.phone_number)
        
        await bot.edit_message_reply_markup(
               chat_id=callback.from_user.id,
@@ -57,8 +59,9 @@ async def main_handler(callback: CallbackQuery, state: FSMContext):
 async def main_handler(msg: Message):
        
        user_id = msg.from_user.id
+       user_language = db.get_user_language(user_id=user_id)
        
-       new_keyboard = kb.get_keyboard(kb.DONATION).reload_for(user_id)
+       new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.DONATION, keyboardType=KeyboardType.REPLY, languageName=user_language)
        bot_message = message_translated(user_id=user_id, key="DONATION_FIND_CENTERS_MESSAGE") % (msg.from_user.username, "абоба\nабоба\nабоба")
               
        await msg.reply(text=bot_message, reply_markup=new_keyboard)
@@ -67,8 +70,9 @@ async def main_handler(msg: Message):
 async def main_handler(msg: Message):
        
        user_id = msg.from_user.id
+       user_language = db.get_user_language(user_id=user_id)
        
-       new_keyboard = kb.get_keyboard(kb.DONATION).reload_for(user_id)
+       new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.DONATION, keyboardType=KeyboardType.REPLY, languageName=user_language)
        bot_message = message_translated(user_id=user_id, key="DONATION_HISTORY_MESSAGE") % (msg.from_user.username, "7", "абоба\nабоба\nабоба")
               
        await msg.reply(text=bot_message, reply_markup=new_keyboard)
