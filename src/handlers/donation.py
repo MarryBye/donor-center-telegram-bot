@@ -12,7 +12,7 @@ from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
 from src.classes.Form import Form
 
-from src.funcs.core import pressed_button, message_translate
+from src.funcs.core import pressed_button, message_translate, language_name_to_number
 
 bot = CRMBot()
 
@@ -40,6 +40,19 @@ async def main_handler(msg: Message, state: FSMContext):
               bot_message = message_translate(message_name="CANNOT_REGISTER", language_name=user_language)
                      
               await msg.reply(text=bot_message, reply_markup=new_keyboard)
+              
+@router.message(Form.sendContact)
+@router.message(pressed_button(button_name="SEND_CONTACT"))
+async def main_handler(msg: Message, state: FSMContext):
+       await state.clear()
+       
+       user_id = msg.from_user.id
+       user_language = db.get_user_language(user_id=user_id)
+       user_contact = msg.contact
+       
+       new_phone_id = db.get_last_id_phone() + 1  
+       
+       db.register_donor(id=user_id, name=user_contact.first_name, firstname=user_contact.last_name, language=language_name_to_number(user_language), phone=user_contact.phone_number)
        
 @router.message(pressed_button(button_name="DONATION_MENU_FIND_CENTER"))
 async def main_handler(msg: Message):

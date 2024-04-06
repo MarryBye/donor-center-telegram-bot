@@ -161,6 +161,15 @@ class DatabaseController(metaclass=Singleton):
             self.notifications_cache[str(user_id)] = option
             json.dump(self.notifications_cache, open("bot/cache/user_notifications.json", "w", encoding="UTF-8"))
             
+    def get_last_id_phone(self) -> int:
+        
+        query = 'SELECT "ID" FROM "numberTelephone".number_tel_don ORDER BY "ID"'
+        self.__cursor.execute(query)
+        
+        data = self.__cursor.fetchone()
+        
+        return data or 0
+            
     def get_user_notifications(self, user_id: Union[int, str]) -> bool:
         return self.notifications_cache[str(user_id)] if str(user_id) in self.notifications_cache else True
             
