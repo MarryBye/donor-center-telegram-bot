@@ -13,7 +13,7 @@ from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
 from src.classes.Form import Form, Feedback
 
-from src.funcs.core import is_pressed_kb_button, message_translated, button_translated
+from src.funcs.core import pressed_button, message_translate, button_translate
 
 db = DatabaseController()
 hnd = HandlersController()
@@ -30,63 +30,61 @@ async def main_handler(msg: Message):
        db.set_user_language(user_id=msg.from_user.id, language=cfg.DEFAULT_LANGUAGE)
        
        new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MAIN, keyboardType=KeyboardType.REPLY, languageName=cfg.DEFAULT_LANGUAGE)
-       bot_message = message_translated(user_id=user_id, key="START_MESSAGE")
+       bot_message = message_translate(message_name="START_MESSAGE", language_name=cfg.DEFAULT_LANGUAGE)
               
        await msg.reply(text=bot_message, reply_markup=new_keyboard)
 
-@router.message(is_pressed_kb_button("MAIN_MENU_DONATION"))
+@router.message(pressed_button(button_name="MAIN_MENU_DONATION"))
 async def main_handler(msg: Message):
        
        user_id = msg.from_user.id
        user_language = db.get_user_language(user_id=user_id)
        
        new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.DONATION, keyboardType=KeyboardType.REPLY, languageName=user_language)
-       bot_message = message_translated(user_id=user_id, key="MENU_OPEN") % button_translated(user_id=user_id, key="MAIN_MENU_DONATION")
+       bot_message = message_translate(message_name="MENU_OPEN", language_name=user_language) % button_translate(button_name="MAIN_MENU_DONATION", language_name=user_language)
               
        await msg.reply(text=bot_message, reply_markup=new_keyboard)
 
-@router.message(is_pressed_kb_button("MAIN_MENU_INFO"))
+@router.message(pressed_button(button_name="MAIN_MENU_INFO"))
 async def main_handler(msg: Message):
        
        user_id = msg.from_user.id
        user_language = db.get_user_language(user_id=user_id)
        
-       bot_message = message_translated(user_id=user_id, key="INFO_REGISTER")
+       bot_message = message_translate(message_name="INFO_REGISTER", language_name=user_language)
               
        await msg.reply(text=bot_message)
        
-@router.message(is_pressed_kb_button("MAIN_MENU_SETTINGS"))
+@router.message(pressed_button(button_name="MAIN_MENU_SETTINGS"))
 async def main_handler(msg: Message):
        
        user_id = msg.from_user.id
        user_language = db.get_user_language(user_id=user_id)
        
        new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.SETTINGS, keyboardType=KeyboardType.REPLY, languageName=user_language)
-       bot_message = message_translated(user_id=user_id, key="MENU_OPEN") % button_translated(user_id=user_id, key="MAIN_MENU_SETTINGS")
+       bot_message = message_translate(message_name="MENU_OPEN", language_name=user_language) % button_translate(button_name="MAIN_MENU_DONATION", language_name=user_language)
               
        await msg.reply(text=bot_message, reply_markup=new_keyboard)
        
-@router.message(is_pressed_kb_button("MAIN_MENU_FEEDBACK"))
+@router.message(pressed_button(button_name="MAIN_MENU_FEEDBACK"))
 async def feedback_handler(msg: Message, state: FSMContext):
 
-    user_id = msg.from_user.id
-    user_language = db.get_user_language(user_id=user_id)
+       user_id = msg.from_user.id
+       user_language = db.get_user_language(user_id=user_id)
 
-    new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.FEEDBACK, keyboardType=KeyboardType.REPLY, languageName=user_language)
-    bot_message = message_translated(
-        user_id=user_id, key="FEEDBACK_MENU_OPEN"
-    ) % button_translated(user_id=user_id, key="MAIN_MENU_FEEDBACK")
+       new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.FEEDBACK, keyboardType=KeyboardType.REPLY, languageName=user_language)
+       bot_message = message_translate(message_name="FEEDBACK_MENU_OPEN", language_name=user_language) % button_translate(button_name="MAIN_MENU_FEEDBACK", language_name=user_language)
+       
+       await msg.reply(bot_message, reply_markup=new_keyboard)
 
-    await msg.reply(bot_message, reply_markup=new_keyboard)
+       # TODO: если имя есть в бд, то пропустить шаг с ним
+       # if not name_in_db:
 
-    # TODO: если имя есть в бд, то пропустить шаг с ним
-    # if not name_in_db:
-
-    await state.set_state(Feedback.name)
-    await msg.answer(
-        message_translated(user_id, key="NAME_SENT"),
-        reply_markup=kb.get_keyboard(kb.MENUBACK).reload_for(user_id),
-    )
-
+       await state.set_state(Feedback.name)
+       
+       new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MENUBACK, keyboardType=KeyboardType.REPLY, languageName=user_language)
+       bot_message = message_translate(message_name="NAME_SENT", language_name=user_language)
+       
+       await msg.answer(bot_message, reply_markup=new_keyboard)
 
 hnd.add_router(router)

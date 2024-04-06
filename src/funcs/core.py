@@ -14,23 +14,28 @@ db = DatabaseController()
 
 # Language translations for buttons and messages
 
-def get_command_variations(key: str):
+def get_command_variations(button_name: str):
+    '''Возвращает кортеж с возможными написаниями команды на разных языках, предусмотренных в боте'''
     command_variations = []
     for language in LANGUAGES:
-        command_variations.append(LANGUAGES[language]["BUTTONS"][key])
+        command_variations.append(LANGUAGES[language]["BUTTONS"][button_name])
     return command_variations
 
-def is_pressed_kb_button(key: str):
-    return F.text.in_(get_command_variations(key=key))
+def pressed_button(button_name: str):
+    '''Сокращенный магический фильтр, проверяет была ли нажата кнопка по ее названию, проверяя все ее переводы'''
+    return F.text.in_(get_command_variations(button_name=button_name))
 
-def is_sended_callback(key: str):
-    return F.data == key
+def sent_callback(callback_name: str):
+    '''Сокращенный магический фильтр, проверяет совпадение значения от Inline кнопки'''
+    return F.data == callback_name
 
-def message_translated(user_id: Union[int, str], key: str):
-    return LANGUAGES[db.get_user_language(user_id=user_id)]["MESSAGES"][key]
+def message_translate(message_name: str, language_name: str):
+    '''Возвращает текст сообщения, переведенный на указанный язык'''
+    return LANGUAGES[language_name]["MESSAGES"][message_name]
 
-def button_translated(user_id: Union[int, str], key: str):
-    return LANGUAGES[db.get_user_language(user_id=user_id)]["BUTTONS"][key]
+def button_translate(button_name: str, language_name: str):
+    '''Возвращает текст кнопки, переведенный на указанный язык'''
+    return LANGUAGES[language_name]["BUTTONS"][button_name]
 
 # Data tranformation
 
@@ -48,22 +53,6 @@ def blood_name_to_number(blood: str):
     for blood_tuple in cfg.BLOODS:
         if blood == blood_tuple[1] + blood_tuple[2]:
             return blood_tuple[0]
-        
-def gender_name_to_number(gender: str):
-    # немного костыльно, можно сравнивать конец названия кнопки но помоему это еще хуже
-    
-    if gender in get_command_variations("REGISTER_GENDER_MALE"):
-        gender = "Male"
-    if gender in get_command_variations("REGISTER_GENDER_FEMALE"):
-        gender = "Female"
-    if gender in get_command_variations("REGISTER_GENDER_OTHER"):
-        gender = "Other"
-    if gender in get_command_variations("REGISTER_GENDER_SECRET"):
-        gender = "Secret"
-        
-    for gender_tuple in cfg.GENDERS:
-        if gender in gender_tuple:
-            return gender_tuple[0]
 
 # Keyboards generation
 

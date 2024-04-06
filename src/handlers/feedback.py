@@ -10,7 +10,7 @@ from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
 from src.classes.DatabaseController import DatabaseController
 from src.classes.HandlersController import HandlersController
 
-from src.funcs.core import is_pressed_kb_button, message_translated, button_translated
+from src.funcs.core import pressed_button, message_translate
 
 cache = Cache()
 
@@ -30,7 +30,7 @@ async def process_name(msg: Message, state: FSMContext):
     name = msg.text.strip()
     
     new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.FEEDBACK, keyboardType=KeyboardType.REPLY, languageName=user_language)
-    bot_message = message_translated(user_id, key="FEEDBACK_AFTER_NAME_MESSAGE")
+    bot_message = message_translate(message_name="FEEDBACK_AFTER_NAME_MESSAGE", language_name=user_language)
 
     if not name.isdigit():
         await state.update_data(name=name)
@@ -38,17 +38,17 @@ async def process_name(msg: Message, state: FSMContext):
         await state.clear()
         await msg.answer(bot_message, reply_markup=new_keyboard)
     else:
-        await msg.answer(message_translated(user_id, key="MAIL_PHONE_ERROR"))
+        await msg.answer(message_translate(message_name="MAIL_PHONE_ERROR", language_name=user_language))
 
 
-@router.message(is_pressed_kb_button("FEEDBACK_MENU_PHONE"))
+@router.message(pressed_button(button_name="FEEDBACK_MENU_PHONE"))
 async def feedback_phone_handler(msg: Message, state: FSMContext):
     
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
     new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MENUBACK, keyboardType=KeyboardType.REPLY, languageName=user_language)
-    bot_message = message_translated(user_id, key="FEEDBACK_PHONE_MESSAGE")
+    bot_message = message_translate(message_name="FEEDBACK_PHONE_MESSAGE", language_name=user_language)
 
     await state.set_state(Feedback.phone)
     await msg.answer(bot_message, reply_markup=new_keyboard)
@@ -63,7 +63,7 @@ async def process_phone(msg: Message, state: FSMContext):
     phone = msg.text
 
     new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MENUBACK, keyboardType=KeyboardType.REPLY, languageName=user_language)
-    bot_message = message_translated(user_id, key="PHONE_SENT")
+    bot_message = message_translate(message_name="PHONE_SENT", language_name=user_language)
 
     if match(r"^\+?(\d{10,15})$", phone):
         await msg.answer(bot_message, reply_markup=new_keyboard)
@@ -75,18 +75,18 @@ async def process_phone(msg: Message, state: FSMContext):
 
         # TODO: phone sending...
     else:
-        await msg.answer(message_translated(user_id, key="MAIL_PHONE_ERROR"))
+        await msg.answer(message_translate(message_name="MAIL_PHONE_ERROR", language_name=user_language))
         print("phone error")
 
 
-@router.message(is_pressed_kb_button("FEEDBACK_MENU_MAIL"))
+@router.message(pressed_button(button_name="FEEDBACK_MENU_MAIL"))
 async def feedback_mail_handler(msg: Message, state: FSMContext):
     
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
     new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MENUBACK, keyboardType=KeyboardType.REPLY, languageName=user_language)
-    bot_message = message_translated(user_id, key="FEEDBACK_MAIL_MESSAGE")
+    bot_message = message_translate(message_name="FEEDBACK_MAIL_MESSAGE", language_name=user_language)
 
     await state.set_state(Feedback.mail)
     await msg.answer(bot_message, reply_markup=new_keyboard)
@@ -101,7 +101,7 @@ async def process_phone(msg: Message, state: FSMContext):
     mail = msg.text
 
     new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MENUBACK, keyboardType=KeyboardType.REPLY, languageName=user_language)
-    bot_message = message_translated(user_id, key="MAIL_SENT")
+    bot_message = message_translate(message_name="MAIL_SENT", language_name=user_language)
 
     if match(r"^[^@]+@[^@]+\.[^@]+$", mail):
         await msg.answer(bot_message, reply_markup=new_keyboard)
@@ -113,7 +113,7 @@ async def process_phone(msg: Message, state: FSMContext):
 
         # TODO: mail sending...
     else:
-        await msg.answer(message_translated(user_id, key="MAIL_PHONE_ERROR"))
+        await msg.answer(message_translate(message_name="MAIL_PHONE_ERROR", language_name=user_language))
         print("mail error")
 
 
