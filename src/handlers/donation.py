@@ -50,9 +50,12 @@ async def main_handler(msg: Message, state: FSMContext):
        user_language = db.get_user_language(user_id=user_id)
        user_contact = msg.contact
        
-       new_phone_id = db.get_last_id_phone() + 1  
-       
        db.register_donor(id=user_id, name=user_contact.first_name, firstname=user_contact.last_name, language=language_name_to_number(user_language), phone=user_contact.phone_number)
+       
+       new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MAIN, keyboardType=KeyboardType.REPLY, languageName=user_language)
+       bot_message = message_translate(message_name="SUCCESSFULL_REGISTER", language_name=user_language)
+              
+       await msg.reply(text=bot_message, reply_markup=new_keyboard)
        
 @router.message(pressed_button(button_name="DONATION_MENU_FIND_CENTER"))
 async def main_handler(msg: Message):

@@ -128,13 +128,15 @@ class DatabaseController(metaclass=Singleton):
         
         return data or False
     
-    def register_donor(self, id: Union[int, str], name: str, firstname: str, language: int, phone: int):
+    def register_donor(self, id: Union[int, str], name: str, firstname: str, language: int, phone: str):
+        
+        new_phone_id = self.get_last_id_phone() + 1 
         
         query = 'INSERT INTO "donor".donor ("ID", "name_donor", "first_name_donor", "language_ID") SELECT %s, %s, %s, %s WHERE NOT EXISTS (SELECT "ID" FROM "donor".donor WHERE "ID" = %s)'
         self.__cursor.execute(query, (id, name, firstname, language, id))
         
-        query = 'INSERT INTO "numberTelephone".number_tel_don ("ID", "donor_ID", "number") SELECT %s, %s, %s WHERE NOT EXISTS (SELECT "ID" FROM "numberTelephone".number_tel_don WHERE "ID" = %s)'
-        self.__cursor.execute(query, (id, id, phone, id))
+        query = 'INSERT INTO "numberTelephone".number_tel_don ("ID", "donor_ID", "number") SELECT %s, %s, %s WHERE NOT EXISTS (SELECT "donor_ID" FROM "numberTelephone".number_tel_don WHERE "donor_ID" = %s)'
+        self.__cursor.execute(query, (new_phone_id, id, phone, id)) 
         
         self.__connection.commit() 
         

@@ -14,4 +14,5 @@ bot.include_routers()
     
 if __name__ == "__main__":
     #DatabaseController().setup_database()
+    #DatabaseController().delete_donor(id=482613937)
     asyncio.run(bot.start_bot())
