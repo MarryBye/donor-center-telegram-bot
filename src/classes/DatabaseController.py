@@ -130,7 +130,7 @@ class DatabaseController(metaclass=Singleton):
     
     def register_donor(self, id: Union[int, str], name: str, firstname: str, language: int, phone: str):
         
-        new_phone_id = self.get_last_id_phone() + 1 
+        new_phone_id = self.get_last_id_phone()[0] + 1 
         
         query = 'INSERT INTO "donor".donor ("ID", "name_donor", "first_name_donor", "language_ID") SELECT %s, %s, %s, %s WHERE NOT EXISTS (SELECT "ID" FROM "donor".donor WHERE "ID" = %s)'
         self.__cursor.execute(query, (id, name, firstname, language, id))
@@ -165,7 +165,7 @@ class DatabaseController(metaclass=Singleton):
         
         data = self.__cursor.fetchone()
         
-        return data or 0
+        return data or (0, )
     
     def set_user_notifications(self, user_id: Union[int, str], option: bool):
         if (not str(user_id) in self.notifications_cache) or (self.notifications_cache[str(user_id)] != option):
@@ -184,7 +184,7 @@ class DatabaseController(metaclass=Singleton):
         
         data = self.__cursor.fetchall()
         
-        return data or 0
+        return data or False
     
     def get_donor_appointments(self, user_id: Union[int, str]):
         query = 'SELECT appointment.* FROM "dataBlood".appointment JOIN "numberTelephone".number_tel_don ON "dataBlood".appointment."donor_tel_ID" = "numberTelephone".number_tel_don."ID" WHERE "numberTelephone".number_tel_don."donor_ID" = %s'
@@ -192,7 +192,7 @@ class DatabaseController(metaclass=Singleton):
         
         data = self.__cursor.fetchall()
         
-        return data or 0
+        return data or False
     
     def setup_database(self):
         

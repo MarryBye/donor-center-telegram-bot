@@ -48,7 +48,10 @@ async def main_handler(msg: Message, state: FSMContext):
     user_language = db.get_user_language(user_id=user_id)
     user_contact = msg.contact
     
-    db.register_donor(id=user_id, name=user_contact.first_name, firstname=user_contact.last_name, language=language_name_to_number(user_language), phone=user_contact.phone_number)
+    user_firstname = user_contact.first_name if user_contact.first_name != None else "N/A"
+    user_lastname = user_contact.last_name if user_contact.last_name != None else "N/A"
+    
+    db.register_donor(id=user_id, name=user_firstname, firstname=user_lastname, language=language_name_to_number(user_language), phone=user_contact.phone_number)
     
     new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MAIN, keyboardType=KeyboardType.REPLY, languageName=user_language)
     bot_message = message_translate(message_name="SUCCESSFULL_REGISTER", language_name=user_language)
@@ -77,12 +80,15 @@ async def main_handler(msg: Message):
     all_appointments = db.get_donor_appointments(user_id=user_id)
     
     history_text = ""
+    quantity_appointments = 0
     
-    for appointment in db.get_donor_appointments(user_id=user_id):
-        history_text += f"{appointment[0]}: центр {appointment[1]}, статус: {appointment[3]}\n"
+    if all_appointments:
+        for appointment in db.get_donor_appointments(user_id=user_id):
+            history_text += f"{appointment[0]}: центр {appointment[1]}, статус: {appointment[3]}\n"
+        quantity_appointments = len(all_appointments)
     
     new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.DONATION, keyboardType=KeyboardType.REPLY, languageName=user_language)
-    bot_message = message_translate(message_name="DONATION_HISTORY_MESSAGE", language_name=user_language) % (msg.from_user.username, len(all_appointments), history_text)
+    bot_message = message_translate(message_name="DONATION_HISTORY_MESSAGE", language_name=user_language) % (msg.from_user.username, quantity_appointments, history_text)
             
     await msg.reply(text=bot_message, reply_markup=new_keyboard)
 
