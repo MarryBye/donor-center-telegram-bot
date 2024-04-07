@@ -182,7 +182,7 @@ class DatabaseController(metaclass=Singleton):
         query = 'SELECT "address_ID" FROM "dataBlood".clinic ORDER BY "ID"'
         self.__cursor.execute(query)
         
-        data = self.__cursor.fetchone()
+        data = self.__cursor.fetchall()
         
         return data or 0
     

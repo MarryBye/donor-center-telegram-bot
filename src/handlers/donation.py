@@ -61,7 +61,7 @@ async def main_handler(msg: Message):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
     
-    clinics_text = "\n-".join([clinic for clinic in db.get_clinics()])
+    clinics_text = "\n".join([str(clinic[0]) for clinic in db.get_clinics()])
     
     new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.DONATION, keyboardType=KeyboardType.REPLY, languageName=user_language)
     bot_message = message_translate(message_name="DONATION_FIND_CENTERS_MESSAGE", language_name=user_language) % (msg.from_user.username, clinics_text)
@@ -73,6 +73,13 @@ async def main_handler(msg: Message):
     
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
+    
+    history_text = ""
+    
+    for appointment in db.get_donor_appointments(user_id=user_id):
+        
+    
+    history_text = "\n".join([str(appointment[0]) for appointment in db.get_donor_appointments(user_id=user_id)])
     
     new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.DONATION, keyboardType=KeyboardType.REPLY, languageName=user_language)
     bot_message = message_translate(message_name="DONATION_HISTORY_MESSAGE", language_name=user_language) % (msg.from_user.username, "7", "абоба\nабоба\nабоба")
