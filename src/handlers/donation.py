@@ -74,15 +74,15 @@ async def main_handler(msg: Message):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
     
+    all_appointments = db.get_donor_appointments(user_id=user_id)
+    
     history_text = ""
     
     for appointment in db.get_donor_appointments(user_id=user_id):
-        
-    
-    history_text = "\n".join([str(appointment[0]) for appointment in db.get_donor_appointments(user_id=user_id)])
+        history_text += f"{appointment[0]}: центр {appointment[1]}, статус: {appointment[3]}\n"
     
     new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.DONATION, keyboardType=KeyboardType.REPLY, languageName=user_language)
-    bot_message = message_translate(message_name="DONATION_HISTORY_MESSAGE", language_name=user_language) % (msg.from_user.username, "7", "абоба\nабоба\nабоба")
+    bot_message = message_translate(message_name="DONATION_HISTORY_MESSAGE", language_name=user_language) % (msg.from_user.username, len(all_appointments), history_text)
             
     await msg.reply(text=bot_message, reply_markup=new_keyboard)
 
