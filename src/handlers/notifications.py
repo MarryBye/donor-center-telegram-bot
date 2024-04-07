@@ -16,7 +16,7 @@ db = DatabaseController()
 hnd = HandlersController()
 kb = KeyboardController()
 
-router = Router()
+router = Router(name="NOTIFICATIONS ROUTER")
 
 @router.message(pressed_button(button_name="NOTIFICATIONS_MENU_ON"))
 async def main_handler(msg: Message):

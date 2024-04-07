@@ -5,3 +5,4 @@ from src.handlers.go_home import *
 from src.handlers.notifications import *
 from src.handlers.donation import *
 from src.handlers.feedback import *
+from src.handlers.commands import *

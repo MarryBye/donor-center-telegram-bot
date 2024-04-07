@@ -18,7 +18,7 @@ db = DatabaseController()
 hnd = HandlersController()
 kb = KeyboardController()
 
-router = Router()
+router = Router(name="FEEDBACK ROUTER")
 
 
 @router.message(Feedback.name)

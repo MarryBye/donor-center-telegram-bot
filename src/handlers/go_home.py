@@ -17,7 +17,7 @@ db = DatabaseController()
 hnd = HandlersController()
 kb = KeyboardController()
 
-router = Router()
+router = Router(name="GO_HOME ROUTER")
        
 @router.message(pressed_button(button_name="BUTTON_HOME"))
 async def main_handler(msg: Message, state: FSMContext):

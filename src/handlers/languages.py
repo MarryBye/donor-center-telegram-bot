@@ -16,7 +16,7 @@ db = DatabaseController()
 hnd = HandlersController()
 kb = KeyboardController()
 
-router = Router()
+router = Router(name="LANGUAGES ROUTER")
 
 @router.message(pressed_button(button_name="LANGUAGES_MENU_UK"))
 async def language_handler(msg: Message):

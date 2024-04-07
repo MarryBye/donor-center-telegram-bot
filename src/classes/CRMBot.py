@@ -17,11 +17,13 @@ class CRMBot(Bot, metaclass=Singleton):
         self.dispatcher = Dispatcher()
         
     def include_routers(self):
+        print("Подключаю роутеры...")
         for rt in hnd.get_routers():
+            print(rt.name, "подключен!")
             self.dispatcher.include_router(rt)
     
     async def send_notifications(self, message: str):
-        for user in db.get_user_notifications():
+        for user in db.get_notifications_list():
             await self.send_message(user, message)
         
     async def start_bot(self):

@@ -158,11 +158,6 @@ class DatabaseController(metaclass=Singleton):
     def get_user_language(self, user_id: Union[int, str]) -> str:
         return self.languages_cache[str(user_id)] if str(user_id) in self.languages_cache else cfg.DEFAULT_LANGUAGE
     
-    def set_user_notifications(self, user_id: Union[int, str], option: bool):
-        if (not str(user_id) in self.notifications_cache) or (self.notifications_cache[str(user_id)] != option):
-            self.notifications_cache[str(user_id)] = option
-            json.dump(self.notifications_cache, open("bot/cache/user_notifications.json", "w", encoding="UTF-8"))
-            
     def get_last_id_phone(self) -> int:
         
         query = 'SELECT "ID" FROM "numberTelephone".number_tel_don ORDER BY "ID"'
@@ -171,12 +166,33 @@ class DatabaseController(metaclass=Singleton):
         data = self.__cursor.fetchone()
         
         return data or 0
+    
+    def set_user_notifications(self, user_id: Union[int, str], option: bool):
+        if (not str(user_id) in self.notifications_cache) or (self.notifications_cache[str(user_id)] != option):
+            self.notifications_cache[str(user_id)] = option
+            json.dump(self.notifications_cache, open("bot/cache/user_notifications.json", "w", encoding="UTF-8"))
             
     def get_user_notifications(self, user_id: Union[int, str]) -> bool:
         return self.notifications_cache[str(user_id)] if str(user_id) in self.notifications_cache else True
             
     def get_notifications_list(self):
         return self.notifications_cache
+    
+    def get_clinics(self):
+        query = 'SELECT "address_ID" FROM "dataBlood".clinic ORDER BY "ID"'
+        self.__cursor.execute(query)
+        
+        data = self.__cursor.fetchone()
+        
+        return data or 0
+    
+    def get_donor_appointments(self, user_id: Union[int, str]):
+        query = 'SELECT appointment.* FROM "dataBlood".appointment JOIN "numberTelephone".number_tel_don ON "dataBlood".appointment."donor_tel_ID" = "numberTelephone".number_tel_don."ID" WHERE "numberTelephone".number_tel_don."donor_ID" = %s'
+        self.__cursor.execute(query, (user_id, ))
+        
+        data = self.__cursor.fetchall()
+        
+        return data or 0
     
     def setup_database(self):
         
