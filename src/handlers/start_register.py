@@ -61,8 +61,8 @@ async def main_handler(msg: Message, state: FSMContext):
     if user_contact is not None:
         
         user_phone = user_contact.phone_number
-        user_firstname = user_contact.first_name
-        user_lastname = user_contact.last_name
+        user_firstname = user_contact.first_name or "NODATA"
+        user_lastname = user_contact.last_name or "NODATA"
         
         await state.update_data(user_phone=user_phone)
         await state.update_data(user_firstname=user_firstname)

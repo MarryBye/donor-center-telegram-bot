@@ -134,12 +134,15 @@ class DatabaseController(metaclass=Singleton):
         
         user_phone = self.get_user_phone(user_id=user_id)
         
-        query = 'SELECT * FROM "donor".donor JOIN "numberTelephone".number_tel_don ON donor."ID" = number_tel_don."donor_ID" WHERE number_tel_don.number = %s'
-        self.__cursor.execute(query, (user_phone, ))
-        
-        data = self.__cursor.fetchone()
-        
-        return data or False
+        if user_phone:
+            query = 'SELECT * FROM "donor".donor JOIN "numberTelephone".number_tel_don ON donor."ID" = number_tel_don."donor_ID" WHERE number_tel_don.number = %s'
+            self.__cursor.execute(query, (user_phone, ))
+            
+            data = self.__cursor.fetchone()
+            
+            return data
+        else:
+            return False
     
     def get_donor_by_phone(self, user_phone: str) -> Union[tuple, bool]:
         query = 'SELECT * FROM "donor".donor JOIN "numberTelephone".number_tel_don ON donor.ID = number_tel_don."donor_ID" WHERE number_tel_don.number = %s'
@@ -164,12 +167,14 @@ class DatabaseController(metaclass=Singleton):
         
     def register_donor_appointment(self, user_id: Union[int, str], clinic_id: Union[int, str], registration_date: str, appointment_date: str):
         
-        user_phone = self.get_user_phone(user_id=user_id)
+        user_phone_id = self.get_user_phone_id(user_id=user_id)
         
-        query = 'INSERT INTO "dataBlood".appointment ("clinic_ID", "donor_tel_ID", "status_ID", "registration_date", "appointment_date", "analysis_file_path") SELECT %s, number_tel_don."ID", %s, %s, %s, %s FROM "numberTelephone".number_tel_don LEFT JOIN "dataBlood".appointment ON number_tel_don."ID" = appointment."donor_tel_ID" AND appointment."status_ID" = 3 WHERE number_tel_don.number = %s AND appointment."ID" IS NULL;'
-        self.__cursor.execute(query, (clinic_id, 3, registration_date, appointment_date, "file/file.txt", user_phone)) 
+        if user_phone_id:
         
-        self.__connection.commit()
+            query = 'INSERT INTO "dataBlood".appointment ("clinic_ID", "donor_tel_ID", "status_ID", "registration_date", "appointment_date", "analysis_file_path") SELECT %s, %s, %s, %s, %s, %s WHERE NOT EXISTS (SELECT * FROM "dataBlood".appointment WHERE "donor_tel_ID" = %s AND "status_ID" = 3)'
+            self.__cursor.execute(query, (clinic_id, user_phone_id, 3, registration_date, appointment_date, "file/file.txt", user_phone_id)) 
+            
+            self.__connection.commit()
         
     # def delete_donor(self, id: Union[int, str]):
         
@@ -201,12 +206,22 @@ class DatabaseController(metaclass=Singleton):
         return self.notifications_cache
     
     def set_user_phone(self, user_id: Union[int, str], user_phone: str):
-        if (not str(user_id) in self.notifications_cache) or (self.notifications_cache[str(user_id)] != user_phone):
-            self.notifications_cache[str(user_id)] = user_phone
-            json.dump(self.notifications_cache, open("bot/cache/user_phones.json", "w", encoding="UTF-8"))
+        if (not str(user_id) in self.phones_cache) or (self.phones_cache[str(user_id)] != user_phone):
+            self.phones_cache[str(user_id)] = user_phone.replace("+", "").replace(" ", "")
+            json.dump(self.phones_cache, open("bot/cache/user_phones.json", "w", encoding="UTF-8"))
             
     def get_user_phone(self, user_id: Union[int, str]):
         return self.phones_cache[str(user_id)] if str(user_id) in self.phones_cache else False
+    
+    def get_user_phone_id(self, user_id: Union[int, str]):
+        user_phone = self.get_user_phone(user_id=user_id)
+        
+        query = 'SELECT "ID" FROM "numberTelephone".number_tel_don WHERE number = %s'
+        self.__cursor.execute(query, (user_phone, ))
+        
+        data = self.__cursor.fetchone()
+        
+        return data or False
     
     def get_last_id_phone(self) -> int:
         
