@@ -134,7 +134,7 @@ class DatabaseController(metaclass=Singleton):
         
         user_phone = self.get_user_phone(user_id=user_id)
         
-        query = 'SELECT * FROM "donor".donor JOIN numberTelephone.number_tel_don ON donor.ID = number_tel_don.donor_ID WHERE number_tel_don.number = %s'
+        query = 'SELECT * FROM "donor".donor JOIN "numberTelephone".number_tel_don ON donor."ID" = number_tel_don."donor_ID" WHERE number_tel_don.number = %s'
         self.__cursor.execute(query, (user_phone, ))
         
         data = self.__cursor.fetchone()
@@ -142,7 +142,7 @@ class DatabaseController(metaclass=Singleton):
         return data or False
     
     def get_donor_by_phone(self, user_phone: str) -> Union[tuple, bool]:
-        query = 'SELECT * FROM "donor".donor JOIN numberTelephone.number_tel_don ON donor.ID = number_tel_don.donor_ID WHERE number_tel_don.number = %s'
+        query = 'SELECT * FROM "donor".donor JOIN "numberTelephone".number_tel_don ON donor.ID = number_tel_don."donor_ID" WHERE number_tel_don.number = %s'
         self.__cursor.execute(query, (user_phone, ))
         
         data = self.__cursor.fetchone()
@@ -150,19 +150,24 @@ class DatabaseController(metaclass=Singleton):
         return data or False
     
     def register_donor(self, name: str, surname: str, date_of_birth: str, password: str, gender_id: int, language: int, user_phone: str):
-        
+        '''Регистрация донора в системе (общий аккаунт с сайтом)'''
         new_phone_id = self.get_last_id_phone()[0] + 1 
         new_user_id = self.get_last_id_user()[0] + 1
         
         query = 'INSERT INTO "donor".donor ("ID", "name_donor", "surname_donor", "date_of_birth", "gender_ID", "password", "language_ID") SELECT %s, %s, %s, %s, %s, %s, %s WHERE NOT EXISTS ( SELECT * FROM "numberTelephone".number_tel_don WHERE number = %s)'
         self.__cursor.execute(query, (new_user_id, name, surname, date_of_birth, gender_id, password, language, user_phone))
         
-        print("Донор добавлен!")
-        
         query = 'INSERT INTO "numberTelephone".number_tel_don ("ID", "donor_ID", "number") SELECT %s, %s, %s WHERE NOT EXISTS (SELECT "donor_ID" FROM "numberTelephone".number_tel_don WHERE "donor_ID" = %s)'
         self.__cursor.execute(query, (new_phone_id, new_user_id, user_phone, new_user_id)) 
         
-        print("Телефон донора добавлен!")
+        self.__connection.commit()
+        
+    def register_donor_appointment(self, user_id: Union[int, str], clinic_id: Union[int, str], registration_date: str, appointment_date: str):
+        
+        user_phone = self.get_user_phone(user_id=user_id)
+        
+        query = 'INSERT INTO "dataBlood".appointment ("clinic_ID", "donor_tel_ID", "status_ID", "registration_date", "appointment_date", "analysis_file_path") SELECT %s, number_tel_don."ID", %s, %s, %s, %s FROM "numberTelephone".number_tel_don LEFT JOIN "dataBlood".appointment ON number_tel_don."ID" = appointment."donor_tel_ID" AND appointment."status_ID" = 3 WHERE number_tel_don.number = %s AND appointment."ID" IS NULL;'
+        self.__cursor.execute(query, (clinic_id, 3, registration_date, appointment_date, "file/file.txt", user_phone)) 
         
         self.__connection.commit()
         

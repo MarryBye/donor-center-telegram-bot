@@ -26,18 +26,25 @@ async def main_handler(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
     
-    if not db.get_donor(user_id=user_id):
-            await state.set_state(Form.sendContact)
-            
-            new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MSG_SHARECONTACT, keyboardType=KeyboardType.REPLY, languageName=user_language)
-            bot_message = message_translate(message_name="REGISTER_STEP_1", language_name=user_language) % msg.from_user.username
-            
-            await msg.reply(text=bot_message, reply_markup=new_keyboard)
-    else:
-            new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.DONATION, keyboardType=KeyboardType.REPLY, languageName=user_language)
-            bot_message = message_translate(message_name="CANNOT_REGISTER", language_name=user_language)
-                    
-            await msg.reply(text=bot_message, reply_markup=new_keyboard)
+    db.register_donor_appointment(user_id=user_id, clinic_id=1, registration_date="18-09-2004", appointment_date="19-09-2004")
+    
+    new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.DONATION, keyboardType=KeyboardType.REPLY, languageName=user_language)
+    bot_message = message_translate(message_name="DONATION_REGISTERED_APPOINTMENT", language_name=user_language)
+    
+    await msg.reply(text=bot_message, reply_markup=new_keyboard)
+    
+    # if not db.get_donor_by_userid(user_id=user_id):
+    #     await state.set_state(Form.sendContact)
+        
+    #     new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MSG_SHARECONTACT, keyboardType=KeyboardType.REPLY, languageName=user_language)
+    #     bot_message = message_translate(message_name="REGISTER_STEP_1", language_name=user_language) % msg.from_user.username
+        
+    #     await msg.reply(text=bot_message, reply_markup=new_keyboard)
+    # else:
+    #     new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.DONATION, keyboardType=KeyboardType.REPLY, languageName=user_language)
+    #     bot_message = message_translate(message_name="CANNOT_REGISTER", language_name=user_language)
+                
+    #     await msg.reply(text=bot_message, reply_markup=new_keyboard)
     
 @router.message(pressed_button(button_name="DONATION_MENU_FIND_CENTER"))
 async def main_handler(msg: Message):

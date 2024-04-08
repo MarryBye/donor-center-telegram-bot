@@ -77,7 +77,8 @@ ADDRESSES = (
 
 STATUSES = (
     (1, "Success"),
-    (2, "Unsuccess")
+    (2, "Unsuccess"),
+    (3, "Waiting")
 )
 
 CLINICS = (

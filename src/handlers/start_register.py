@@ -29,17 +29,27 @@ router = Router(name="REGISTER ROUTER")
 @router.message(Command("start"))
 async def main_handler(msg: Message, state: FSMContext):
     
-    await state.set_state(Form.registerUser_contact)
-       
     user_id = msg.from_user.id
     
-    db.set_user_notifications(user_id=user_id, option=True)
-    db.set_user_language(user_id=msg.from_user.id, language=cfg.DEFAULT_LANGUAGE)
+    if not db.get_donor_by_userid(user_id=user_id):
     
-    new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MSG_SHARECONTACT, keyboardType=KeyboardType.REPLY, languageName=cfg.DEFAULT_LANGUAGE)
-    bot_message = message_translate(message_name="REGISTER_START", language_name=cfg.DEFAULT_LANGUAGE)
-            
-    await msg.reply(text=bot_message, reply_markup=new_keyboard)
+        await state.set_state(Form.registerUser_contact)
+        
+        db.set_user_notifications(user_id=user_id, option=True)
+        db.set_user_language(user_id=msg.from_user.id, language=cfg.DEFAULT_LANGUAGE)
+        
+        new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MSG_SHARECONTACT, keyboardType=KeyboardType.REPLY, languageName=cfg.DEFAULT_LANGUAGE)
+        bot_message = message_translate(message_name="REGISTER_START", language_name=cfg.DEFAULT_LANGUAGE)
+                
+        await msg.reply(text=bot_message, reply_markup=new_keyboard)
+        
+    else:
+        
+        new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MAIN, keyboardType=KeyboardType.REPLY, languageName=cfg.DEFAULT_LANGUAGE)
+        bot_message = message_translate(message_name="ALREADY_REGISTERED", language_name=cfg.DEFAULT_LANGUAGE)
+                
+        await msg.reply(text=bot_message, reply_markup=new_keyboard)
+        
 
 @router.message(Form.registerUser_contact)
 async def main_handler(msg: Message, state: FSMContext):
