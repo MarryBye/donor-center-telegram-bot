@@ -63,9 +63,9 @@
         "BUTTON_HOME": "🏠 Главное меню",
         "BUTTON_BACK": "⬅️ Назад",
 
-        "GENDER_MALE": "Мужчина",
-        "GENDER_FEMALE": "Женщина",
-        "GENDER_OTHER": "Боевой вертолет",
-        "GENDER_NODATA": "Не хочу говорить"
+        "MALE": "Мужчина",
+        "FEMALE": "Женщина",
+        "OTHER": "Боевой вертолет",
+        "NODATA": "Не хочу говорить"
     }
 }

@@ -56,7 +56,7 @@ def blood_name_to_id(blood_name: str):
         
 def gender_name_to_id(gender_name: str):
     for gender in cfg.GENDERS:
-        if gender_name == gender[1]:
+        if gender[1] == gender_name:
             return gender[0]
 
 # Keyboards generation

@@ -3,9 +3,9 @@ from src.classes.Keyboards import Keyboard, KeyboardController, KeyboardName
 kb = KeyboardController()
 
 kb_scheme = [
-    [{"GENDER_MALE": {}}, {"GENDER_FEMALE": {}}],
-    [{"GENDER_OTHER": {}}],
-    [{"GENDER_NODATA": {}}]
+    [{"MALE": {}}, {"FEMALE": {}}],
+    [{"OTHER": {}}],
+    [{"NODATA": {}}]
 ]
 
 keyboard = Keyboard(keyboardScheme=kb_scheme)

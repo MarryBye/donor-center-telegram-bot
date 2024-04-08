@@ -101,8 +101,21 @@ async def main_handler(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
     
-    if msg.text in get_command_variations(button_name="GENDER_MALE") or msg.text in get_command_variations(button_name="GENDER_FEMALE") or msg.text in get_command_variations(button_name="GENDER_OTHER") or msg.text in get_command_variations(button_name="GENDER_NODATA"):
-        user_gender = msg.text
+    if msg.text in get_command_variations(button_name="MALE") or msg.text in get_command_variations(button_name="FEMALE") or msg.text in get_command_variations(button_name="OTHER") or msg.text in get_command_variations(button_name="NODATA"):
+        
+        user_gender = ""
+        
+        if msg.text in get_command_variations(button_name="MALE"):
+            user_gender = "MALE"
+    
+        if msg.text in msg.text in get_command_variations(button_name="FEMALE"):
+            user_gender = "FEMALE"
+    
+        if msg.text in get_command_variations(button_name="OTHER"):
+            user_gender = "OTHER"
+    
+        if msg.text in get_command_variations(button_name="NODATA"):
+            user_gender = "NODATA"
         
         await state.update_data(user_gender=user_gender)
         

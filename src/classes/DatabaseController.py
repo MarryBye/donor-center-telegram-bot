@@ -45,7 +45,7 @@ class DatabaseController(metaclass=Singleton):
         query = 'DELETE FROM "donor".language'
         self.__cursor.execute(query)
         
-        query = 'INSERT INTO "donor".language ("ID", "language") VALUES (%s, %s)'
+        query = 'INSERT INTO "donor".language ("ID", "language_name") VALUES (%s, %s)'
         self.__cursor.executemany(query, cfg.LANGUAGES)
         
         self.__connection.commit()
@@ -95,7 +95,7 @@ class DatabaseController(metaclass=Singleton):
         query = 'DELETE FROM "dataBlood".address'
         self.__cursor.execute(query)
         
-        query = 'INSERT INTO "dataBlood".address ("ID", "region_ID", "city_ID", "area_ID", "street_ID") VALUES (%s, %s, %s, %s, %s)'
+        query = 'INSERT INTO "dataBlood".address ("ID", "region_ID", "city_ID", "area_ID", "street_ID", "house_number") VALUES (%s, %s, %s, %s, %s, %s)'
         self.__cursor.executemany(query, cfg.ADDRESSES)
         
         self.__connection.commit()
@@ -115,7 +115,7 @@ class DatabaseController(metaclass=Singleton):
         query = 'DELETE FROM "donor".gender'
         self.__cursor.execute(query)
         
-        query = 'INSERT INTO "donor".gender ("ID", "gender_status") VALUES (%s, %s)'
+        query = 'INSERT INTO "donor".gender ("ID", "gender_name") VALUES (%s, %s)'
         self.__cursor.executemany(query, cfg.GENDERS)
         
         self.__connection.commit()
@@ -125,7 +125,7 @@ class DatabaseController(metaclass=Singleton):
         query = 'DELETE FROM "dataBlood".clinic'
         self.__cursor.execute(query)
         
-        query = 'INSERT INTO "dataBlood".clinic ("ID", "address_ID") VALUES (%s, %s)'
+        query = 'INSERT INTO "dataBlood".clinic ("ID", "clinic_name", "address_ID", "working_hours") VALUES (%s, %s, %s, %s)'
         self.__cursor.executemany(query, cfg.CLINICS)
         
         self.__connection.commit()
