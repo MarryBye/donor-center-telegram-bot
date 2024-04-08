@@ -17,6 +17,7 @@ class KeyboardName:
     FEEDBACK = "FEEDBACK"
     MENUBACK = "MENUBACK"
     MSG_SHARECONTACT = "MSG_SHARECONTACT"
+    GENDERS = "GENDERS"
 
 class Keyboard:
     def __init__(self, keyboardScheme: list[dict[str, dict]], needTranslation=True):

@@ -11,6 +11,7 @@ class DatabaseController(metaclass=Singleton):
         
         self.languages_cache = json.load(open("bot/cache/user_languages.json", "r", encoding="UTF-8"))
         self.notifications_cache = json.load(open("bot/cache/user_notifications.json", "r", encoding="UTF-8"))
+        self.phones_cache = json.load(open("bot/cache/user_phones.json", "r", encoding="UTF-8"))
         
         self.__connection = None
         self.__cursor = None
@@ -109,6 +110,16 @@ class DatabaseController(metaclass=Singleton):
         
         self.__connection.commit()
         
+    def add_genders(self):
+        
+        query = 'DELETE FROM "donor".gender'
+        self.__cursor.execute(query)
+        
+        query = 'INSERT INTO "donor".gender ("ID", "gender_status") VALUES (%s, %s)'
+        self.__cursor.executemany(query, cfg.GENDERS)
+        
+        self.__connection.commit()
+        
     def add_clinics(self):
         
         query = 'DELETE FROM "dataBlood".clinic'
@@ -119,36 +130,51 @@ class DatabaseController(metaclass=Singleton):
         
         self.__connection.commit()
     
-    def get_donor(self, user_id: Union[int, str]) -> Union[tuple, bool]:
-
-        query = 'SELECT * FROM "donor".donor WHERE "ID" = %s'
-        self.__cursor.execute(query, (user_id, ))
+    def get_donor_by_userid(self, user_id: str) -> Union[tuple, bool]:
+        
+        user_phone = self.get_user_phone(user_id=user_id)
+        
+        query = 'SELECT * FROM "donor".donor JOIN numberTelephone.number_tel_don ON donor.ID = number_tel_don.donor_ID WHERE number_tel_don.number = %s'
+        self.__cursor.execute(query, (user_phone, ))
         
         data = self.__cursor.fetchone()
         
         return data or False
     
-    def register_donor(self, id: Union[int, str], name: str, firstname: str, language: int, phone: str):
+    def get_donor_by_phone(self, user_phone: str) -> Union[tuple, bool]:
+        query = 'SELECT * FROM "donor".donor JOIN numberTelephone.number_tel_don ON donor.ID = number_tel_don.donor_ID WHERE number_tel_don.number = %s'
+        self.__cursor.execute(query, (user_phone, ))
+        
+        data = self.__cursor.fetchone()
+        
+        return data or False
+    
+    def register_donor(self, name: str, surname: str, date_of_birth: str, password: str, gender_id: int, language: int, user_phone: str):
         
         new_phone_id = self.get_last_id_phone()[0] + 1 
+        new_user_id = self.get_last_id_user()[0] + 1
         
-        query = 'INSERT INTO "donor".donor ("ID", "name_donor", "first_name_donor", "language_ID") SELECT %s, %s, %s, %s WHERE NOT EXISTS (SELECT "ID" FROM "donor".donor WHERE "ID" = %s)'
-        self.__cursor.execute(query, (id, name, firstname, language, id))
+        query = 'INSERT INTO "donor".donor ("ID", "name_donor", "surname_donor", "date_of_birth", "gender_ID", "password", "language_ID") SELECT %s, %s, %s, %s, %s, %s, %s WHERE NOT EXISTS ( SELECT * FROM "numberTelephone".number_tel_don WHERE number = %s)'
+        self.__cursor.execute(query, (new_user_id, name, surname, date_of_birth, gender_id, password, language, user_phone))
+        
+        print("Донор добавлен!")
         
         query = 'INSERT INTO "numberTelephone".number_tel_don ("ID", "donor_ID", "number") SELECT %s, %s, %s WHERE NOT EXISTS (SELECT "donor_ID" FROM "numberTelephone".number_tel_don WHERE "donor_ID" = %s)'
-        self.__cursor.execute(query, (new_phone_id, id, phone, id)) 
+        self.__cursor.execute(query, (new_phone_id, new_user_id, user_phone, new_user_id)) 
         
-        self.__connection.commit() 
-        
-    def delete_donor(self, id: Union[int, str]):
-        
-        query = 'DELETE FROM "donor".donor WHERE "ID" = %s'
-        self.__cursor.execute(query, (id, ))
-        
-        query = 'DELETE FROM "numberTelephone".number_tel_don WHERE "donor_ID" = %s'
-        self.__cursor.execute(query, (id, ))
+        print("Телефон донора добавлен!")
         
         self.__connection.commit()
+        
+    # def delete_donor(self, id: Union[int, str]):
+        
+    #     query = 'DELETE FROM "donor".donor WHERE "ID" = %s'
+    #     self.__cursor.execute(query, (id, ))
+        
+    #     query = 'DELETE FROM "numberTelephone".number_tel_don WHERE "donor_ID" = %s'
+    #     self.__cursor.execute(query, (id, ))
+        
+    #     self.__connection.commit()
         
     def set_user_language(self, user_id: Union[int, str], language: str):
         if (not str(user_id) in self.languages_cache) or (self.languages_cache[str(user_id)] != language):
@@ -157,15 +183,6 @@ class DatabaseController(metaclass=Singleton):
         
     def get_user_language(self, user_id: Union[int, str]) -> str:
         return self.languages_cache[str(user_id)] if str(user_id) in self.languages_cache else cfg.DEFAULT_LANGUAGE
-    
-    def get_last_id_phone(self) -> int:
-        
-        query = 'SELECT "ID" FROM "numberTelephone".number_tel_don ORDER BY "ID"'
-        self.__cursor.execute(query)
-        
-        data = self.__cursor.fetchone()
-        
-        return data or (0, )
     
     def set_user_notifications(self, user_id: Union[int, str], option: bool):
         if (not str(user_id) in self.notifications_cache) or (self.notifications_cache[str(user_id)] != option):
@@ -178,6 +195,32 @@ class DatabaseController(metaclass=Singleton):
     def get_notifications_list(self):
         return self.notifications_cache
     
+    def set_user_phone(self, user_id: Union[int, str], user_phone: str):
+        if (not str(user_id) in self.notifications_cache) or (self.notifications_cache[str(user_id)] != user_phone):
+            self.notifications_cache[str(user_id)] = user_phone
+            json.dump(self.notifications_cache, open("bot/cache/user_phones.json", "w", encoding="UTF-8"))
+            
+    def get_user_phone(self, user_id: Union[int, str]):
+        return self.phones_cache[str(user_id)] if str(user_id) in self.phones_cache else False
+    
+    def get_last_id_phone(self) -> int:
+        
+        query = 'SELECT "ID" FROM "numberTelephone".number_tel_don ORDER BY "ID"'
+        self.__cursor.execute(query)
+        
+        data = self.__cursor.fetchone()
+        
+        return data or (0, )
+    
+    def get_last_id_user(self) -> int:
+        
+        query = 'SELECT "ID" FROM "donor".donor ORDER BY "ID"'
+        self.__cursor.execute(query)
+        
+        data = self.__cursor.fetchone()
+        
+        return data or (0, )
+    
     def get_clinics(self):
         query = 'SELECT "address_ID" FROM "dataBlood".clinic ORDER BY "ID"'
         self.__cursor.execute(query)
@@ -187,8 +230,11 @@ class DatabaseController(metaclass=Singleton):
         return data or False
     
     def get_donor_appointments(self, user_id: Union[int, str]):
-        query = 'SELECT appointment.* FROM "dataBlood".appointment JOIN "numberTelephone".number_tel_don ON "dataBlood".appointment."donor_tel_ID" = "numberTelephone".number_tel_don."ID" WHERE "numberTelephone".number_tel_don."donor_ID" = %s'
-        self.__cursor.execute(query, (user_id, ))
+        
+        user_phone = self.get_user_phone(user_id=user_id)
+        
+        query = 'SELECT appointment.* FROM dataBlood.appointment JOIN numberTelephone.number_tel_don ON appointment.donor_tel_ID = number_tel_don.donor_ID WHERE number_tel_don.number = %s'
+        self.__cursor.execute(query, (user_phone, ))
         
         data = self.__cursor.fetchall()
         
@@ -225,3 +271,6 @@ class DatabaseController(metaclass=Singleton):
         
         self.add_clinics()
         print("Таблица клиник заполнена!")
+        
+        self.add_genders()
+        print("Таблица гендеров заполнена!")

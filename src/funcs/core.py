@@ -39,20 +39,25 @@ def button_translate(button_name: str, language_name: str):
 
 # Data tranformation
 
-def month_name_to_number(month: str):
+def month_name_to_id(month_name: str):
     for i in range(12):
-        if month in get_command_variations("REGISTER_MONTH_" + str(i + 1)):
+        if month_name in get_command_variations("REGISTER_MONTH_" + str(i + 1)):
             return i + 1
         
-def language_name_to_number(language: str):
-    for language_tuple in cfg.LANGUAGES:
-        if language in language_tuple:
-            return language_tuple[0]
+def language_name_to_id(language_name: str):
+    for language in cfg.LANGUAGES:
+        if language_name in language:
+            return language[0]
 
-def blood_name_to_number(blood: str):
-    for blood_tuple in cfg.BLOODS:
-        if blood == blood_tuple[1] + blood_tuple[2]:
-            return blood_tuple[0]
+def blood_name_to_id(blood_name: str):
+    for blood in cfg.BLOODS:
+        if blood_name == blood[1] + blood[2]:
+            return blood[0]
+        
+def gender_name_to_id(gender_name: str):
+    for gender in cfg.GENDERS:
+        if gender_name == gender[1]:
+            return gender[0]
 
 # Keyboards generation
 

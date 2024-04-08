@@ -12,7 +12,7 @@ from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
 from src.classes.Form import Form
 
-from src.funcs.core import pressed_button, message_translate, language_name_to_number
+from src.funcs.core import pressed_button, message_translate, language_name_to_id
 
 db = DatabaseController()
 hnd = HandlersController()
@@ -38,25 +38,6 @@ async def main_handler(msg: Message, state: FSMContext):
             bot_message = message_translate(message_name="CANNOT_REGISTER", language_name=user_language)
                     
             await msg.reply(text=bot_message, reply_markup=new_keyboard)
-            
-@router.message(Form.sendContact)
-@router.message(pressed_button(button_name="SEND_CONTACT"))
-async def main_handler(msg: Message, state: FSMContext):
-    await state.clear()
-    
-    user_id = msg.from_user.id
-    user_language = db.get_user_language(user_id=user_id)
-    user_contact = msg.contact
-    
-    user_firstname = user_contact.first_name if user_contact.first_name != None else "N/A"
-    user_lastname = user_contact.last_name if user_contact.last_name != None else "N/A"
-    
-    db.register_donor(id=user_id, name=user_firstname, firstname=user_lastname, language=language_name_to_number(user_language), phone=user_contact.phone_number)
-    
-    new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MAIN, keyboardType=KeyboardType.REPLY, languageName=user_language)
-    bot_message = message_translate(message_name="SUCCESSFULL_REGISTER", language_name=user_language)
-            
-    await msg.reply(text=bot_message, reply_markup=new_keyboard)
     
 @router.message(pressed_button(button_name="DONATION_MENU_FIND_CENTER"))
 async def main_handler(msg: Message):

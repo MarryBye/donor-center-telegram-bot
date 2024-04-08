@@ -12,8 +12,8 @@ DONATION_MAXIMUM_YEAR = 80 # for example today 2024 year, so the minimum year is
 # PostgreSQL Server Configuration
 
 DATABASE_NAME = "crm"
-IP_ADDRESS = "108.181.157.250"
-PORT = "10068"
+IP_ADDRESS = "108.181.197.188"
+PORT = "18384"
 USERNAME = "temshik_shemshik"
 PASSWORD = "3211234545"
 
@@ -86,4 +86,11 @@ CLINICS = (
     (3, 3),
     (4, 4),
     (5, 5)
+)
+
+GENDERS = (
+    (1, "Male"),
+    (2, "Female"),
+    (3, "Other"),
+    (4, "N/A")
 )
