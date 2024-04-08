@@ -56,10 +56,9 @@ async def main_handler(msg: Message, state: FSMContext):
     else:
         text = msg.text.replace("/notify_all ", "")
 
-    new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MAIN, keyboardType=KeyboardType.REPLY, languageName=user_language)
     bot_message = message_translate(message_name="CANCELLED_STATE", language_name=user_language)
     
-    for user_id in enumerate(db.get_notifications_list()):
+    for user_id in db.get_notifications_list():
         if photos is not None:
             await bot.send_photo(user_id, photo=photos[-1].file_id, caption=text)
         else:
