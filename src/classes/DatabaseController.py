@@ -253,7 +253,7 @@ class DatabaseController(metaclass=Singleton):
         
         user_phone = self.get_user_phone(user_id=user_id)
         
-        query = 'SELECT appointment.* FROM dataBlood.appointment JOIN numberTelephone.number_tel_don ON appointment.donor_tel_ID = number_tel_don.donor_ID WHERE number_tel_don.number = %s'
+        query = 'SELECT appointment.* FROM "dataBlood".appointment JOIN "numberTelephone".number_tel_don ON appointment."donor_tel_ID" = number_tel_don."donor_ID" WHERE number_tel_don.number = %s AND NOT appointment."status_ID" = 3'
         self.__cursor.execute(query, (user_phone, ))
         
         data = self.__cursor.fetchall()
