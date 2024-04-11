@@ -59,19 +59,19 @@ async def feedback_handler(msg: Message, state: FSMContext):
        user_id = msg.from_user.id
        user_language = db.get_user_language(user_id=user_id)
 
-       new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.FEEDBACK, keyboardType=KeyboardType.REPLY, languageName=user_language)
-       bot_message = message_translate(message_name="FEEDBACK_MENU_OPEN", language_name=user_language) % button_translate(button_name="MAIN_MENU_FEEDBACK", language_name=user_language)
-       
-       await msg.reply(bot_message, reply_markup=new_keyboard)
+       if db.get_donor_by_userid(user_id):
 
-       # TODO: если имя есть в бд, то пропустить шаг с ним
-       # if not name_in_db:
+              new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.FEEDBACK, keyboardType=KeyboardType.REPLY, languageName=user_language)
+              bot_message = message_translate(message_name="FEEDBACK_MENU_OPEN", language_name=user_language) % button_translate(button_name="MAIN_MENU_FEEDBACK", language_name=user_language)
+              
+              await msg.reply(bot_message, reply_markup=new_keyboard)
 
-       await state.set_state(Feedback.name)
-       
-       new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MENUBACK, keyboardType=KeyboardType.REPLY, languageName=user_language)
-       bot_message = message_translate(message_name="NAME_SENT", language_name=user_language)
-       
-       await msg.answer(bot_message, reply_markup=new_keyboard)
+       else:
+              await state.set_state(Feedback.name)
+              
+              new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MENUBACK, keyboardType=KeyboardType.REPLY, languageName=user_language)
+              bot_message = message_translate(message_name="NAME_SENT", language_name=user_language)
+              
+              await msg.answer(bot_message, reply_markup=new_keyboard)
 
 hnd.add_router(router)
