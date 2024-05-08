@@ -172,7 +172,7 @@ class DatabaseController(metaclass=Singleton):
         - ``telegram_id`` - номер профиля Телеграма пользоваля;
         - ``number`` - номер телефона пользователя;
         - ``email`` - электронная почта пользователя.\n
-        Возвращает ``False`` если донора не существует.
+        Метод возвращает ``False`` если донора не существует.
         '''
         
         query = 'SELECT donors.*, numbers."ID" AS number_ID, numbers.number AS number FROM donor.donor as donors, number_telephone.donor_number AS numbers WHERE donors."ID" = numbers."donor_ID" AND (donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s)'
@@ -237,6 +237,24 @@ class DatabaseController(metaclass=Singleton):
         self.__connection.commit()
         
         return True
+    
+    def register_donor_appointment(self, clinic_id: int, registration_date: str, appointment_date: str, id: int=-1, telegram_id: int=-1, number: str="-1", email: str="-1"):
+        
+        '''
+        Зарегистрировать донора на прием. В качестве параметров для определения донора передается одно из или несколько следующих значений:
+        - ``id`` - номер донора в БД; 
+        - ``telegram_id`` - номер профиля Телеграма пользоваля;
+        - ``number`` - номер телефона пользователя;
+        - ``email`` - электронная почта пользователя.\n
+        Достаточно передать один из аргументов для того, чтобы определить кого записать на прием.
+        Далее необходимо передать аргументы для будущей записи на прием, а именно:
+        - ``clinic_id`` - номер клиники;
+        - ``registration_date`` - дата регистрации;
+        - ``appointment_date`` - дата приема;
+        Метод возвращает ``False`` если донора не существует.
+        '''
+        
+        pass
     
     def get_donor_by_userid(self, user_id: str) -> Union[tuple, bool]:
         
