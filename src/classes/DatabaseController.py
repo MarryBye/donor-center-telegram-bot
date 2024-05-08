@@ -145,21 +145,19 @@ class DatabaseController(metaclass=Singleton):
         
         return 1 if data is None else data[0] + 1
     
-    def is_donor_exists(self, donor: Donor) -> bool:
+    def is_donor_exists(self, id: int=-1, telegram_id: int=-1, number: str="-1", email: str="-1") -> bool:
         
         '''
-        Проверка существует ли донор. В качестве параметра передается объект класса ``Donor``, т.к. нужно одновременно проверить наличие в БД комплекса параметров.\n
-        Метод возвращает либо ``True``, либо ``False``.
+        Проверка существует ли донор. В качестве параметров передается одно из или несколько следующих значений:
+        - ``id`` - номер донора в БД; 
+        - ``telegram_id`` - номер профиля Телеграма пользоваля;
+        - ``number`` - номер телефона пользователя;
+        - ``email`` - электронная почта пользователя.\n
+        Возвращает ``False`` если донора не существует.
         '''
         
         query = 'SELECT donors."ID" FROM donor.donor AS donors, number_telephone.donor_number AS numbers WHERE donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s'
-        self.__cursor.execute(query, (
-            donor.get_id(), 
-            donor.get_telegram(), 
-            donor.get_number(), 
-            donor.get_email()
-            )
-        )
+        self.__cursor.execute(query, (id, telegram_id, number, email))
         
         data = self.__cursor.fetchone()
         is_exists = data is not None
@@ -169,7 +167,7 @@ class DatabaseController(metaclass=Singleton):
     def get_donor_by(self, id: int=-1, telegram_id: int=-1, number: str="-1", email: str="-1") -> Union[Donor, bool]:
         
         '''
-        Сформировать объект ``Donor`` по данным из БД, если донор существует. В качестве параметра передается одно из следующих значений:
+        Сформировать объект ``Donor`` по данным из БД, если донор существует. В качестве параметров передается одно из или несколько следующих значений:
         - ``id`` - номер донора в БД; 
         - ``telegram_id`` - номер профиля Телеграма пользоваля;
         - ``number`` - номер телефона пользователя;
@@ -206,7 +204,7 @@ class DatabaseController(metaclass=Singleton):
         Регистрация донора и добавление его в БД. Если донор уже существует (такая электронная почта уже существует, номер телефона, номер в БД или номер профиля Телеграм) метод вернет ``False``, в случае успешного выполнения будет возвращено значение ``True``.
         '''
         
-        is_exists = self.is_donor_exists(donor=donor)
+        is_exists = self.is_donor_exists(id=donor.get_id(), telegram_id=donor.get_telegram(), number=donor.get_number(), email=donor.get_email())
         
         if is_exists:
             return False
