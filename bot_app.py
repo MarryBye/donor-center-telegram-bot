@@ -30,7 +30,9 @@ new_donor.set_email(email="a234231@gmail.com")
 new_donor.set_number(number="+38066066220666")
 new_donor.set_password(password="2eRT3kGG")
 
-print(DatabaseController().register_donor(donor=new_donor))
+# print(DatabaseController().register_donor(donor=new_donor))
 
-for donor in DatabaseController().get_donors():
-    print(donor.get_name(), donor.get_telegram())
+# for donor in DatabaseController().get_donors():
+#     print(donor.get_name(), donor.get_telegram())
+
+DatabaseController().register_donor_appointment(id=5, clinic_id=1, registration_date="1-1-2000", appointment_date="11-11-2004")
