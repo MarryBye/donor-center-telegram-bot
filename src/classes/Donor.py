@@ -4,7 +4,7 @@ class Donor:
     Формирует объект донора при помощи данных из БД. Метод ``form()`` для формирования нового донора. В качестве аргумента нужно передать кортеж данных из БД. Например ``new_donor.form(data)``, где ``data`` - это кортеж.
     '''
     
-    def __init__(self, data: tuple):
+    def __init__(self, data: tuple=None):
         self.__data = {
             "ID": None,
             "name_donor": None,
@@ -19,7 +19,8 @@ class Donor:
             "donor_number": None
         }
         
-        self.form(data)
+        if data is not None:
+            self.form(data)
         
     def form(self, data: tuple):
         for i, data_component in enumerate(self.__data, start=0):
@@ -30,10 +31,10 @@ class Donor:
     def get_data(self) -> tuple:
         return self.__data.values()
     
-    def set_ID(self, id: int):
+    def set_id(self, id: int):
         self.__data["ID"] = id
     
-    def get_ID(self) -> int:
+    def get_id(self) -> int:
         return self.__data["ID"]
     
     def set_name(self, name: str):
@@ -43,10 +44,10 @@ class Donor:
         return self.__data["name_donor"]
     
     def set_surname(self, surname: str):
-        self.__data["surname"] = surname
+        self.__data["surname_donor"] = surname
     
     def get_surname(self) -> str:
-        return self.__data["surname"]
+        return self.__data["surname_donor"]
     
     def set_birthdate(self, birthdate: str):
         self.__data["date_of_birth"] = birthdate
@@ -67,7 +68,7 @@ class Donor:
         return self.__data["email"]
     
     def set_telegram(self, telegram: int):
-        self.__data["telegram_ID"] = id
+        self.__data["telegram_ID"] = telegram
     
     def get_telegram(self) -> int:
         return self.__data["telegram_ID"]
@@ -83,3 +84,16 @@ class Donor:
     
     def get_language(self) -> int:
         return self.__data["language_ID"]
+    
+    def set_number_id(self, id: int):
+        self.__data["number_ID"] = id
+    
+    def get_number_id(self) -> int:
+        return self.__data["number_ID"]
+    
+    def set_number(self, number: str):
+        self.__data["donor_number"] = number
+    
+    def get_number(self) -> int:
+        return self.__data["donor_number"]
+    

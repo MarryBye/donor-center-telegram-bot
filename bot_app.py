@@ -18,7 +18,19 @@ from keyboards_imports import *
 #     #DatabaseController().setup_database()
 #     asyncio.run(bot.start_bot())
 
-# new_donor = Donor().form((145, "Bob", "Atkins", "18.09.2004", 1, "bob@gmail.com", 1667488673, "2E4f555U", 2, 1))
+new_donor = Donor()
+
+new_donor.set_name(name="Abobius")
+new_donor.set_surname(surname="Aborimbas")
+new_donor.set_birthdate(birthdate="12-12-2000")
+new_donor.set_gender(gender=1)
+new_donor.set_telegram(telegram=2888774)
+new_donor.set_language(language=1)
+new_donor.set_email(email="abob111@gmail.com")
+new_donor.set_number(number="+380660660666")
+new_donor.set_password(password="2eRT3kGG")
+
+print(DatabaseController().register_donor(donor=new_donor))
 
 for donor in DatabaseController().get_donors():
-    print(donor.get_name())
+    print(donor.get_name(), donor.get_telegram())

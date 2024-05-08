@@ -131,47 +131,54 @@ class DatabaseController(metaclass=Singleton):
         
         self.__connection.commit()
     
-    def get_next_donor_id(self) -> int:
+    def get_next_row_id(self, table: str) -> int:
         
         '''
-        Получение последнего доступного номера в таблице ``donor``.
+        Получение последнего доступного номера в таблице, указанной в аргументе ``table``.\n
+        Метод возвращает число - следующая свободная строка в указанной таблице.
         '''
         
-        query = 'SELECT "ID" FROM donor.donor ORDER BY "ID" DESC'
+        query = 'SELECT "ID" FROM %s ORDER BY "ID" DESC' % table
         self.__cursor.execute(query)
         
         data = self.__cursor.fetchone()
         
         return 1 if data is None else data[0] + 1
     
-    def is_donor_exists(self, id: int=-1, telegram_id: int=-1) -> bool:
+    def is_donor_exists(self, donor: Donor) -> bool:
         
         '''
-        Проверка существует ли донор. В качестве параметра передается одно из двух значений:
-        - ``id`` - номер донора в БД; 
-        - ``telegram_id`` - номер профиля Телеграма пользоваля.\n
+        Проверка существует ли донор. В качестве параметра передается объект класса ``Donor``, т.к. нужно одновременно проверить наличие в БД комплекса параметров.\n
         Метод возвращает либо ``True``, либо ``False``.
         '''
         
-        query = 'SELECT * FROM donor.donor WHERE donor."ID" = %s OR donor."telegram_ID" = %s'
-        self.__cursor.execute(query, (id, telegram_id))
+        query = 'SELECT donors."ID" FROM donor.donor AS donors, number_telephone.donor_number AS numbers WHERE donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s'
+        self.__cursor.execute(query, (
+            donor.get_id(), 
+            donor.get_telegram(), 
+            donor.get_number(), 
+            donor.get_email()
+            )
+        )
         
         data = self.__cursor.fetchone()
         is_exists = data is not None
         
         return is_exists
         
-    def get_donor(self, id: int=-1, telegram_id: int=-1) -> Union[Donor, bool]:
+    def get_donor_by(self, id: int=-1, telegram_id: int=-1, number: str="-1", email: str="-1") -> Union[Donor, bool]:
         
         '''
-        Сформировать объект ``Donor`` по данным из БД, если донор существует. В качестве параметра передается одно из двух значений:
+        Сформировать объект ``Donor`` по данным из БД, если донор существует. В качестве параметра передается одно из следующих значений:
         - ``id`` - номер донора в БД; 
-        - ``telegram_id`` - номер профиля Телеграма пользоваля.\n 
+        - ``telegram_id`` - номер профиля Телеграма пользоваля;
+        - ``number`` - номер телефона пользователя;
+        - ``email`` - электронная почта пользователя.\n
         Возвращает ``False`` если донора не существует.
         '''
         
-        query = 'SELECT donors.*, numbers."ID" AS number_ID, numbers.number AS number FROM donor.donor as donors, number_telephone.donor_number AS numbers WHERE donors."ID" = numbers."donor_ID" AND (donor."ID" = %s OR donor."telegram_ID" = %s)'
-        self.__cursor.execute(query, (id, telegram_id))
+        query = 'SELECT donors.*, numbers."ID" AS number_ID, numbers.number AS number FROM donor.donor as donors, number_telephone.donor_number AS numbers WHERE donors."ID" = numbers."donor_ID" AND (donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s)'
+        self.__cursor.execute(query, (id, telegram_id, number, email))
         
         data = self.__cursor.fetchone()
         
@@ -180,7 +187,7 @@ class DatabaseController(metaclass=Singleton):
     def get_donors(self) -> list[Donor]:
         
         '''
-        Получить список всех доноров в виде объекта ``Donor``, существующих в БД.
+        Получить список всех доноров существующих в БД в виде объектов ``Donor``.
         '''
         
         query = 'SELECT donors.*, numbers."ID" AS number_ID, numbers.number AS number FROM donor.donor as donors, number_telephone.donor_number AS numbers WHERE donors."ID" = numbers."donor_ID"'
@@ -193,30 +200,45 @@ class DatabaseController(metaclass=Singleton):
         
         return data
     
-    # ПЕРЕСМОТРЕТЬ ПЕРЕДЕЛАТЬ
     def register_donor(self, donor: Donor) -> bool:
         
         '''
-        Регистрация донора и добавление его в БД. Если донор уже существует метод вернет ``False``, в случае успешного выполнения будет возвращено значение ``True``.
+        Регистрация донора и добавление его в БД. Если донор уже существует (такая электронная почта уже существует, номер телефона, номер в БД или номер профиля Телеграм) метод вернет ``False``, в случае успешного выполнения будет возвращено значение ``True``.
         '''
         
-        is_exists = self.is_donor_exists(id=donor.get_telegram())
+        is_exists = self.is_donor_exists(donor=donor)
         
         if is_exists:
             return False
         
-        donor.set_ID(id=self.get_next_donor_id())
-
-        # new_phone_id = self.get_last_id_phone()[0] + 1 
-        # new_user_id = self.get_last_id_user()[0] + 1
+        donor.set_id(id=self.get_next_row_id(table="donor.donor"))
+        donor.set_number_id(id=self.get_next_row_id(table="number_telephone.donor_number"))
         
-        # query = 'INSERT INTO "donor".donor ("ID", "name_donor", "surname_donor", "date_of_birth", "gender_ID", "password", "language_ID") SELECT %s, %s, %s, %s, %s, %s, %s WHERE NOT EXISTS ( SELECT * FROM "numberTelephone".number_tel_don WHERE number = %s)'
-        # self.__cursor.execute(query, (new_user_id, name, surname, date_of_birth, gender_id, password, language, user_phone))
+        query = 'INSERT INTO donor.donor ("ID", "name_donor", "surname_donor", "date_of_birth", "gender_ID", "email", "telegram_ID", "password", "language_ID") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)'
+        self.__cursor.execute(query, (
+            donor.get_id(), 
+            donor.get_name(), 
+            donor.get_surname(),
+            donor.get_birthdate(), 
+            donor.get_gender(), 
+            donor.get_email(), 
+            donor.get_telegram(), 
+            donor.get_password(), 
+            donor.get_language()
+            )
+        )
         
-        # query = 'INSERT INTO "numberTelephone".number_tel_don ("ID", "donor_ID", "number") SELECT %s, %s, %s WHERE NOT EXISTS (SELECT "donor_ID" FROM "numberTelephone".number_tel_don WHERE "donor_ID" = %s)'
-        # self.__cursor.execute(query, (new_phone_id, new_user_id, user_phone, new_user_id)) 
+        query = 'INSERT INTO number_telephone.donor_number ("ID", "donor_ID", "number") VALUES (%s, %s, %s)'
+        self.__cursor.execute(query, (
+            donor.get_number_id(), 
+            donor.get_id(), 
+            donor.get_number()
+            )
+        ) 
         
-        # self.__connection.commit()
+        self.__connection.commit()
+        
+        return True
     
     def get_donor_by_userid(self, user_id: str) -> Union[tuple, bool]:
         
