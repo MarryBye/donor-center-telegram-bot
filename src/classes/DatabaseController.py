@@ -291,28 +291,6 @@ class DatabaseController(metaclass=Singleton):
         self.__connection.commit()
         
         return True
-    
-    def get_donor_by_userid(self, user_id: str) -> Union[tuple, bool]:
-        
-        user_phone = self.get_user_phone(user_id=user_id)
-        
-        if user_phone:
-            query = 'SELECT * FROM "donor".donor JOIN "numberTelephone".number_tel_don ON donor."ID" = number_tel_don."donor_ID" WHERE number_tel_don.number = %s'
-            self.__cursor.execute(query, (user_phone, ))
-            
-            data = self.__cursor.fetchone()
-            
-            return data
-        else:
-            return False
-    
-    def get_donor_by_phone(self, user_phone: str) -> Union[tuple, bool]:
-        query = 'SELECT * FROM "donor".donor JOIN "numberTelephone".number_tel_don ON donor.ID = number_tel_don."donor_ID" WHERE number_tel_don.number = %s'
-        self.__cursor.execute(query, (user_phone, ))
-        
-        data = self.__cursor.fetchone()
-        
-        return data or False
          
     def set_user_language(self, user_id: Union[int, str], language: str):
         if (not str(user_id) in self.languages_cache) or (self.languages_cache[str(user_id)] != language):
@@ -332,61 +310,6 @@ class DatabaseController(metaclass=Singleton):
             
     def get_notifications_list(self):
         return self.notifications_cache
-    
-    def set_user_phone(self, user_id: Union[int, str], user_phone: str):
-        if (not str(user_id) in self.phones_cache) or (self.phones_cache[str(user_id)] != user_phone):
-            self.phones_cache[str(user_id)] = user_phone.replace("+", "").replace(" ", "")
-            json.dump(self.phones_cache, open("bot/cache/user_phones.json", "w", encoding="UTF-8"))
-            
-    def get_user_phone(self, user_id: Union[int, str]):
-        return self.phones_cache[str(user_id)] if str(user_id) in self.phones_cache else False
-    
-    def get_user_phone_id(self, user_id: Union[int, str]):
-        user_phone = self.get_user_phone(user_id=user_id)
-        
-        query = 'SELECT "ID" FROM "numberTelephone".number_tel_don WHERE number = %s'
-        self.__cursor.execute(query, (user_phone, ))
-        
-        data = self.__cursor.fetchone()
-        
-        return data or False
-    
-    def get_last_id_phone(self) -> int:
-        
-        query = 'SELECT "ID" FROM "numberTelephone".number_tel_don ORDER BY "ID"'
-        self.__cursor.execute(query)
-        
-        data = self.__cursor.fetchone()
-        
-        return data or (0, )
-    
-    def get_last_id_user(self) -> int:
-        
-        query = 'SELECT "ID" FROM "donor".donor ORDER BY "ID"'
-        self.__cursor.execute(query)
-        
-        data = self.__cursor.fetchone()
-        
-        return data or (0, )
-    
-    def get_clinics(self):
-        query = 'SELECT "address_ID" FROM data_blood.clinic ORDER BY "ID"'
-        self.__cursor.execute(query)
-        
-        data = self.__cursor.fetchall()
-        
-        return data or False
-    
-    def get_donor_appointments(self, user_id: Union[int, str]):
-        
-        user_phone = self.get_user_phone(user_id=user_id)
-        
-        query = 'SELECT appointment.* FROM data_blood.appointment JOIN "numberTelephone".number_tel_don ON appointment."donor_tel_ID" = number_tel_don."donor_ID" WHERE number_tel_don.number = %s AND NOT appointment."status_ID" = 3'
-        self.__cursor.execute(query, (user_phone, ))
-        
-        data = self.__cursor.fetchall()
-        
-        return data or False
     
     def setup_database(self):
         
