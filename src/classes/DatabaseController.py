@@ -1,4 +1,5 @@
 import psycopg2 as psql
+import psycopg2.extras as psql_extra
 import config as cfg
 import json
 
@@ -6,6 +7,7 @@ from typing import Union
 
 from src.classes.Singleton import Singleton
 from src.classes.Donor import Donor
+from src.classes.Appointment import Appointment
 
 class DatabaseController(metaclass=Singleton):
     def __init__(self):
@@ -25,7 +27,7 @@ class DatabaseController(metaclass=Singleton):
                         user=cfg.USERNAME,
                         password=cfg.PASSWORD,
                         port=cfg.PORT)
-        self.__cursor = self.__connection.cursor()
+        self.__cursor = self.__connection.cursor(cursor_factory=psql_extra.RealDictCursor)
         
     def disconnect(self):
         self.__cursor.close()
@@ -143,7 +145,7 @@ class DatabaseController(metaclass=Singleton):
         
         data = self.__cursor.fetchone()
         
-        return 1 if data is None else data[0] + 1
+        return 1 if data is None else data["ID"] + 1
     
     def is_donor_exists(self, id: int=-1, telegram_id: int=-1, number: str="-1", email: str="-1") -> bool:
         
@@ -252,14 +254,37 @@ class DatabaseController(metaclass=Singleton):
         if not self.is_donor_exists(id=id, telegram_id=telegram_id, number=number, email=email):
             return None
         
-        query = 'SELECT appointments.* FROM donor.donor AS donors, number_telephone.donor_number AS numbers, data_blood.appointment AS appointments WHERE appointments."status_ID" = 3 AND appointments."donor_number_ID" = numbers."ID" AND numbers."donor_ID" = donors."ID" AND (donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s)'
+        query = 'SELECT appointments."ID" FROM donor.donor AS donors, number_telephone.donor_number AS numbers, data_blood.appointment AS appointments WHERE appointments."status_ID" = 3 AND appointments."donor_number_ID" = numbers."ID" AND numbers."donor_ID" = donors."ID" AND (donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s)'
         self.__cursor.execute(query, (id, telegram_id, number, email))
         
         data = self.__cursor.fetchone()
-        print(data)
         is_registered = data is not None
         
         return is_registered
+    
+    def get_donor_appointments_by(self, id: int=-1, telegram_id: int=-1, number: str="-1", email: str="-1", need_status: int=None) -> Union[Appointment, bool]:
+        
+        '''
+        Сформировать объект ``Appointment`` по данным из БД, если донор существует. В качестве параметров передается одно из или несколько следующих значений:
+        - ``id`` - номер донора в БД; 
+        - ``telegram_id`` - номер профиля Телеграма пользоваля;
+        - ``number`` - номер телефона пользователя;
+        - ``email`` - электронная почта пользователя.\n
+        Эти данные нужны для того, чтобы определить чьи записи мы ищем. далее задаются необязательные аргументы в качестве фильтра, какие записи искать:
+        - ``need_status`` - с каким статусом искать приемы. Если не указано, то возвращаются все приемы.
+        Метод возвращает ``False`` если донора не существует.
+        '''
+        
+        if need_status is not None:
+            query = 'SELECT appointments.* FROM donor.donor AS donors, number_telephone.donor_number AS numbers, data_blood.appointment AS appointments WHERE appointments."status_ID" = %s AND appointments."donor_number_ID" = numbers."ID" AND numbers."donor_ID" = donors."ID" AND (donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s)'
+            self.__cursor.execute(query, (need_status, id, telegram_id, number, email))
+        else:
+            query = 'SELECT appointments.* FROM donor.donor AS donors, number_telephone.donor_number AS numbers, data_blood.appointment AS appointments WHERE appointments."donor_number_ID" = numbers."ID" AND numbers."donor_ID" = donors."ID" AND (donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s)'
+            self.__cursor.execute(query, (id, telegram_id, number, email))
+            
+        data = self.__cursor.fetchone()
+        
+        return Appointment(data=data) if data is not None else False
     
     def register_donor_appointment(self, clinic_id: int, registration_date: str, appointment_date: str, id: int=-1, telegram_id: int=-1, number: str="-1", email: str="-1"):
         

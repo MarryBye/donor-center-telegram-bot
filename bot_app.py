@@ -35,4 +35,5 @@ new_donor.set_password(password="2eRT3kGG")
 # for donor in DatabaseController().get_donors():
 #     print(donor.get_name(), donor.get_telegram())
 
-DatabaseController().register_donor_appointment(id=5, clinic_id=1, registration_date="1-1-2000", appointment_date="11-11-2004")
+d = DatabaseController().get_donor_appointments_by(id=3, need_status=1)
+print(d.get_registration_date(), d.get_id())
