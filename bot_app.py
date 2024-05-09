@@ -5,6 +5,7 @@ from src.classes.CRMBot import CRMBot
 from src.classes.DatabaseController import DatabaseController
 from src.classes.Donor import *
 from src.classes.Appointment import Appointment
+from src.classes.Crypto import Crypto
 
 from handlers_imports import *
 from keyboards_imports import *
@@ -25,16 +26,16 @@ from keyboards_imports import *
 # new_donor.set_surname(surname="Aborimbas")
 # new_donor.set_birthdate(birthdate="12-12-2000")
 # new_donor.set_gender(gender=1)
-# new_donor.set_telegram(telegram=2832223774)
+# new_donor.set_telegram(telegram=28274)
 # new_donor.set_language(language=3)
-# new_donor.set_email(email="a31@gmail.com")
-# new_donor.set_number(number="+38064666")
-# new_donor.set_password(password="2eRT3kGG")
+# new_donor.set_email(email="a343331@gmail.com")
+# new_donor.set_number(number="+22323424324")
+# new_donor.set_password(password="abobakar_pepe_mama_ee")
 
 # print(DatabaseController().register_donor(donor=new_donor))
 
 # for donor in DatabaseController().get_donors():
-#     print(donor.get_name(), donor.get_telegram())
+#     print(donor.get_name(), Crypto().decode(donor.get_password()))
 
 # new_appointment = Appointment()
 # new_appointment.set_registration_date("12-12-2025")

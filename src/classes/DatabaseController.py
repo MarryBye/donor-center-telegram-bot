@@ -8,6 +8,7 @@ from typing import Union
 from src.classes.Singleton import Singleton
 from src.classes.Donor import Donor
 from src.classes.Appointment import Appointment
+from src.classes.Crypto import Crypto
 
 class DatabaseController(metaclass=Singleton):
     def __init__(self):
@@ -223,7 +224,7 @@ class DatabaseController(metaclass=Singleton):
             donor.get_gender(), 
             donor.get_email(), 
             donor.get_telegram(), 
-            donor.get_password(), 
+            Crypto().code(donor.get_password()), 
             donor.get_language()
             )
         )

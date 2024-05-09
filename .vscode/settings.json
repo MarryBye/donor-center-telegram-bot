@@ -6,7 +6,6 @@
         "**/CVS": true,
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
-        "**/TOKEN": true,
         "src/classes/__pycache__": true,
         "__pycache__": true,
         "src/handlers/__pycache__": true,
