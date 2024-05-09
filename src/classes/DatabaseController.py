@@ -177,7 +177,7 @@ class DatabaseController(metaclass=Singleton):
         Метод возвращает ``False`` если донора не существует.
         '''
         
-        query = 'SELECT donors.*, numbers."ID" AS number_ID, numbers.number AS number FROM donor.donor as donors, number_telephone.donor_number AS numbers WHERE donors."ID" = numbers."donor_ID" AND (donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s)'
+        query = 'SELECT donors.*, numbers."ID" AS "number_ID", numbers.number AS number FROM donor.donor as donors, number_telephone.donor_number AS numbers WHERE donors."ID" = numbers."donor_ID" AND (donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s)'
         self.__cursor.execute(query, (id, telegram_id, number, email))
         
         data = self.__cursor.fetchone()
@@ -262,7 +262,7 @@ class DatabaseController(metaclass=Singleton):
         
         return is_registered
     
-    def get_donor_appointments_by(self, id: int=-1, telegram_id: int=-1, number: str="-1", email: str="-1", need_status: int=None) -> Union[Appointment, bool]:
+    def get_donor_appointments_by(self, id: int=-1, telegram_id: int=-1, number: str="-1", email: str="-1", need_status: int=None, only_last: bool=True) -> Union[Appointment, bool]:
         
         '''
         Сформировать объект ``Appointment`` по данным из БД, если донор существует. В качестве параметров передается одно из или несколько следующих значений:
@@ -271,7 +271,8 @@ class DatabaseController(metaclass=Singleton):
         - ``number`` - номер телефона пользователя;
         - ``email`` - электронная почта пользователя.\n
         Эти данные нужны для того, чтобы определить чьи записи мы ищем. далее задаются необязательные аргументы в качестве фильтра, какие записи искать:
-        - ``need_status`` - с каким статусом искать приемы. Если не указано, то возвращаются все приемы.
+        - ``need_status`` - с каким статусом искать приемы. Если не указано, то возвращаются все приемы;
+        - ``only_last`` - получить только последнюю запись из БД.
         Метод возвращает ``False`` если донора не существует.
         '''
         
@@ -282,24 +283,27 @@ class DatabaseController(metaclass=Singleton):
             query = 'SELECT appointments.* FROM donor.donor AS donors, number_telephone.donor_number AS numbers, data_blood.appointment AS appointments WHERE appointments."donor_number_ID" = numbers."ID" AND numbers."donor_ID" = donors."ID" AND (donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s)'
             self.__cursor.execute(query, (id, telegram_id, number, email))
             
-        data = self.__cursor.fetchone()
-        
-        return Appointment(data=data) if data is not None else False
+        if only_last:
+            data = self.__cursor.fetchone()
+            return Appointment(data=data) if data is not None else False
+        else:
+            data = self.__cursor.fetchall()
+            for i, donor_data in enumerate(data, start=0):
+                data[i] = Appointment(data=donor_data)
+            return data if data is not None else False
     
-    def register_donor_appointment(self, clinic_id: int, registration_date: str, appointment_date: str, id: int=-1, telegram_id: int=-1, number: str="-1", email: str="-1"):
+    def register_donor_appointment(self, appointment: Appointment, id: int=-1, telegram_id: int=-1, number: str="-1", email: str="-1"):
         
         '''
-        Зарегистрировать донора на прием. В качестве параметров для определения донора передается одно из или несколько следующих значений:
+        Зарегистрировать донора на прием. Первым параметром принимает:
+        - ``appointment`` - принимает объект Appointment с данными про новый прием.\n
+        Далее в качестве параметров для определения донора передается одно из или несколько следующих значений:
         - ``id`` - номер донора в БД; 
         - ``telegram_id`` - номер профиля Телеграма пользоваля;
         - ``number`` - номер телефона пользователя;
         - ``email`` - электронная почта пользователя.\n
         Достаточно передать один из аргументов для того, чтобы определить кого записать на прием.
-        Далее необходимо передать аргументы для будущей записи на прием, а именно:
-        - ``clinic_id`` - номер клиники;
-        - ``registration_date`` - дата регистрации;
-        - ``appointment_date`` - дата приема;
-        Метод возвращает ``False`` если донора не существует.
+        Метод возвращает ``False`` если донора не существует или он уже зарегистрирован на прием.
         '''
         
         if not self.is_donor_exists(id=id, telegram_id=telegram_id, number=number, email=email):
@@ -308,10 +312,23 @@ class DatabaseController(metaclass=Singleton):
         if self.is_registered_donor_appointment(id=id, telegram_id=telegram_id, number=number, email=email):
             return False
         
-        donor = self.get_donor_by(id=id)
+        donor = self.get_donor_by(id=id, telegram_id=telegram_id, number=number, email=email)
+        
+        appointment.set_id(id=self.get_next_row_id(table="data_blood.appointment"))
+        appointment.set_donor_number_ID(donor_number_ID=donor.get_number_id())
+        appointment.set_status_ID(status_ID=3)
         
         query = 'INSERT INTO data_blood.appointment ("ID", "clinic_ID", "donor_number_ID", "status_ID", "registration_date", "appointment_date", "analysis_file_path") VALUES (%s, %s, %s, %s, %s, %s, %s)'
-        self.__cursor.execute(query, (self.get_next_row_id(table="data_blood.appointment"), clinic_id, donor.get_number_id(), 3, registration_date, appointment_date, "aboba.txt"))
+        self.__cursor.execute(query, (
+            appointment.get_id(), 
+            appointment.get_clinic_id(), 
+            appointment.get_donor_number_ID(), 
+            appointment.get_status_ID(), 
+            appointment.get_registration_date(), 
+            appointment.get_appointment_date(), 
+            appointment.get_analysis_file_path()
+            )
+        )
         
         self.__connection.commit()
         
