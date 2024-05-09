@@ -42,37 +42,30 @@ LANGUAGES = (
 CITIES = (
     (1, "Odessa"),
     (2, "Kiyv"),
-    (3, "Lviv")
+    (3, "Lviv"),
+    (4, "Kharkiv")
 )
 
 REGIONS = (
-    (1, "Odes`ka Oblast"),
-    (2, "Kiyvska Oblast"),
-    (3, "Lvivska Oblast")
+    (1, "Odessa"),
+    (2, "Kyiv"),
+    (3, "Lviv"),
+    (4, "Kharkiv")
 )
 
 STREETS = (
-    (1, "Generala Petrova, 66"),
-    (2, "Akademika Koroliova, 3"),
-    (3, "Jopa Bobra, 8"),
-    (4, "Abobakar pepe abobakar, 88")
+    (1, "Klochkivska"),
+    (2, "Pushkin's"),
 )
 
 AREAS = (
-    (1, "Area1"),
-    (2, "Area2"),
-    (3, "Area3"),
-    (4, "Area4"),
-    (5, "Area5"),
-    (6, "Area6")
+    (1, "Shevchenkivskyi"),
+    (2, "Kyivіkyi"),
 )
 
 ADDRESSES = (
-    (1, 2, 2, 2, 2, 38),
-    (2, 2, 3, 1, 2, 45),
-    (3, 1, 1, 1, 1, 78),
-    (4, 1, 2, 1, 3, 35),
-    (5, 2, 1, 2, 1, 12)
+    (1, 1, 4, 4, 1, 366),
+    (2, 2, 4, 4, 2, 2),
 )
 
 STATUSES = (
@@ -82,11 +75,8 @@ STATUSES = (
 )
 
 CLINICS = (
-    (1, "КЛИНИКА АДІН", 1, "8:00:00"),
-    (2, "КЛІНІКА ДВА", 2, "12:00:00"),
-    (3, "КЛИНИКА ТРИ", 3, "12:00:00"),
-    (4, "КЛИНИКА ЧЕТІРЕ", 4, "13:00:00"),
-    (5, "КЛИНИКА ПЯТЬ", 5, "14:00:00")
+    (1, "Blood center in Kharkiv", 1, "Mon-Fri 08:00-15:00 / Sat 08:00-13:00"),
+    (2, "blood center in 'Nikolskyi' mall", 2, "Tue, Thu, Sat 09:00-14:00"),
 )
 
 GENDERS = (
