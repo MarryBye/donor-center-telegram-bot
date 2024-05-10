@@ -138,7 +138,8 @@ class DatabaseController(metaclass=Singleton):
         
         '''
         Получение последнего доступного номера в таблице, указанной в аргументе ``table``.\n
-        Метод возвращает число - следующая свободная строка в указанной таблице.
+        Метод возвращает число - следующая свободная строка в указанной таблице.\n\n
+        ВНИМАНИЕ! Метод использует НЕБЕЗОПАСНЫЕ (подверженные SQL инжекции способы подстановки названия таблицы. Ни при каких обстоятельствах не позволять пользователю вводить самостоятельно название таблицы или давать возможность воспользоваться методом)
         '''
         
         query = 'SELECT "ID" FROM %s ORDER BY "ID" DESC' % table
@@ -151,7 +152,7 @@ class DatabaseController(metaclass=Singleton):
     def get_donor_by(self, id: int=-1, telegram_id: int=-1, number: str="-1", email: str="-1") -> Union[Donor, None]:
         
         '''
-        Сформировать объект ``Donor`` по данным из БД, если донор существует. В качестве параметров передается одно из или несколько следующих значений:
+        Сформировать объект ``Donor`` по данным из БД. В качестве параметров передается одно из или несколько следующих значений:
         - ``id`` - номер донора в БД; 
         - ``telegram_id`` - номер профиля Телеграма пользоваля;
         - ``number`` - номер телефона пользователя;
@@ -230,7 +231,7 @@ class DatabaseController(metaclass=Singleton):
         '''
         Узнать, зарегистрирован ли донор на прием (прием с статусом "3"). В качестве параметра принимает:
         - ``donor`` - объект ``Donor`` с информацией про донора.\n
-        Если донор зарегистрирован будет возвращено значение ``True``, в ином случае ``False``.
+        Если донор зарегистрирован на прием будет возвращено значение ``True``, в ином случае ``False``.
         '''
         
         query = 'SELECT appointments."ID" FROM donor.donor AS donors, number_telephone.donor_number AS numbers, data_blood.appointment AS appointments WHERE appointments."status_ID" = 3 AND appointments."donor_number_ID" = numbers."ID" AND numbers."donor_ID" = donors."ID" AND (donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s)'
