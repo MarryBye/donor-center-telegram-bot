@@ -245,23 +245,34 @@ class DatabaseController(metaclass=Singleton):
         
         return is_registered
     
-    def get_donor_appointments(self, donor: Donor, need_status: int=None, only_last: bool=True) -> Union[Appointment, bool]:
+    def get_donor_appointments(self, donor: Donor, need_status: int=None, need_registration_date: str=None, need_appointment_date: str=None, only_last: bool=True) -> Union[Appointment, bool]:
         
         '''
         Сформировать объект ``Appointment`` по данным из БД, если донор существует. В качестве параметра принимает:
         - ``donor`` - объект ``Donor`` с информацией про донора.\n
         Далее идут необязательные параметры для фильтрации данных:
         - ``need_status`` - с каким статусом искать приемы. Если не указано, то возвращаются все приемы;
-        - ``only_last`` - получить только последнюю запись из БД.
+        - ``only_last`` - получить только последнюю запись из БД;
+        - ``need_appointment_date`` - получить только с определенной датой встречи;
+        - ``need_registration_date`` - получить только с определенной датой регистрации встречи.\n
         Метод возвращает ``False`` если донора не существует.
         '''
         
+        additional_filters = ''
+        additional_filters_args = []
+        
         if need_status is not None:
-            query = 'SELECT appointments.* FROM donor.donor AS donors, number_telephone.donor_number AS numbers, data_blood.appointment AS appointments WHERE appointments."status_ID" = %s AND appointments."donor_number_ID" = numbers."ID" AND numbers."donor_ID" = donors."ID" AND (donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s)'
-            self.__cursor.execute(query, (need_status, donor.get_id(), donor.get_telegram(), donor.get_number(), donor.get_email()))
-        else:
-            query = 'SELECT appointments.* FROM donor.donor AS donors, number_telephone.donor_number AS numbers, data_blood.appointment AS appointments WHERE appointments."donor_number_ID" = numbers."ID" AND numbers."donor_ID" = donors."ID" AND (donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s)'
-            self.__cursor.execute(query, (donor.get_id(), donor.get_telegram(), donor.get_number(), donor.get_email()))
+            additional_filters += ' AND appointments."status_ID" = %s'
+            additional_filters_args.append(need_status)
+        if need_registration_date is not None:
+            additional_filters += ' AND appointments.registration_date = %s'
+            additional_filters_args.append(need_registration_date)
+        if need_appointment_date is not None:
+            additional_filters += ' AND appointments.appointment_date = %s'
+            additional_filters_args.append(need_appointment_date)
+        
+        query = 'SELECT appointments.* FROM donor.donor AS donors, number_telephone.donor_number AS numbers, data_blood.appointment AS appointments WHERE appointments."donor_number_ID" = numbers."ID" AND numbers."donor_ID" = donors."ID" AND (donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s)' + additional_filters
+        self.__cursor.execute(query, (donor.get_id(), donor.get_telegram(), donor.get_number(), donor.get_email(), *additional_filters_args))
             
         if only_last:
             data = self.__cursor.fetchone()
@@ -316,6 +327,12 @@ class DatabaseController(metaclass=Singleton):
             return False
     
     def change_donor_appointment_status(self, appointment_id: int, id: int=-1, telegram_id: int=-1, number: str="-1", email: str="-1"):
+        pass
+    
+    def delete_donor(self, donor: Donor):
+        pass
+    
+    def delete_donor_appointment(self, donor: Donor, appointment: Appointment):
         pass
          
     def set_user_language(self, user_id: Union[int, str], language: str):
