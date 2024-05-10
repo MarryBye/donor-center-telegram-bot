@@ -10,7 +10,6 @@ from src.classes.Donor import Donor
 from src.classes.Appointment import Appointment
 from src.classes.Crypto import Crypto
 
-from src.funcs.core import language_name_to_id
 
 class DatabaseController(metaclass=Singleton):
     def __init__(self):
@@ -383,26 +382,34 @@ class DatabaseController(metaclass=Singleton):
     def delete_donor_appointment(self, donor: Donor, appointment: Appointment):
         pass
 
-    def set_user_language(self, donor: Donor, language: str):
+    def set_user_language(self, donor: Donor, language: str, only_cache: bool = False):
 
         """
         Устанавливает значение языка в БД и кеше бота чтобы в дальнейшем при запросах языка не обращаться в БД.
         """
 
-        if (not str(donor.get_telegram()) in self.languages_cache) or (self.languages_cache[str(donor.get_telegram())] != language):
+        for language in cfg.LANGUAGES:
+            if language in language:
+                language = language[0]
+            else:
+                return False
 
-            if not donor.is_full():
+        if (not str(donor.get_telegram()) in self.languages_cache) or (
+                self.languages_cache[str(donor.get_telegram())] != language):
+
+            if not donor.is_full() and not only_cache:
                 return False
 
             try:
-                query = ('UPDATE donor.donor AS donors SET donors.language_ID = %s WHERE donors."ID" = %s OR '
-                         'donors."telegram_ID" = %s OR donors.email = %s')
-                self.__cursor.execute(query, (language_name_to_id(language_name=language), donor.get_id(), donor.get_telegram(), donor.get_email()))
+                if not only_cache:
+                    query = ('UPDATE donor.donor AS donors SET donors.language_ID = %s WHERE donors."ID" = %s OR '
+                             'donors."telegram_ID" = %s OR donors.email = %s')
+                    self.__cursor.execute(query, (language, donor.get_id(), donor.get_telegram(), donor.get_email()))
+
+                    self.__connection.commit()
 
                 self.languages_cache[str(donor.get_telegram())] = language
                 json.dump(self.languages_cache, open("bot/cache/user_languages.json", "w", encoding="UTF-8"))
-
-                self.__connection.commit()
 
                 return True
             except:

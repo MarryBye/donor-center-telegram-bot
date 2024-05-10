@@ -12,13 +12,15 @@ from keyboards_imports import *
 
 # id_my = 482613937
 
-# bot = CRMBot()
+bot = CRMBot()
 
-# bot.include_routers()
+bot.include_routers()
 
-# if __name__ == "__main__":
-#     #DatabaseController().setup_database()
-#     asyncio.run(bot.start_bot())
+DatabaseController().delete_donor(DatabaseController().get_donor_by(telegram_id=482613937))
+
+if __name__ == "__main__":
+    #DatabaseController().setup_database()
+    asyncio.run(bot.start_bot())
 
 # new_donor = Donor()
 

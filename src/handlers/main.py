@@ -63,7 +63,7 @@ async def feedback_handler(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
-    if db.get_donor_by_userid(user_id):
+    if db.get_donor_by(telegram_id=user_id):
 
         new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.FEEDBACK, keyboard_type=KeyboardType.REPLY,
                                        language_name=user_language)

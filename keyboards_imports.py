@@ -7,3 +7,4 @@ from src.keyboards.feedback import *
 from src.keyboards.menuback import *
 from src.keyboards.send_contact import *
 from src.keyboards.genders import *
+from src.keyboards.registration_languages import *
