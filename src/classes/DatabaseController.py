@@ -330,7 +330,28 @@ class DatabaseController(metaclass=Singleton):
         pass
     
     def delete_donor(self, donor: Donor):
-        pass
+        
+        '''
+        Удалить донора из таблицы доноров, а также его номер телефона, который к нему привязан.Принимает следующие аргументы:
+        - ``donor`` - принимает объект ``Donor`` с данными про донора.\n
+        Метод возвращает ``False`` если донора удалить не получилось.
+        '''
+        
+        if not donor.is_full():
+            return False
+        
+        query = 'DELETE FROM donor.donor as donors WHERE donors."ID" = %s OR donors."telegram_ID" = %s OR donors.email = %s'
+        self.__cursor.execute(query, (donor.get_id(), donor.get_telegram(), donor.get_email()))
+        
+        query = 'DELETE FROM number_telephone.donor_number AS numbers WHERE numbers.number = %s OR numbers."ID" = %s OR numbers."donor_ID" = %s'
+        self.__cursor.execute(query, (donor.get_number(), donor.get_number_id(), donor.get_id()))
+        
+        query = 'DELETE FROM data_blood.appointment AS appointments WHERE appointments."donor_number_ID" = %s'
+        self.__cursor.execute(query, (donor.get_id(), ))
+        
+        self.__connection.commit()
+        
+        return True
     
     def delete_donor_appointment(self, donor: Donor, appointment: Appointment):
         pass
