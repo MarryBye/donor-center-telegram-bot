@@ -13,7 +13,7 @@ class CRMBaseDataType:
             
         return self
     
-    def is_data_empty(self) -> bool:
+    def is_empty(self) -> bool:
         empty = True
         for data_component in self.data:
             if self.data[data_component] != None:

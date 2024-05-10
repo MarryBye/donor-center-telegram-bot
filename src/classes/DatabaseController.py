@@ -186,10 +186,13 @@ class DatabaseController(metaclass=Singleton):
     def register_donor(self, donor: Donor) -> bool:
         
         '''
-        Регистрация донора и добавление его в БД. В качестве аргумента принимает:
+        Регистрация донора и добавление его в БД если его в ней нет. В качестве аргумента принимает:
         - ``donor`` - объект ``Donor`` с информацией про нового донора.\n
         В случае успешного выполнения будет возвращено значение ``True``, в ином случае ``False``.
         '''
+        
+        if not self.get_donor_by(id=donor.get_id(), telegram_id=donor.get_telegram(), number=donor.get_number(), email=donor.get_email()).is_empty():
+            return False
         
         try:
             donor.set_id(id=self.get_next_row_id(table="donor.donor"))
