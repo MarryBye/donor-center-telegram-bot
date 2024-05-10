@@ -149,7 +149,7 @@ class DatabaseController(metaclass=Singleton):
         
         return 1 if data is None else data["ID"] + 1
         
-    def get_donor_by(self, id: int=-1, telegram_id: int=-1, number: str="-1", email: str="-1") -> Union[Donor, None]:
+    def get_donor_by(self, id: int=-1, telegram_id: int=-1, number: str="-1", email: str="-1") -> Donor:
         
         '''
         Сформировать объект ``Donor`` по данным из БД. В качестве параметров передается одно из или несколько следующих значений:
@@ -229,7 +229,7 @@ class DatabaseController(metaclass=Singleton):
         except:
             return False
     
-    def is_registered_donor_appointment(self, donor: Donor):
+    def is_registered_donor_appointment(self, donor: Donor) -> bool:
         
         '''
         Узнать, зарегистрирован ли донор на прием (прием с статусом "3"). В качестве параметра принимает:
@@ -265,12 +265,12 @@ class DatabaseController(metaclass=Singleton):
             
         if only_last:
             data = self.__cursor.fetchone()
-            return Appointment(data=data) if data is not None else False
+            return Appointment(data=data) if data is not None else Appointment()
         else:
             data = self.__cursor.fetchall()
             for i, data_component in enumerate(data, start=0):
                 data[i] = Appointment(data=data_component)
-            return data if data is not None else False
+            return data if data is not None else []
     
     def register_donor_appointment(self, appointment: Appointment, donor: Donor):
         
