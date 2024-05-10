@@ -8,5 +8,5 @@ kb_scheme = [
     [{"BUTTON_HOME": {}}]
 ]
 
-keyboard = Keyboard(keyboardScheme=kb_scheme)
-kb.add_keyboard(keyboardName=KeyboardName.LANGUAGES, keyboard=keyboard)
+keyboard = Keyboard(keyboard_scheme=kb_scheme)
+kb.add_keyboard(keyboard_name=KeyboardName.LANGUAGES, keyboard=keyboard)

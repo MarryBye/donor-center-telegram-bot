@@ -8,5 +8,5 @@ kb_scheme = [
     [{"NODATA": {}}]
 ]
 
-keyboard = Keyboard(keyboardScheme=kb_scheme)
-kb.add_keyboard(keyboardName=KeyboardName.GENDERS, keyboard=keyboard)
+keyboard = Keyboard(keyboard_scheme=kb_scheme)
+kb.add_keyboard(keyboard_name=KeyboardName.GENDERS, keyboard=keyboard)

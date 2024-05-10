@@ -6,5 +6,5 @@ kb_scheme = [
     [{"SEND_CONTACT": {"callback_data": "send_contact", "request_contact": True}}]
 ]
 
-keyboard = Keyboard(keyboardScheme=kb_scheme)
-kb.add_keyboard(keyboardName=KeyboardName.MSG_SHARECONTACT, keyboard=keyboard)
+keyboard = Keyboard(keyboard_scheme=kb_scheme)
+kb.add_keyboard(keyboard_name=KeyboardName.MSG_SHARECONTACT, keyboard=keyboard)

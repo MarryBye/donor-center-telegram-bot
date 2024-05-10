@@ -1,41 +1,44 @@
-import config as cfg
-
 from datetime import date
 
-from typing import Union
 from aiogram import F
 
+import config as cfg
 from src.classes.DatabaseController import DatabaseController
-from src.classes.Keyboards import Keyboard, ReplyKeyboardMarkup, KeyboardButton
-
+from src.classes.Keyboards import ReplyKeyboardMarkup, KeyboardButton
 from src.lang.languages import LANGUAGES
 
 db = DatabaseController()
 
+
 # Language translations for buttons and messages
 
 def get_command_variations(button_name: str):
-    '''Возвращает кортеж с возможными написаниями команды на разных языках, предусмотренных в боте'''
+    """Возвращает кортеж с возможными написаниями команды на разных языках, предусмотренных в боте"""
     command_variations = []
     for language in LANGUAGES:
         command_variations.append(LANGUAGES[language]["BUTTONS"][button_name])
     return command_variations
 
+
 def pressed_button(button_name: str):
-    '''Сокращенный магический фильтр, проверяет была ли нажата кнопка по ее названию, проверяя все ее переводы'''
+    """Сокращенный магический фильтр, проверяет была ли нажата кнопка по ее названию, проверяя все ее переводы"""
     return F.text.in_(get_command_variations(button_name=button_name))
 
+
 def sent_callback(callback_name: str):
-    '''Сокращенный магический фильтр, проверяет совпадение значения от Inline кнопки'''
+    """Сокращенный магический фильтр, проверяет совпадение значения от Inline кнопки"""
     return F.data == callback_name
 
+
 def message_translate(message_name: str, language_name: str):
-    '''Возвращает текст сообщения, переведенный на указанный язык'''
+    """Возвращает текст сообщения, переведенный на указанный язык"""
     return LANGUAGES[language_name]["MESSAGES"][message_name]
 
+
 def button_translate(button_name: str, language_name: str):
-    '''Возвращает текст кнопки, переведенный на указанный язык'''
+    """Возвращает текст кнопки, переведенный на указанный язык"""
     return LANGUAGES[language_name]["BUTTONS"][button_name]
+
 
 # Data tranformation
 
@@ -43,33 +46,25 @@ def month_name_to_id(month_name: str):
     for i in range(12):
         if month_name in get_command_variations("REGISTER_MONTH_" + str(i + 1)):
             return i + 1
-        
+
+
 def language_name_to_id(language_name: str):
     for language in cfg.LANGUAGES:
         if language_name in language:
             return language[0]
 
+
 def blood_name_to_id(blood_name: str):
     for blood in cfg.BLOODS:
         if blood_name == blood[1] + blood[2]:
             return blood[0]
-        
+
+
 def gender_name_to_id(gender_name: str):
     for gender in cfg.GENDERS:
         if gender[1] == gender_name:
             return gender[0]
 
-# Keyboards generation
-
-def generate_keyboard_months():
-    kb_scheme = [
-        ["REGISTER_MONTH_1", "REGISTER_MONTH_2", "REGISTER_MONTH_3"],
-        ["REGISTER_MONTH_4", "REGISTER_MONTH_5", "REGISTER_MONTH_6"],
-        ["REGISTER_MONTH_7", "REGISTER_MONTH_8", "REGISTER_MONTH_9"],
-        ["REGISTER_MONTH_10", "REGISTER_MONTH_11", "REGISTER_MONTH_12"]
-    ]
-
-    return Keyboard(keyboard=kb_scheme)
 
 def generate_keyboard_days(month: int, year: int):
     months_days = {
@@ -86,14 +81,14 @@ def generate_keyboard_days(month: int, year: int):
         11: 30,
         12: 31
     }
-    
+
     days_count = months_days[month]
     i = 0
-    
+
     kb_scheme = []
-    
+
     row = []
-    
+
     while days_count - i > 0:
         row.append(KeyboardButton(text=str(days_count - i)))
         i += 1
@@ -101,15 +96,16 @@ def generate_keyboard_days(month: int, year: int):
         if len(row) == 5 or days_count - i == 0:
             kb_scheme.append(row)
             row = []
-    
+
     return ReplyKeyboardMarkup(keyboard=kb_scheme, resize_keyboard=True)
+
 
 def generate_keyboard_years():
     current_year = date.today().year
     minimum_year = current_year - cfg.DONATION_MAXIMUM_YEAR
-    
+
     kb_scheme = []
-    
+
     row = []
     for year in range(current_year, minimum_year + 1, -1):
         if len(row) < 5:
@@ -117,24 +113,14 @@ def generate_keyboard_years():
         else:
             kb_scheme.append(row)
             row = []
-    
+
     return ReplyKeyboardMarkup(keyboard=kb_scheme, resize_keyboard=True)
+
 
 def generate_keyboard_bloods():
-    
     kb_scheme = []
-    
+
     for blood in cfg.BLOODS:
         kb_scheme.append([KeyboardButton(text=blood[1] + blood[2])])
-        
-    return ReplyKeyboardMarkup(keyboard=kb_scheme, resize_keyboard=True)
 
-def generate_keyboard_genders():
-    
-    kb_scheme = [
-        ["REGISTER_GENDER_MALE", "REGISTER_GENDER_FEMALE"],
-        ["REGISTER_GENDER_OTHER"],
-        ["REGISTER_GENDER_SECRET"]
-    ]
-        
-    return Keyboard(keyboard=kb_scheme)
+    return ReplyKeyboardMarkup(keyboard=kb_scheme, resize_keyboard=True)

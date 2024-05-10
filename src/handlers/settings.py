@@ -18,26 +18,31 @@ kb = KeyboardController()
 
 router = Router(name="SETTINGS ROUTER")
 
+
 @router.message(pressed_button(button_name="SETTINGS_MENU_NOTIFICATIONS"))
 async def main_handler(msg: Message):
-       
-       user_id = msg.from_user.id
-       user_language = db.get_user_language(user_id=user_id)
-       
-       new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.NOTIFICATIONS, keyboardType=KeyboardType.REPLY, languageName=user_language)
-       bot_message = message_translate(message_name="MENU_OPEN", language_name=user_language) % button_translate(button_name="SETTINGS_MENU_NOTIFICATIONS", language_name=user_language)
-              
-       await msg.reply(text=bot_message, reply_markup=new_keyboard)
-       
+    user_id = msg.from_user.id
+    user_language = db.get_user_language(user_id=user_id)
+
+    new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.NOTIFICATIONS, keyboard_type=KeyboardType.REPLY,
+                                   language_name=user_language)
+    bot_message = message_translate(message_name="MENU_OPEN", language_name=user_language) % button_translate(
+        button_name="SETTINGS_MENU_NOTIFICATIONS", language_name=user_language)
+
+    await msg.reply(text=bot_message, reply_markup=new_keyboard)
+
+
 @router.message(pressed_button(button_name="SETTINGS_MENU_LANGUAGES"))
 async def main_handler(msg: Message):
-       
-       user_id = msg.from_user.id
-       user_language = db.get_user_language(user_id=user_id)
-       
-       new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.LANGUAGES, keyboardType=KeyboardType.REPLY, languageName=user_language)
-       bot_message = message_translate(message_name="MENU_OPEN", language_name=user_language) % button_translate(button_name="SETTINGS_MENU_LANGUAGES", language_name=user_language)
-              
-       await msg.reply(text=bot_message, reply_markup=new_keyboard)
+    user_id = msg.from_user.id
+    user_language = db.get_user_language(user_id=user_id)
+
+    new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.LANGUAGES, keyboard_type=KeyboardType.REPLY,
+                                   language_name=user_language)
+    bot_message = message_translate(message_name="MENU_OPEN", language_name=user_language) % button_translate(
+        button_name="SETTINGS_MENU_LANGUAGES", language_name=user_language)
+
+    await msg.reply(text=bot_message, reply_markup=new_keyboard)
+
 
 hnd.add_router(router)

@@ -9,5 +9,5 @@ kb_scheme = [
     [{"MAIN_MENU_SETTINGS": {}}]
 ]
 
-keyboard = Keyboard(keyboardScheme=kb_scheme)
-kb.add_keyboard(keyboardName=KeyboardName.MAIN, keyboard=keyboard)
+keyboard = Keyboard(keyboard_scheme=kb_scheme)
+kb.add_keyboard(keyboard_name=KeyboardName.MAIN, keyboard=keyboard)

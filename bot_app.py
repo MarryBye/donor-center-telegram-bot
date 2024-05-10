@@ -48,6 +48,6 @@ from keyboards_imports import *
 # print(DatabaseController().is_registered_donor_appointment(donor=DatabaseController().get_donor_by(id=8)))
 # print(DatabaseController().register_donor_appointment(donor=DatabaseController().get_donor_by(id=8), appointment=Appointment()))
 
-print(DatabaseController().get_donor_by(id=1).get_name())
-print(DatabaseController().delete_donor(donor=DatabaseController().get_donor_by(id=1)))
-print(DatabaseController().get_donor_by(id=1).get_name())
+# print(DatabaseController().get_donor_by(id=1).get_name())
+# print(DatabaseController().delete_donor(donor=DatabaseController().get_donor_by(id=1)))
+# print(DatabaseController().get_donor_by(id=1).get_name())

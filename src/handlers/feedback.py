@@ -29,7 +29,7 @@ async def process_name(msg: Message, state: FSMContext):
     
     name = msg.text.strip()
     
-    new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.FEEDBACK, keyboardType=KeyboardType.REPLY, languageName=user_language)
+    new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.FEEDBACK, keyboard_type=KeyboardType.REPLY, language_name=user_language)
     bot_message = message_translate(message_name="FEEDBACK_AFTER_NAME_MESSAGE", language_name=user_language)
 
     if not name.isdigit():
@@ -47,7 +47,7 @@ async def feedback_phone_handler(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
-    new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MENUBACK, keyboardType=KeyboardType.REPLY, languageName=user_language)
+    new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.MENUBACK, keyboard_type=KeyboardType.REPLY, language_name=user_language)
     bot_message = message_translate(message_name="FEEDBACK_PHONE_MESSAGE", language_name=user_language)
 
     await state.set_state(Feedback.phone)
@@ -62,7 +62,7 @@ async def process_phone(msg: Message, state: FSMContext):
     
     phone = msg.text
 
-    new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MENUBACK, keyboardType=KeyboardType.REPLY, languageName=user_language)
+    new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.MENUBACK, keyboard_type=KeyboardType.REPLY, language_name=user_language)
     bot_message = message_translate(message_name="PHONE_SENT", language_name=user_language)
 
     if match(r"^\+?(\d{10,15})$", phone):
@@ -85,7 +85,7 @@ async def feedback_mail_handler(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
-    new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MENUBACK, keyboardType=KeyboardType.REPLY, languageName=user_language)
+    new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.MENUBACK, keyboard_type=KeyboardType.REPLY, language_name=user_language)
     bot_message = message_translate(message_name="FEEDBACK_MAIL_MESSAGE", language_name=user_language)
 
     await state.set_state(Feedback.mail)
@@ -100,7 +100,7 @@ async def process_phone(msg: Message, state: FSMContext):
     
     mail = msg.text
 
-    new_keyboard = kb.get_keyboard(keyboardName=KeyboardName.MENUBACK, keyboardType=KeyboardType.REPLY, languageName=user_language)
+    new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.MENUBACK, keyboard_type=KeyboardType.REPLY, language_name=user_language)
     bot_message = message_translate(message_name="MAIL_SENT", language_name=user_language)
 
     if match(r"^[^@]+@[^@]+\.[^@]+$", mail):

@@ -1,5 +1,3 @@
-import json
-
 # BOT TOKEN FILE
 
 TOKEN = open("TOKEN", "r").read()
@@ -7,9 +5,9 @@ TOKEN = open("TOKEN", "r").read()
 # BOT CONFIGURATION
 
 DEFAULT_LANGUAGE = "en-EN"
-DONATION_MAXIMUM_YEAR = 80 # for example today 2024 year, so the minimum year is 2024 - 80 = 1944
+DONATION_MAXIMUM_YEAR = 80  # for example today 2024 year, so the minimum year is 2024 - 80 = 1944
 
-# PostgreSQL Server Configuration
+# PostgresSQL Server Configuration
 
 DATABASE_NAME = "crm"
 IP_ADDRESS = "108.181.197.190"
