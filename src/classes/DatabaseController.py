@@ -382,38 +382,40 @@ class DatabaseController(metaclass=Singleton):
     def delete_donor_appointment(self, donor: Donor, appointment: Appointment):
         pass
 
-    def set_user_language(self, donor: Donor, language: str, only_cache: bool = False):
+    def set_user_language(self, user_id: int, language: str, only_cache: bool = False):
 
         """
         Устанавливает значение языка в БД и кеше бота чтобы в дальнейшем при запросах языка не обращаться в БД.
         """
 
-        for language in cfg.LANGUAGES:
-            if language in language:
-                language = language[0]
-            else:
-                return False
+        real_language = None
 
-        if (not str(donor.get_telegram()) in self.languages_cache) or (
-                self.languages_cache[str(donor.get_telegram())] != language):
+        for language_component in cfg.LANGUAGES:
+            if language in language_component:
+                real_language = language_component
+                break
 
-            if not donor.is_full() and not only_cache:
-                return False
+        if real_language is None:
+            return False
 
-            try:
-                if not only_cache:
-                    query = ('UPDATE donor.donor AS donors SET donors.language_ID = %s WHERE donors."ID" = %s OR '
-                             'donors."telegram_ID" = %s OR donors.email = %s')
-                    self.__cursor.execute(query, (language, donor.get_id(), donor.get_telegram(), donor.get_email()))
+        print("LANGUAGE REAL!")
 
-                    self.__connection.commit()
+        if (not str(user_id) in self.languages_cache) or (self.languages_cache[str(user_id)] != language):
 
-                self.languages_cache[str(donor.get_telegram())] = language
-                json.dump(self.languages_cache, open("bot/cache/user_languages.json", "w", encoding="UTF-8"))
+            print("CAN ADD!")
 
-                return True
-            except:
-                return False
+            if not only_cache:
+                query = 'UPDATE donor.donor AS donors SET donors.language_ID = %s WHERE donors."telegram_ID" = %s'
+                self.__cursor.execute(query, (real_language[0], user_id))
+
+                self.__connection.commit()
+
+            self.languages_cache[str(user_id)] = real_language[1]
+            json.dump(self.languages_cache, open("bot/cache/user_languages.json", "w", encoding="UTF-8"))
+
+            print("ADDED!")
+
+            return True
 
     def get_user_language(self, user_id: Union[int, str]) -> str:
         return self.languages_cache[str(user_id)] if str(user_id) in self.languages_cache else cfg.DEFAULT_LANGUAGE

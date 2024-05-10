@@ -32,6 +32,7 @@ router = Router(name="REGISTER ROUTER")
 @router.message(Command("start"))
 async def main_handler(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
+    user_language = db.get_user_language(user_id=user_id)
 
     if db.get_donor_by(telegram_id=user_id).is_empty():
 
@@ -43,24 +44,21 @@ async def main_handler(msg: Message, state: FSMContext):
         await state.update_data(donor_data=donor_data)
 
         db.set_user_notifications(user_id=user_id, option=True)
-        db.set_user_language(donor=donor_data, language=cfg.DEFAULT_LANGUAGE, only_cache=True)
+        db.set_user_language(user_id=user_id, language=cfg.DEFAULT_LANGUAGE, only_cache=True)
 
         new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.LANGUAGES_REGISTER, keyboard_type=KeyboardType.INLINE,
-                                       language_name=cfg.DEFAULT_LANGUAGE)
-        bot_message = message_translate(message_name="REGISTER_START", language_name=cfg.DEFAULT_LANGUAGE)
+                                       language_name=user_language)
+        bot_message = message_translate(message_name="REGISTER_START", language_name=user_language)
 
         await msg.reply(text=bot_message, reply_markup=new_keyboard)
 
     else:
 
         new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.MAIN, keyboard_type=KeyboardType.REPLY,
-                                       language_name=cfg.DEFAULT_LANGUAGE)
-        bot_message = message_translate(message_name="ALREADY_REGISTERED", language_name=cfg.DEFAULT_LANGUAGE)
+                                       language_name=user_language)
+        bot_message = message_translate(message_name="ALREADY_REGISTERED", language_name=user_language)
 
         bot_msg = await bot.send_message(user_id, text=bot_message, reply_markup=new_keyboard)
-
-        await asyncio.sleep(5)
-        await bot_msg.delete()
 
 
 @router.callback_query(Form.registerUser_language)
@@ -71,13 +69,13 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     donor_data = await state.get_data()
     donor_data["donor_data"].set_language(language_id=language_name_to_id(user_language))
 
-    db.set_user_language(donor=donor_data["donor_data"], language=user_language, only_cache=True)
+    db.set_user_language(user_id=user_id, language=user_language, only_cache=True)
 
     await state.update_data(donor_data=donor_data["donor_data"])
     await state.set_state(Form.registerUser_contact)
 
     new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.MSG_SHARECONTACT, keyboard_type=KeyboardType.REPLY,
-                                   language_name=cfg.DEFAULT_LANGUAGE)
+                                   language_name=user_language)
     bot_message = message_translate(message_name="REGISTER_START", language_name=user_language)
 
     await bot.edit_message_reply_markup(
@@ -115,7 +113,7 @@ async def main_handler(msg: Message, state: FSMContext):
 
     else:
         new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.MSG_SHARECONTACT, keyboard_type=KeyboardType.REPLY,
-                                       language_name=cfg.DEFAULT_LANGUAGE)
+                                       language_name=user_language)
         bot_message = message_translate(message_name="REGISTER_START_FAILURE", language_name=user_language)
 
         bot_msg = await bot.send_message(user_id, text=bot_message, reply_markup=new_keyboard)
@@ -182,6 +180,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
 
     await bot.send_message(user_id, text=bot_message, reply_markup=None)
 
+
 @router.message(Form.registerUser_email)
 async def main_handler(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
@@ -235,7 +234,7 @@ async def main_handler(msg: Message, state: FSMContext):
         db.register_donor(donor=donor_data["donor_data"])
 
         new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.MAIN, keyboard_type=KeyboardType.REPLY,
-                                       language_name=cfg.DEFAULT_LANGUAGE)
+                                       language_name=user_language)
         bot_message = message_translate(message_name="SUCCESSFULL_REGISTER", language_name=user_language)
 
         await state.clear()
