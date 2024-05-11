@@ -39,7 +39,6 @@ def button_translate(button_name: str, language_name: str):
     """Возвращает текст кнопки, переведенный на указанный язык"""
     return LANGUAGES[language_name]["BUTTONS"][button_name]
 
-
 # Data tranformation
 
 def month_name_to_id(month_name: str):

@@ -21,6 +21,8 @@ class KeyboardName:
     MSG_SHARECONTACT = "MSG_SHARECONTACT"
     GENDERS = "GENDERS"
     LANGUAGES_REGISTER = "LANGUAGES_REGISTER"
+    CITIES = "CITIES"
+    REGIONS = "REGIONS"
 
 
 class Keyboard:
@@ -32,38 +34,37 @@ class Keyboard:
     def regenerate_inline_keyboard(self, language_name: str) -> InlineKeyboardMarkup:
         self.scheme = []
 
-        if self.need_translation:
-            for buttons_row in self.__nameScheme:
-                scheme_buttons_row = []
+        for buttons_row in self.__nameScheme:
+            scheme_buttons_row = []
 
-                for button_dictionary in buttons_row:
-                    button_name = list(button_dictionary.keys())[0]
-                    button_text_translated = LANGUAGES[language_name]["BUTTONS"][button_name]
-                    scheme_buttons_row.append(
-                        InlineKeyboardButton(text=button_text_translated, **button_dictionary[button_name]))
+            for button_dictionary in buttons_row:
+                button_name = list(button_dictionary.keys())[0]
+                if self.need_translation:
+                    button_text = LANGUAGES[language_name]["BUTTONS"][button_name]
+                else:
+                    button_text = button_name
+                scheme_buttons_row.append(InlineKeyboardButton(text=button_text, **button_dictionary[button_name]))
 
-                self.scheme.append(scheme_buttons_row)
-        else:
-            self.scheme = self.__nameScheme.copy()
+            self.scheme.append(scheme_buttons_row)
 
         return InlineKeyboardMarkup(inline_keyboard=self.scheme)
 
     def regenerate_reply_keyboard(self, language_name: str) -> ReplyKeyboardMarkup:
         self.scheme = []
 
-        if self.need_translation:
-            for buttons_row in self.__nameScheme:
-                scheme_buttons_row = []
+        for buttons_row in self.__nameScheme:
+            scheme_buttons_row = []
 
-                for button_dictionary in buttons_row:
-                    button_name = list(button_dictionary.keys())[0]
-                    button_text_translated = LANGUAGES[language_name]["BUTTONS"][button_name]
-                    scheme_buttons_row.append(
-                        KeyboardButton(text=button_text_translated, **button_dictionary[button_name]))
+            for button_dictionary in buttons_row:
+                button_name = list(button_dictionary.keys())[0]
+                if self.need_translation:
+                    button_text = LANGUAGES[language_name]["BUTTONS"][button_name]
+                else:
+                    button_text = button_name
+                scheme_buttons_row.append(
+                    KeyboardButton(text=button_text, **button_dictionary[button_name]))
 
-                self.scheme.append(scheme_buttons_row)
-        else:
-            self.scheme = self.__nameScheme.copy()
+            self.scheme.append(scheme_buttons_row)
 
         return ReplyKeyboardMarkup(keyboard=self.scheme, resize_keyboard=True)
 

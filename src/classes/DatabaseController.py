@@ -152,7 +152,7 @@ class DatabaseController(metaclass=Singleton):
             print("`add_support_request` sent successfully!")
         except Exception as error:
             print("`add_support_request` ERROR:", error)
-    
+
     def get_next_row_id(self, table: str) -> int:
 
         """
@@ -398,6 +398,86 @@ class DatabaseController(metaclass=Singleton):
     def delete_donor_appointment(self, donor: Donor, appointment: Appointment):
         pass
 
+    def get_cities(self):
+
+        query = 'SELECT * FROM data_blood.city'
+        self.__cursor.execute(query)
+        data = self.__cursor.fetchall()
+
+        return data if data is not None else []
+
+    def get_regions(self):
+
+        query = 'SELECT * FROM data_blood.region'
+        self.__cursor.execute(query)
+        data = self.__cursor.fetchall()
+
+        return data if data is not None else []
+
+    def get_streets(self):
+        query = 'SELECT * FROM data_blood.street'
+        self.__cursor.execute(query)
+        data = self.__cursor.fetchall()
+
+        return data if data is not None else []
+
+    def get_areas(self):
+
+        query = 'SELECT * FROM data_blood.area'
+        self.__cursor.execute(query)
+        data = self.__cursor.fetchall()
+
+        return data if data is not None else []
+
+    def get_addresses(self):
+
+        query = 'SELECT * FROM data_blood.address'
+        self.__cursor.execute(query)
+        data = self.__cursor.fetchall()
+
+        return data if data is not None else []
+
+
+
+    def get_clinics_by(self, db_id: int = -1, city: int = -1, region: int = -1, street: int = -1, area: int = -1, address: int = -1) -> list:
+
+        query = ('SELECT clinic.* '
+                 'FROM '
+                 'data_blood.clinic AS clinic, '
+                 'data_blood.city AS city, '
+                 'data_blood.region AS region, '
+                 'data_blood.street AS street, '
+                 'data_blood.area AS area, '
+                 'data_blood.address AS address'
+                 ' WHERE '
+                 'clinic."address_ID" = address."ID"'
+                 ' AND '
+                 'address."area_ID" = area."ID"'
+                 ' AND '
+                 'address."city_ID" = city."ID"'
+                 ' AND '
+                 'address."region_ID" = region."ID"'
+                 ' AND '
+                 'address."street_ID" = street."ID"'
+                 ' AND '
+                 '(clinic."ID" = %s'
+                 ' OR '
+                 'city."ID" = %s'
+                 ' OR '
+                 'region."ID" = %s'
+                 ' OR '
+                 'street."ID" = %s'
+                 ' OR '
+                 'area."ID" = %s'
+                 ' OR '
+                 'clinic."address_ID" = %s)')
+
+        self.__cursor.execute(query, (db_id, city, region, street, area, address))
+
+        data = self.__cursor.fetchall()
+
+        return data if data is not None else []
+
     def set_user_language(self, user_id: int, language: str, only_cache: bool = False):
 
         """
@@ -414,11 +494,7 @@ class DatabaseController(metaclass=Singleton):
         if real_language is None:
             return False
 
-        print("LANGUAGE REAL!")
-
         if (not str(user_id) in self.languages_cache) or (self.languages_cache[str(user_id)] != language):
-
-            print("CAN ADD!")
 
             if not only_cache:
                 query = 'UPDATE donor.donor AS donors SET donors.language_ID = %s WHERE donors."telegram_ID" = %s'
@@ -428,8 +504,6 @@ class DatabaseController(metaclass=Singleton):
 
             self.languages_cache[str(user_id)] = real_language[1]
             json.dump(self.languages_cache, open("bot/cache/user_languages.json", "w", encoding="UTF-8"))
-
-            print("ADDED!")
 
             return True
 

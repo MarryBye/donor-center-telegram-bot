@@ -16,7 +16,7 @@ bot = CRMBot()
 
 bot.include_routers()
 
-DatabaseController().delete_donor(DatabaseController().get_donor_by(telegram_id=482613937))
+# DatabaseController().delete_donor(DatabaseController().get_donor_by(telegram_id=482613937))
 
 if __name__ == "__main__":
     #DatabaseController().setup_database()

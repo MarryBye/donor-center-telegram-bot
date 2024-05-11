@@ -58,7 +58,7 @@ async def main_handler(msg: Message, state: FSMContext):
                                        language_name=user_language)
         bot_message = message_translate(message_name="ALREADY_REGISTERED", language_name=user_language)
 
-        bot_msg = await bot.send_message(user_id, text=bot_message, reply_markup=new_keyboard)
+        await bot.send_message(user_id, text=bot_message, reply_markup=new_keyboard)
 
 
 @router.callback_query(Form.registerUser_language)

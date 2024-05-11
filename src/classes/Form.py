@@ -11,6 +11,13 @@ class Form(StatesGroup):
     registerUser_email = State()
 
 
+class FormAppointment(StatesGroup):
+    registerAppointment_city = State()
+    registerAppointment_region = State()
+    registerAppointment_clinic = State()
+    registerAppointment_date = State()
+
+
 class Feedback(StatesGroup):
     phone = State()
     mail = State()
