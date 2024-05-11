@@ -141,8 +141,8 @@ class DatabaseController(metaclass=Singleton):
         """
         Добавляет запрос на поддержку в базу данных.
 
-        - `user_id` : (int, str) - идентификатор пользователя.
-        - `note` : (str) - примечание к запросу.
+        - `user_id` - идентификатор пользователя.
+        - `note` - примечание к запросу.
         """
         try:
             query = """INSERT INTO admin.waiting_feed_back ("status_ID", "donor_number_ID", "note")
