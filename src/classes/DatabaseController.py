@@ -137,6 +137,22 @@ class DatabaseController(metaclass=Singleton):
 
         self.__connection.commit()
 
+    def add_feedback_request(self, user_id: int | str, note: str) -> None:
+        """
+        Добавляет запрос на поддержку в базу данных.
+
+        - `user_id` : (int, str) - идентификатор пользователя.
+        - `note` : (str) - примечание к запросу.
+        """
+        try:
+            query = """INSERT INTO admin.waiting_feed_back ("status_ID", "donor_number_ID", "note")
+                        SELECT %s, "ID", %s FROM "number_telephone".donor_number WHERE "donor_ID" = %s"""
+            self.__cursor.execute(query, (3, note, user_id))
+            self.__connection.commit()
+            print("`add_support_request` sent successfully!")
+        except Exception as error:
+            print("`add_support_request` ERROR:", error)
+    
     def get_next_row_id(self, table: str) -> int:
 
         """
