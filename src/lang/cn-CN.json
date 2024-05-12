@@ -1,74 +1,93 @@
 {
     "MESSAGES": {
         
-        "REGISTER_START": "Привет, я бот центр по сдаче крови! Чтобы ты мог мною воспользоваться - пройди небольшую авторизацию.\n\nПервое что я попрошу - поделись со мной своими контактами, это очень сильно ускорит процесс регистрации. CN LANG",
-        "REGISTER_START_FAILURE": "Это не ваш контакт! Для отправки контакта воспользуйтесь кнопкой ниже. CN LANG",
-        "REGISTER_STEP_1": "Спасибо за то, что поделился данными! Теперь давай уточним некоторую информацию.\n\nПервое, введи, пожалуйста, свою дату рождения в формате DD-MM-YYY. CN LANG",
-        "REGISTER_STEP_1_FAILURE": "Неправильно введена дата! Пожалуйста, убедись что ты вводишь ее в формате DD-MM-YYYY. CN LANG",
-        "REGISTER_STEP_2": "Отлично! Дальше я бы хотел узнать, какого ты пола. Выбери один из вариантов на клавиатуре снизу. CN LANG",
-        "REGISTER_STEP_2_FAILURE": "Неправильно введен гендер! Пожалуйста, выберите один из представленных на клавиатуре. CN LANG",
-        "REGISTER_STEP_3": "Отлично! Дальше я бы хотел чтобы ты создал свой личный пароль. Ни при каких обстоятельствах его не распространяй, это твой ключ к личному кабинету на сайте. Пароль может состоять из цифр и букв латинского алфавита, минимум 8 символов. Нельзя использовать специальные символы! CN LANG",
-        "REGISTER_STEP_3_FAILURE": "Неправильно введен пароль! Убедитесь, что у вас минимум 8 символов, нет спец. символов и состоит он из цифр и букв латинского алфавита. CN LANG",
-        "SUCCESSFULL_REGISTER": "Отлично! Мы тебя зарегистрировали в системе, теперь ты можешь пользоваться всем функционалом! CN LANG",
-        "ALREADY_REGISTERED": "Вы уже зарегистрировали аккаунт! CN LANG",
-
-        "DONATION_REGISTERED_APPOINTMENT": "Вы зарегистрировались на прием! CN LANG",
+        "REGISTER_START": "嗨，我是血液捐赠中心的机器人！要开始使用我的服务，请通过一个简短的认证过程。",
+        "REGISTER_START_FAILURE": "这不是您的联系方式！请使用下面的按钮发送您的联系方式。",
+        "REGISTER_STEP_1": "感谢您分享您的信息！现在，让我们澄清一些细节。\n\n首先，请以DD-MM-YYYY的格式输入您的出生日期。",
+        "REGISTER_STEP_1_FAILURE": "日期无效！请确保您以DD-MM-YYYY格式输入。",
+        "REGISTER_STEP_2": "太棒了！接下来，我想知道您的性别。请在下方的键盘上选择一个选项。",
+        "REGISTER_STEP_2_FAILURE": "性别无效！请在键盘上选择一个可用的选项。",
+        "REGISTER_STEP_3": "太好了！接下来，我想让您创建您的个人密码。永远不要分享它，这是您访问网站个人帐户的密钥。密码可以包含数字和拉丁字母，至少8个字符。不允许使用特殊字符！",
+        "REGISTER_STEP_3_FAILURE": "密码无效！确保它至少包含8个字符，没有特殊字符，并由数字和拉丁字母组成。",
+        "SUCCESSFULL_REGISTER": "太棒了！我们已经在系统中注册了您，现在您可以享受所有功能！",
+        "ALREADY_REGISTERED": "您已经注册了！",
+    
+        "DONATION_REGISTERED_APPOINTMENT": "您已注册捐赠！",
         
-        "CANNOT_REGISTER": "Вы уже зарегистрированы на прием! CN LANG",
-        "INFO_REGISTER": "С данными ничего не будет. CN LANG",
-        "CHANGE_LANGUAGE": "Оберіть одну з мов, наведених нижче... CN LANG",
-        "SUCCESFULLY_CHANGED_LANGUAGE": "Язык успешно изменен! CN LANG",
-        "MENU_OPEN": "Меню '%s'. Оберіть потрібну опцію. CN LANG",
-        "BACK": "Повернулись в %s. Оберіть потрібну опцію. CN LANG",
-        "NOTIFICATIONS_ON": "Включили уведомления! CN LANG",
-        "NOTIFICATIONS_OFF": "Выключили уведомления! CN LANG",
-        "DONATION_HISTORY_MESSAGE": "%s, Вы пожертвовали %s раз свою кровь в следующих центрах:\n%s CN LANG",
-        "DONATION_FIND_CENTERS_MESSAGE": "%s, Вы можете найти центры по сдачи крови по следующим адресам:\n%s CN LANG",
-        "FEEDBACK_MENU_OPEN": "Меню '%s'. Ви можете надати дані для зворотнього зв'язку нижче. CN LANG",
-        "FEEDBACK_PHONE_MESSAGE": "Напишіть свій номер телефону. CN LANG",
-        "FEEDBACK_MAIL_MESSAGE": "Напишіть свій адрес пошти. CN LANG",
-        "PHONE_SENT": "Номер прийнятий. Чекайте на відповідь. CN LANG",
-        "MAIL_SENT": "Пошта прийнята. Чекайте на відповідь. CN LANG",
-        "NAME_SENT": "Введіть своє ім'я. CN LANG",
-        "MAIL_PHONE_ERROR": "Введено неправильні дані. CN LANG",
-        "FEEDBACK_AFTER_NAME_MESSAGE": "Ім'я прийнято. Тепер Ви можете вибрати один з способів для зворотнього зв'язку. CN LANG",
-        "CANCELLED_STATE": "Вы отменили действие CN LANG"
+        "CANNOT_REGISTER": "您已经注册了捐赠！",
+        "INFO_REGISTER": "不会分享任何信息。",
+        "CHANGE_LANGUAGE": "请选择以下语言之一...",
+        "SUCCESFULLY_CHANGED_LANGUAGE": "语言已成功更改！",
+        "MENU_OPEN": "菜单'%s'。选择所需的选项。",
+        "BACK": "返回%s。选择所需的选项。",
+        "NOTIFICATIONS_ON": "通知已启用！",
+        "NOTIFICATIONS_OFF": "通知已禁用！",
+        "DONATION_HISTORY_MESSAGE": "%s，您在以下中心捐赠了%s次血液：\n%s",
+        "DONATION_FIND_CENTERS_MESSAGE": "%s，您可以在以下地址找到血液捐赠中心：\n%s",
+        "FEEDBACK_MENU_OPEN": "菜单'%s'。您可以在下面留下联系方式进行回拨。",
+        "FEEDBACK_PHONE_MESSAGE": "请输入您的电话号码。",
+        "FEEDBACK_MAIL_MESSAGE": "请输入您的电子邮件地址。",
+        "PHONE_SENT": "号码已接收。请等待回复。",
+        "MAIL_SENT": "邮件已接收。请等待回复。",
+        "NAME_SENT": "输入您的名字。",
+        "MAIL_PHONE_ERROR": "输入的数据无效。",
+        "FEEDBACK_AFTER_NAME_MESSAGE": "已收到姓名。您现在可以选择其中一种联系方法。",
+        "CANCELLED_STATE": "您已取消操作。",
+    
+        "PROFILE": "您的信息：\n姓名：%s\n号码：%s\n出生日期：%s\n性别：%s",
+        "PROFILE_NAME_REQUEST": "请输入您的新姓名。（例如，张三）",
+        "PROFILE_NAME_CHANGED": "姓名成功更改，您可以在个人资料中检查。",
+        "PROFILE_NUMBER_REQUEST": "请输入您的新号码。（例如，+1234567890）",
+        "PROFILE_NUMBER_CHANGED": "号码成功更改，您可以在个人资料中检查。",
+        "PROFILE_BDATE_REQUEST": "请输入您的新出生日期。",
+        "PROFILE_BDATE_CHANGED": "出生日期成功更改，您可以在个人资料中检查。",
+        "PROFILE_GENDER_REQUEST": "请输入您的新性别。",
+        "PROFILE_GENDER_CHANGED": "性别成功更改，您可以在个人资料中检查。"
     },
     "BUTTONS": {
-        "MAIN_MENU_DONATION": "🩸 Донация  CN LANG",
-        "MAIN_MENU_SETTINGS": "⚙️ Настройки  CN LANG",
-        "MAIN_MENU_FEEDBACK": "📞 Поддержка  CN LANG",
-        "MAIN_MENU_INFO": "❓ Что будет с моими данными?  CN LANG",
-
-        "SEND_CONTACT": "Отправить контактные данные CN LANG",
-
-        "DONATION_MENU_REGISTER": "🙋 Запис на донацію CN LANG",
-        "DONATION_MENU_FIND_CENTER": "🔎 Пошук центрів CN LANG",
-        "DONATION_MENU_HISTORY": "📗 История донаций CN LANG",
-
-        "SETTINGS_MENU_NOTIFICATIONS": "💡 Оповещения и напоминания CN LANG",
-        "SETTINGS_MENU_LANGUAGES": "🌐 Сменить язык CN LANG",
-
-        "NOTIFICATIONS_MENU_ON": "✅ Включить уведомления CN LANG",
-        "NOTIFICATIONS_MENU_OFF": "❎ Выключить уведомления CN LANG",
-
-        "FEEDBACK_MENU_PHONE": "📞 Залишити номер телефону CN LANG",
-        "FEEDBACK_MENU_MAIL": "📧 Залишити адрес пошти CN LANG",
-        "FEEDBACK_MENU_NEED_OPERATOR": "🎧 Звернутись до оператора CN LANG",
-
-        "LANGUAGES_MENU_UK": "🇺🇦 Український CN LANG",
-        "LANGUAGES_MENU_EN": "🇬🇧 English CN LANG",
-        "LANGUAGES_MENU_RU": "🇷🇺 Русский CN LANG",
-        "LANGUAGES_MENU_DE": "🇩🇪 Deutsch CN LANG",
-        "LANGUAGES_MENU_CN": "🇨🇳 中国人 CN LANG",
-        "LANGUAGES_MENU_FR": "🇫🇷 Français CN LANG",
+        "MAIN_MENU_DONATION": "🩸 捐赠",
+        "MAIN_MENU_SETTINGS": "⚙️ 设置",
+        "MAIN_MENU_PROFILE": "✨ 个人资料",
+        "MAIN_MENU_EVENTS": "🎈 活动与促销",
+        "MAIN_MENU_FEEDBACK": "📞 支持",
+        "MAIN_MENU_INFO": "❓ 我的数据会怎样？",
+    
+        "SEND_CONTACT": "发送联系方式",
+    
+        "DONATION_MENU_REGISTER": "🙋 注册捐赠",
+        "DONATION_MENU_FIND_CENTER": "🔎 查找中心",
+        "DONATION_MENU_HISTORY": "📗 捐赠历史",
+    
+        "SETTINGS_MENU_NOTIFICATIONS": "💡 通知与提醒",
+        "SETTINGS_MENU_LANGUAGES": "🌐 更改语言",
+    
+        "NOTIFICATIONS_MENU_ON": "✅ 启用通知",
+        "NOTIFICATIONS_MENU_OFF": "❎ 禁用通知",
+    
+        "FEEDBACK_MENU_PHONE": "📞 留下电话号码",
+        "FEEDBACK_MENU_MAIL": "📧 留下电子邮件地址",
+        "FEEDBACK_MENU_NEED_OPERATOR": "🎧 与运营商交谈",
+    
+        "LANGUAGES_MENU_UK": "🇺🇦 乌克兰语",
+        "LANGUAGES_MENU_EN": "🇬🇧 英语",
+        "LANGUAGES_MENU_RU": "🇷🇺 俄语",
+        "LANGUAGES_MENU_DE": "🇩🇪 德语",
+        "LANGUAGES_MENU_CN": "🇨🇳 中文",
+        "LANGUAGES_MENU_FR": "🇫🇷 法语",
+    
+        "EDIT_PROFILE": "编辑",
+        "EDIT_PROFILE_NAME": "编辑姓名",
+        "EDIT_PROFILE_NUMBER": "编辑号码",
+        "EDIT_PROFILE_BIRTHDATE": "编辑出生日期",
+        "EDIT_PROFILE_GENDER": "编辑性别",
         
-        "BUTTON_HOME": "🏠 Главное меню CN LANG",
-        "BUTTON_BACK": "⬅️ Назад CN LANG",
-
-        "MALE": "Мужчина CN LANG",
-        "FEMALE": "Женщина CN LANG",
-        "OTHER": "Боевой вертолет CN LANG",
-        "NODATA": "Не хочу говорить CN LANG"
+        "BUTTON_HOME": "🏠 主页",
+        "BUTTON_BACK": "⬅️ 返回",
+    
+        "MALE": "男",
+        "FEMALE": "女",
+        "OTHER": "其他",
+        "NODATA": "不想说"
     }
+    
 }
