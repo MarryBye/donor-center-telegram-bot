@@ -1,74 +1,93 @@
 {
     "MESSAGES": {
         
-        "REGISTER_START": "Привет, я бот центр по сдаче крови! Чтобы ты мог мною воспользоваться - пройди небольшую авторизацию.\n\nПервое что я попрошу - поделись со мной своими контактами, это очень сильно ускорит процесс регистрации. DE LANG",
-        "REGISTER_START_FAILURE": "Это не ваш контакт! Для отправки контакта воспользуйтесь кнопкой ниже. DE LANG",
-        "REGISTER_STEP_1": "Спасибо за то, что поделился данными! Теперь давай уточним некоторую информацию.\n\nПервое, введи, пожалуйста, свою дату рождения в формате DD-MM-YYY. DE LANG",
-        "REGISTER_STEP_1_FAILURE": "Неправильно введена дата! Пожалуйста, убедись что ты вводишь ее в формате DD-MM-YYYY. DE LANG",
-        "REGISTER_STEP_2": "Отлично! Дальше я бы хотел узнать, какого ты пола. Выбери один из вариантов на клавиатуре снизу. DE LANG",
-        "REGISTER_STEP_2_FAILURE": "Неправильно введен гендер! Пожалуйста, выберите один из представленных на клавиатуре. DE LANG",
-        "REGISTER_STEP_3": "Отлично! Дальше я бы хотел чтобы ты создал свой личный пароль. Ни при каких обстоятельствах его не распространяй, это твой ключ к личному кабинету на сайте. Пароль может состоять из цифр и букв латинского алфавита, минимум 8 символов. Нельзя использовать специальные символы! DE LANG",
-        "REGISTER_STEP_3_FAILURE": "Неправильно введен пароль! Убедитесь, что у вас минимум 8 символов, нет спец. символов и состоит он из цифр и букв латинского алфавита. DE LANG",
-        "SUCCESSFULL_REGISTER": "Отлично! Мы тебя зарегистрировали в системе, теперь ты можешь пользоваться всем функционалом! DE LANG",
-        "ALREADY_REGISTERED": "Вы уже зарегистрировали аккаунт! DE LANG",
-
-        "DONATION_REGISTERED_APPOINTMENT": "Вы зарегистрировались на прием! DE LANG",
+        "REGISTER_START": "Hallo, ich bin der Bot des Blutspendezentrums! Um meine Dienste nutzen zu können, durchlaufen Sie bitte einen kurzen Authentifizierungsprozess.\n\nDas Erste, was ich Sie fragen werde - teilen Sie mir bitte Ihre Kontaktdaten mit, das wird den Registrierungsprozess erheblich beschleunigen.",
+        "REGISTER_START_FAILURE": "Das ist nicht Ihr Kontakt! Verwenden Sie bitte die Schaltfläche unten, um Ihren Kontakt zu senden.",
+        "REGISTER_STEP_1": "Vielen Dank für das Teilen Ihrer Informationen! Jetzt klären wir einige Details.\n\nZuerst geben Sie bitte Ihr Geburtsdatum im Format TT-MM-JJJJ ein.",
+        "REGISTER_STEP_1_FAILURE": "Ungültiges Datum! Stellen Sie sicher, dass Sie es im Format TT-MM-JJJJ eingeben.",
+        "REGISTER_STEP_2": "Großartig! Als nächstes würde ich gerne Ihr Geschlecht wissen. Bitte wählen Sie eine der Optionen auf der Tastatur unten aus.",
+        "REGISTER_STEP_2_FAILURE": "Ungültiges Geschlecht! Bitte wählen Sie eine der verfügbaren Optionen auf der Tastatur aus.",
+        "REGISTER_STEP_3": "Super! Als nächstes würde ich gerne, dass Sie Ihr persönliches Passwort erstellen. Teilen Sie es niemals, es ist Ihr Schlüssel, um auf Ihr persönliches Konto auf der Website zuzugreifen. Das Passwort kann Zahlen und Buchstaben des lateinischen Alphabets enthalten, mindestens 8 Zeichen lang sein. Sonderzeichen sind nicht erlaubt!",
+        "REGISTER_STEP_3_FAILURE": "Ungültiges Passwort! Stellen Sie sicher, dass es mindestens 8 Zeichen lang ist, keine Sonderzeichen enthält und aus Zahlen und Buchstaben des lateinischen Alphabets besteht.",
+        "SUCCESSFULL_REGISTER": "Super! Wir haben Sie in unserem System registriert, jetzt können Sie alle Funktionen genießen!",
+        "ALREADY_REGISTERED": "Sie sind bereits registriert!",
+    
+        "DONATION_REGISTERED_APPOINTMENT": "Sie sind für die Spende registriert!",
         
-        "CANNOT_REGISTER": "Вы уже зарегистрированы на прием! DE LANG",
-        "INFO_REGISTER": "С данными ничего не будет. DE LANG",
-        "CHANGE_LANGUAGE": "Оберіть одну з мов, наведених нижче... DE LANG",
-        "SUCCESFULLY_CHANGED_LANGUAGE": "Язык успешно изменен! DE LANG",
-        "MENU_OPEN": "Меню '%s'. Оберіть потрібну опцію. DE LANG",
-        "BACK": "Повернулись в %s. Оберіть потрібну опцію. DE LANG",
-        "NOTIFICATIONS_ON": "Включили уведомления! DE LANG",
-        "NOTIFICATIONS_OFF": "Выключили уведомления! DE LANG",
-        "DONATION_HISTORY_MESSAGE": "%s, Вы пожертвовали %s раз свою кровь в следующих центрах:\n%s DE LANG",
-        "DONATION_FIND_CENTERS_MESSAGE": "%s, Вы можете найти центры по сдачи крови по следующим адресам:\n%s DE LANG",
-        "FEEDBACK_MENU_OPEN": "Меню '%s'. Ви можете надати дані для зворотнього зв'язку нижче. DE LANG",
-        "FEEDBACK_PHONE_MESSAGE": "Напишіть свій номер телефону. DE LANG",
-        "FEEDBACK_MAIL_MESSAGE": "Напишіть свій адрес пошти. DE LANG",
-        "PHONE_SENT": "Номер прийнятий. Чекайте на відповідь. DE LANG",
-        "MAIL_SENT": "Пошта прийнята. Чекайте на відповідь. DE LANG",
-        "NAME_SENT": "Введіть своє ім'я. DE LANG",
-        "MAIL_PHONE_ERROR": "Введено неправильні дані. DE LANG",
-        "FEEDBACK_AFTER_NAME_MESSAGE": "Ім'я прийнято. Тепер Ви можете вибрати один з способів для зворотнього зв'язку. DE LANG",
-        "CANCELLED_STATE": "Вы отменили действие DE LANG"
+        "CANNOT_REGISTER": "Sie sind bereits für die Spende registriert!",
+        "INFO_REGISTER": "Es werden keine Informationen weitergegeben.",
+        "CHANGE_LANGUAGE": "Wählen Sie eine der unten stehenden Sprachen aus...",
+        "SUCCESFULLY_CHANGED_LANGUAGE": "Sprache erfolgreich geändert!",
+        "MENU_OPEN": "Menü '%s'. Wählen Sie die gewünschte Option aus.",
+        "BACK": "Zurück zu %s. Wählen Sie die gewünschte Option aus.",
+        "NOTIFICATIONS_ON": "Benachrichtigungen aktiviert!",
+        "NOTIFICATIONS_OFF": "Benachrichtigungen deaktiviert!",
+        "DONATION_HISTORY_MESSAGE": "%s, Sie haben Ihr Blut %s Mal in den folgenden Zentren gespendet:\n%s",
+        "DONATION_FIND_CENTERS_MESSAGE": "%s, Sie können Blutspendezentren an den folgenden Adressen finden:\n%s",
+        "FEEDBACK_MENU_OPEN": "Menü '%s'. Sie können unten Ihre Kontaktdaten für einen Rückruf hinterlassen.",
+        "FEEDBACK_PHONE_MESSAGE": "Bitte geben Sie Ihre Telefonnummer ein.",
+        "FEEDBACK_MAIL_MESSAGE": "Bitte geben Sie Ihre E-Mail-Adresse ein.",
+        "PHONE_SENT": "Nummer erhalten. Warten Sie auf die Antwort.",
+        "MAIL_SENT": "E-Mail erhalten. Warten Sie auf die Antwort.",
+        "NAME_SENT": "Geben Sie Ihren Namen ein.",
+        "MAIL_PHONE_ERROR": "Ungültige Daten eingegeben.",
+        "FEEDBACK_AFTER_NAME_MESSAGE": "Name erhalten. Sie können jetzt eine der Kontaktmethoden auswählen.",
+        "CANCELLED_STATE": "Sie haben die Aktion abgebrochen.",
+    
+        "PROFILE": "Ihre Informationen:\nName: %s\nNummer: %s\nGeburtsdatum: %s\nGeschlecht: %s",
+        "PROFILE_NAME_REQUEST": "Bitte geben Sie Ihren neuen Namen ein. (Zum Beispiel, Hans)",
+        "PROFILE_NAME_CHANGED": "Name erfolgreich geändert, Sie können es im Profil überprüfen.",
+        "PROFILE_NUMBER_REQUEST": "Bitte geben Sie Ihre neue Nummer ein. (Zum Beispiel, +491234567890)",
+        "PROFILE_NUMBER_CHANGED": "Nummer erfolgreich geändert, Sie können es im Profil überprüfen.",
+        "PROFILE_BDATE_REQUEST": "Bitte geben Sie Ihr neues Geburtsdatum ein.",
+        "PROFILE_BDATE_CHANGED": "Geburtsdatum erfolgreich geändert, Sie können es im Profil überprüfen.",
+        "PROFILE_GENDER_REQUEST": "Bitte geben Sie Ihr neues Geschlecht ein.",
+        "PROFILE_GENDER_CHANGED": "Geschlecht erfolgreich geändert, Sie können es im Profil überprüfen."
     },
     "BUTTONS": {
-        "MAIN_MENU_DONATION": "🩸 Донация  DE LANG",
-        "MAIN_MENU_SETTINGS": "⚙️ Настройки  DE LANG",
-        "MAIN_MENU_FEEDBACK": "📞 Поддержка  DE LANG",
-        "MAIN_MENU_INFO": "❓ Что будет с моими данными?  DE LANG",
-
-        "SEND_CONTACT": "Отправить контактные данные DE LANG",
-
-        "DONATION_MENU_REGISTER": "🙋 Запис на донацію DE LANG",
-        "DONATION_MENU_FIND_CENTER": "🔎 Пошук центрів DE LANG",
-        "DONATION_MENU_HISTORY": "📗 История донаций DE LANG",
-
-        "SETTINGS_MENU_NOTIFICATIONS": "💡 Оповещения и напоминания DE LANG",
-        "SETTINGS_MENU_LANGUAGES": "🌐 Сменить язык DE LANG",
-
-        "NOTIFICATIONS_MENU_ON": "✅ Включить уведомления DE LANG",
-        "NOTIFICATIONS_MENU_OFF": "❎ Выключить уведомления DE LANG",
-
-        "FEEDBACK_MENU_PHONE": "📞 Залишити номер телефону DE LANG",
-        "FEEDBACK_MENU_MAIL": "📧 Залишити адрес пошти DE LANG",
-        "FEEDBACK_MENU_NEED_OPERATOR": "🎧 Звернутись до оператора DE LANG",
-
-        "LANGUAGES_MENU_UK": "🇺🇦 Український DE LANG",
-        "LANGUAGES_MENU_EN": "🇬🇧 English DE LANG",
-        "LANGUAGES_MENU_RU": "🇷🇺 Русский DE LANG",
-        "LANGUAGES_MENU_DE": "🇩🇪 Deutsch DE LANG",
-        "LANGUAGES_MENU_CN": "🇨🇳 中国人 DE LANG",
-        "LANGUAGES_MENU_FR": "🇫🇷 Français DE LANG",
+        "MAIN_MENU_DONATION": "🩸 Spende",
+        "MAIN_MENU_SETTINGS": "⚙️ Einstellungen",
+        "MAIN_MENU_PROFILE": "✨ Profil",
+        "MAIN_MENU_EVENTS": "🎈 Veranstaltungen und Aktionen",
+        "MAIN_MENU_FEEDBACK": "📞 Unterstützung",
+        "MAIN_MENU_INFO": "❓ Was passiert mit meinen Daten?",
+    
+        "SEND_CONTACT": "Kontaktdaten senden",
+    
+        "DONATION_MENU_REGISTER": "🙋 Registrierung zur Spende",
+        "DONATION_MENU_FIND_CENTER": "🔎 Zentren finden",
+        "DONATION_MENU_HISTORY": "📗 Spendenhistorie",
+    
+        "SETTINGS_MENU_NOTIFICATIONS": "💡 Benachrichtigungen und Erinnerungen",
+        "SETTINGS_MENU_LANGUAGES": "🌐 Sprache ändern",
+    
+        "NOTIFICATIONS_MENU_ON": "✅ Benachrichtigungen aktivieren",
+        "NOTIFICATIONS_MENU_OFF": "❎ Benachrichtigungen deaktivieren",
+    
+        "FEEDBACK_MENU_PHONE": "📞 Telefonnummer hinterlassen",
+        "FEEDBACK_MENU_MAIL": "📧 E-Mail-Adresse hinterlassen",
+        "FEEDBACK_MENU_NEED_OPERATOR": "🎧 Mit einem Operator sprechen",
+    
+        "LANGUAGES_MENU_UK": "🇺🇦 Ukrainisch",
+        "LANGUAGES_MENU_EN": "🇬🇧 Englisch",
+        "LANGUAGES_MENU_RU": "🇷🇺 Russisch",
+        "LANGUAGES_MENU_DE": "🇩🇪 Deutsch",
+        "LANGUAGES_MENU_CN": "🇨🇳 Chinesisch",
+        "LANGUAGES_MENU_FR": "🇫🇷 Französisch",
+    
+        "EDIT_PROFILE": "Bearbeiten",
+        "EDIT_PROFILE_NAME": "Namen bearbeiten",
+        "EDIT_PROFILE_NUMBER": "Nummer bearbeiten",
+        "EDIT_PROFILE_BIRTHDATE": "Geburtsdatum bearbeiten",
+        "EDIT_PROFILE_GENDER": "Geschlecht bearbeiten",
         
-        "BUTTON_HOME": "🏠 Главное меню DE LANG",
-        "BUTTON_BACK": "⬅️ Назад DE LANG",
-
-        "MALE": "Мужчина DE LANG",
-        "FEMALE": "Женщина DE LANG",
-        "OTHER": "Боевой вертолет DE LANG",
-        "NODATA": "Не хочу говорить DE LANG"
+        "BUTTON_HOME": "🏠 Startseite",
+        "BUTTON_BACK": "⬅️ Zurück",
+    
+        "MALE": "Männlich",
+        "FEMALE": "Weiblich",
+        "OTHER": "Andere",
+        "NODATA": "Möchte nicht angeben"
     }
+    
 }
