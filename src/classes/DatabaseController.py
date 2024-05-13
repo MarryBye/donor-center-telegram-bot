@@ -153,6 +153,78 @@ class DatabaseController(metaclass=Singleton):
         except Exception as error:
             print("`add_support_request` ERROR:", error)
 
+        def update_donor_number(self, donor_id, new_phone_number):
+        try:
+            with self.__connection.cursor() as cur:
+                cur.execute(
+                    """UPDATE number_telephone.donor_number SET number = %s WHERE "donor_ID" = %s;""",
+                    (new_phone_number, donor_id),
+                )
+            self.__connection.commit()
+            print("Номер телефона донора успешно обновлен.")
+        except Exception as e:
+            print(f"Ошибка при обновлении номера телефона донора: {e}")
+
+    def update_donor_field(self, donor: Donor, field_name: str, new_value: str | int):
+        """Меняет одно значение информации о пользователе
+
+        - `donor` - объект `Donor` с информацией про нового донора.
+        - `field_name` - название колонки информации. Их список: `name_donor`, `email`, `password`, `date_of_birth`, `gender_ID`, `number`.
+        - `new_value` - новое значение колонки.
+        """
+
+        try:
+            user_id = donor.get_id()
+
+            if field_name == "phone_number":
+                self.update_donor_number(user_id, new_value)
+
+            with self.__connection.cursor() as cur:
+                cur.execute(
+                    f"""UPDATE donor.donor SET {field_name} = %s WHERE "ID" = %s;""",
+                    (new_value, user_id),
+                )
+            self.__connection.commit()
+
+            print(f"{field_name} донора успешно обновлено.")
+        except Exception as e:
+            print(f"Ошибка при обновлении {field_name} донора: {e}")
+
+    def update_donor_fields(self, donor: Donor, **fields: dict[str, str | int]):
+        """Меняет несколько значений информации о пользователе
+
+        - `donor` - объект `Donor` с информацией про нового донора.
+        fields:
+        - `name_donor`: Новое имя донора.
+        - `email`: Новый адрес электронной почты донора.
+        - `password`: Новый пароль донора.
+        - `date_of_birth`: Новая дата рождения донора (в формате 'YYYY-MM-DD').
+        - `gender_ID`: Новый идентификатор гендера донора.
+        - `phone_number`: Новый номер телефона донора.
+        Пример:
+            update(donor, fields={"name_donor": "NewName", "email": "new.mail@gmail.com"})
+        """
+
+        try:
+            user_id = donor.get_id()
+            fields = fields.get('fields')
+            
+            set_fields = ", ".join([f"{field} = %s" for field in fields.keys()])
+
+            if "phone_number" in fields:
+                self.update_donor_number(user_id, fields.pop("phone_number"))
+
+            with self.__connection.cursor() as cur:
+                cur.execute(
+                    f"""UPDATE donor.donor SET {set_fields} WHERE "ID" = %s""",
+                    list(fields.values()) + [user_id],
+                )
+            self.__connection.commit()
+
+            print("Данные донора успешно обновлены.")
+        except Exception as e:
+            print(f"Ошибка при обновлении данных донора: {e}")
+
     def get_next_row_id(self, table: str) -> int:
 
         """
