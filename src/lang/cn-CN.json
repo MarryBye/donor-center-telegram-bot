@@ -36,13 +36,20 @@
     
         "PROFILE": "您的信息：\n姓名：%s\n号码：%s\n出生日期：%s\n性别：%s",
         "PROFILE_NAME_REQUEST": "请输入您的新姓名。（例如，张三）",
-        "PROFILE_NAME_CHANGED": "姓名成功更改，您可以在个人资料中检查。",
-        "PROFILE_NUMBER_REQUEST": "请输入您的新号码。（例如，+1234567890）",
-        "PROFILE_NUMBER_CHANGED": "号码成功更改，您可以在个人资料中检查。",
-        "PROFILE_BDATE_REQUEST": "请输入您的新出生日期。",
-        "PROFILE_BDATE_CHANGED": "出生日期成功更改，您可以在个人资料中检查。",
+        "PROFILE_NAME_CHANGED": "姓名已成功更改，您可以在个人资料中进行验证以确保。",
+        "PROFILE_NAME_ERROR": "出错了！姓名应仅包含大小写字母。",
+        "PROFILE_NUMBER_REQUEST": "请输入您的新号码。（例如，+380637407856）",
+        "PROFILE_NUMBER_CHANGED": "号码已成功更改，您可以在个人资料中进行验证以确保。",
+        "PROFILE_NUMBER_ERROR": "出错了！号码应为格式+380xxxxxxxxx。",
+        "PROFILE_BDATE_REQUEST": "请输入您的新出生日期。（dd-mm-yyyy）",
+        "PROFILE_BDATE_CHANGED": "出生日期已成功更改，您可以在个人资料中进行验证以确保。",
+        "PROFILE_BDATE_ERROR": "出错了！日期应为格式dd-mm-yyyy。示例：03-04-2001",
         "PROFILE_GENDER_REQUEST": "请输入您的新性别。",
-        "PROFILE_GENDER_CHANGED": "性别成功更改，您可以在个人资料中检查。"
+        "PROFILE_GENDER_CHANGED": "性别已成功更改，您可以在个人资料中进行验证以确保。",
+        "PROFILE_GENDER_ERROR": "出错了！不存在此性别。",
+        "PROFILE_EMAIL_REQUEST": "请输入您的新电子邮件地址。",
+        "PROFILE_EMAIL_CHANGED": "电子邮件地址已成功更改，您可以在个人资料中进行验证以确保。",
+        "PROFILE_EMAIL_ERROR": "出错了！电子邮件地址应为格式mail@example.com。"
     },
     "BUTTONS": {
         "MAIN_MENU_DONATION": "🩸 捐赠",
@@ -80,6 +87,7 @@
         "EDIT_PROFILE_NUMBER": "编辑号码",
         "EDIT_PROFILE_BIRTHDATE": "编辑出生日期",
         "EDIT_PROFILE_GENDER": "编辑性别",
+        "EDIT_PROFILE_EMAIL": "编辑邮件",
         
         "BUTTON_HOME": "🏠 主页",
         "BUTTON_BACK": "⬅️ 返回",
