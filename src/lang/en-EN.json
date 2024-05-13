@@ -36,13 +36,20 @@
     
         "PROFILE": "Your information:\nName: %s\nNumber: %s\nDate of Birth: %s\nGender: %s",
         "PROFILE_NAME_REQUEST": "Please enter your new name. (For example, John)",
-        "PROFILE_NAME_CHANGED": "Name successfully changed, you can check in the profile.",
-        "PROFILE_NUMBER_REQUEST": "Please enter your new number. (For example, +1234567890)",
-        "PROFILE_NUMBER_CHANGED": "Number successfully changed, you can check in the profile.",
-        "PROFILE_BDATE_REQUEST": "Please enter your new date of birth.",
-        "PROFILE_BDATE_CHANGED": "Date of birth successfully changed, you can check in the profile.",
+        "PROFILE_NAME_CHANGED": "Name successfully changed, you can verify in your profile for certainty.",
+        "PROFILE_NAME_ERROR": "An error occurred! The name should only include lowercase and uppercase letters.",
+        "PROFILE_NUMBER_REQUEST": "Please enter your new number. (For example, +380637407856)",
+        "PROFILE_NUMBER_CHANGED": "Number successfully changed, you can verify in your profile for certainty.",
+        "PROFILE_NUMBER_ERROR": "An error occurred! The number should be in the format +380xxxxxxxxx",
+        "PROFILE_BDATE_REQUEST": "Please enter your new date of birth. (dd-mm-yyyy)",
+        "PROFILE_BDATE_CHANGED": "Date of birth successfully changed, you can verify in your profile for certainty.",
+        "PROFILE_BDATE_ERROR": "An error occurred! The date should be in the format dd-mm-yyyy. Example: 03-04-2001",
         "PROFILE_GENDER_REQUEST": "Please enter your new gender.",
-        "PROFILE_GENDER_CHANGED": "Gender successfully changed, you can check in the profile."
+        "PROFILE_GENDER_CHANGED": "Gender successfully changed, you can verify in your profile for certainty.",
+        "PROFILE_GENDER_ERROR": "An error occurred! Such gender does not exist.",
+        "PROFILE_EMAIL_REQUEST": "Please enter your new email.",
+        "PROFILE_EMAIL_CHANGED": "Email successfully changed, you can verify in your profile for certainty.",
+        "PROFILE_EMAIL_ERROR": "An error occurred! The email should be in the format mail@example.com"
     },
     "BUTTONS": {
         "MAIN_MENU_DONATION": "🩸 Donation",
@@ -80,6 +87,7 @@
         "EDIT_PROFILE_NUMBER": "Edit Number",
         "EDIT_PROFILE_BIRTHDATE": "Edit Birthdate",
         "EDIT_PROFILE_GENDER": "Edit Gender",
+        "EDIT_PROFILE_EMAIL": "Edit Email",
         
         "BUTTON_HOME": "🏠 Home",
         "BUTTON_BACK": "⬅️ Back",
