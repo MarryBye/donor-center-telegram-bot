@@ -29,3 +29,4 @@ class UserSettings(StatesGroup):
     number = State()
     bdate = State()
     gender = State()
+    email = State()
