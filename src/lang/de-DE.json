@@ -36,13 +36,20 @@
     
         "PROFILE": "Ihre Informationen:\nName: %s\nNummer: %s\nGeburtsdatum: %s\nGeschlecht: %s",
         "PROFILE_NAME_REQUEST": "Bitte geben Sie Ihren neuen Namen ein. (Zum Beispiel, Hans)",
-        "PROFILE_NAME_CHANGED": "Name erfolgreich geändert, Sie können es im Profil überprüfen.",
-        "PROFILE_NUMBER_REQUEST": "Bitte geben Sie Ihre neue Nummer ein. (Zum Beispiel, +491234567890)",
-        "PROFILE_NUMBER_CHANGED": "Nummer erfolgreich geändert, Sie können es im Profil überprüfen.",
-        "PROFILE_BDATE_REQUEST": "Bitte geben Sie Ihr neues Geburtsdatum ein.",
-        "PROFILE_BDATE_CHANGED": "Geburtsdatum erfolgreich geändert, Sie können es im Profil überprüfen.",
+        "PROFILE_NAME_CHANGED": "Name erfolgreich geändert, Sie können es in Ihrem Profil überprüfen, um sicher zu gehen.",
+        "PROFILE_NAME_ERROR": "Ein Fehler ist aufgetreten! Der Name darf nur Klein- und Großbuchstaben enthalten.",
+        "PROFILE_NUMBER_REQUEST": "Bitte geben Sie Ihre neue Nummer ein. (Zum Beispiel, +380637407856)",
+        "PROFILE_NUMBER_CHANGED": "Nummer erfolgreich geändert, Sie können es in Ihrem Profil überprüfen, um sicher zu gehen.",
+        "PROFILE_NUMBER_ERROR": "Ein Fehler ist aufgetreten! Die Nummer sollte im Format +380xxxxxxxxx sein.",
+        "PROFILE_BDATE_REQUEST": "Bitte geben Sie Ihr neues Geburtsdatum ein. (tt-mm-jjjj)",
+        "PROFILE_BDATE_CHANGED": "Geburtsdatum erfolgreich geändert, Sie können es in Ihrem Profil überprüfen, um sicher zu gehen.",
+        "PROFILE_BDATE_ERROR": "Ein Fehler ist aufgetreten! Das Datum sollte im Format tt-mm-jjjj sein. Beispiel: 03-04-2001",
         "PROFILE_GENDER_REQUEST": "Bitte geben Sie Ihr neues Geschlecht ein.",
-        "PROFILE_GENDER_CHANGED": "Geschlecht erfolgreich geändert, Sie können es im Profil überprüfen."
+        "PROFILE_GENDER_CHANGED": "Geschlecht erfolgreich geändert, Sie können es in Ihrem Profil überprüfen, um sicher zu gehen.",
+        "PROFILE_GENDER_ERROR": "Ein Fehler ist aufgetreten! Dieses Geschlecht existiert nicht.",
+        "PROFILE_EMAIL_REQUEST": "Bitte geben Sie Ihre neue E-Mail-Adresse ein.",
+        "PROFILE_EMAIL_CHANGED": "E-Mail-Adresse erfolgreich geändert, Sie können es in Ihrem Profil überprüfen, um sicher zu gehen.",
+        "PROFILE_EMAIL_ERROR": "Ein Fehler ist aufgetreten! Die E-Mail-Adresse sollte im Format mail@example.com sein."
     },
     "BUTTONS": {
         "MAIN_MENU_DONATION": "🩸 Spende",
@@ -80,6 +87,7 @@
         "EDIT_PROFILE_NUMBER": "Nummer bearbeiten",
         "EDIT_PROFILE_BIRTHDATE": "Geburtsdatum bearbeiten",
         "EDIT_PROFILE_GENDER": "Geschlecht bearbeiten",
+        "EDIT_PROFILE_EMAIL": "Mail bearbeiten",
         
         "BUTTON_HOME": "🏠 Startseite",
         "BUTTON_BACK": "⬅️ Zurück",
