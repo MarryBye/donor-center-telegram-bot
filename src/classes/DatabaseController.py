@@ -181,7 +181,7 @@ class DatabaseController(metaclass=Singleton):
 
             with self.__connection.cursor() as cur:
                 cur.execute(
-                    f"""UPDATE donor.donor SET {field_name} = %s WHERE "ID" = %s;""",
+                    f'''UPDATE donor.donor SET "{field_name}" = %s WHERE "ID" = %s;''',
                     (new_value, user_id),
                 )
             self.__connection.commit()
@@ -209,7 +209,7 @@ class DatabaseController(metaclass=Singleton):
             user_id = donor.get_id()
             fields = fields.get('fields')
             
-            set_fields = ", ".join([f"{field} = %s" for field in fields.keys()])
+            set_fields = ", ".join([f'"{field}" = %s' for field in fields.keys()])
 
             if "phone_number" in fields:
                 self.update_donor_number(user_id, fields.pop("phone_number"))
