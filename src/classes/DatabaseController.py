@@ -205,7 +205,7 @@ class DatabaseController(metaclass=Singleton):
         - `gender_ID`: Новый идентификатор гендера донора.
         - `phone_number`: Новый номер телефона донора.
         Пример:
-            update_donor_fields(donor, fields={"name_donor": "NewName", "email": "new.mail@gmail.com"})
+            update_donor_fields(donor, name_donor="NewName", email="new.mail@gmail.com")
         """
 
         try:
