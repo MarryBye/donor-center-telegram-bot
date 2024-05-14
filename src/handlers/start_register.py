@@ -76,7 +76,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
 
     new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.MSG_SHARECONTACT, keyboard_type=KeyboardType.REPLY,
                                    language_name=user_language)
-    bot_message = message_translate(message_name="REGISTER_START", language_name=user_language)
+    bot_message = message_translate(message_name="REGISTER_STEP_1", language_name=user_language)
 
     await bot.edit_message_reply_markup(
         chat_id=call.from_user.id,
@@ -107,14 +107,14 @@ async def main_handler(msg: Message, state: FSMContext):
         await state.update_data(donor_data=donor_data["donor_data"])
         await state.set_state(Form.registerUser_birthday)
 
-        bot_message = message_translate(message_name="REGISTER_STEP_1", language_name=user_language)
+        bot_message = message_translate(message_name="REGISTER_STEP_2", language_name=user_language)
 
         await bot.send_message(user_id, text=bot_message, reply_markup=ReplyKeyboardRemove())
 
     else:
         new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.MSG_SHARECONTACT, keyboard_type=KeyboardType.REPLY,
                                        language_name=user_language)
-        bot_message = message_translate(message_name="REGISTER_START_FAILURE", language_name=user_language)
+        bot_message = message_translate(message_name="REGISTER_STEP_1_FAILURE", language_name=user_language)
 
         bot_msg = await bot.send_message(user_id, text=bot_message, reply_markup=new_keyboard)
 
@@ -132,7 +132,7 @@ async def main_handler(msg: Message, state: FSMContext):
     birthday_pattern = r'^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(19[4-9][0-9]|20[0-9]{2})$'
 
     if msg.text is None or not match(birthday_pattern, msg.text):
-        bot_message = message_translate(message_name="REGISTER_STEP_1_FAILURE", language_name=user_language)
+        bot_message = message_translate(message_name="REGISTER_STEP_2_FAILURE", language_name=user_language)
 
         bot_msg = await bot.send_message(user_id, text=bot_message, reply_markup=None)
 
@@ -150,7 +150,7 @@ async def main_handler(msg: Message, state: FSMContext):
 
         new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.GENDERS, keyboard_type=KeyboardType.INLINE,
                                        language_name=user_language)
-        bot_message = message_translate(message_name="REGISTER_STEP_2", language_name=user_language)
+        bot_message = message_translate(message_name="REGISTER_STEP_3", language_name=user_language)
 
         await bot.send_message(user_id, text=bot_message, reply_markup=new_keyboard)
 
@@ -170,7 +170,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     await state.update_data(donor_data=donor_data["donor_data"])
     await state.set_state(Form.registerUser_email)
 
-    bot_message = message_translate(message_name="REGISTER_STEP_3", language_name=user_language)
+    bot_message = message_translate(message_name="REGISTER_STEP_4", language_name=user_language)
 
     await bot.edit_message_reply_markup(
         chat_id=call.from_user.id,
@@ -189,7 +189,7 @@ async def main_handler(msg: Message, state: FSMContext):
     email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 
     if msg.text is None or not match(email_pattern, msg.text):
-        bot_message = message_translate(message_name="REGISTER_STEP_3_FAILURE", language_name=user_language)
+        bot_message = message_translate(message_name="REGISTER_STEP_4_FAILURE", language_name=user_language)
 
         bot_msg = await bot.send_message(user_id, text=bot_message, reply_markup=None)
 
@@ -206,7 +206,7 @@ async def main_handler(msg: Message, state: FSMContext):
         await state.update_data(donor_data=donor_data["donor_data"])
         await state.set_state(Form.registerUser_password)
 
-        bot_message = message_translate(message_name="REGISTER_STEP_3", language_name=user_language)
+        bot_message = message_translate(message_name="REGISTER_STEP_5", language_name=user_language)
 
         await bot.send_message(user_id, text=bot_message, reply_markup=None)
 
@@ -221,7 +221,7 @@ async def main_handler(msg: Message, state: FSMContext):
     password_pattern = r'^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]{8,}$'
 
     if msg.text is None or not match(password_pattern, msg.text):
-        bot_message = message_translate(message_name="REGISTER_STEP_3_FAILURE", language_name=user_language)
+        bot_message = message_translate(message_name="REGISTER_STEP_5_FAILURE", language_name=user_language)
 
         await bot.send_message(user_id, text=bot_message, reply_markup=None)
 
@@ -231,7 +231,7 @@ async def main_handler(msg: Message, state: FSMContext):
         donor_data = await state.get_data()
         donor_data["donor_data"].set_password(password=user_password)
 
-        db.register_donor(donor=donor_data["donor_data"])
+        print(db.register_donor(donor=donor_data["donor_data"]))
 
         new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.MAIN, keyboard_type=KeyboardType.REPLY,
                                        language_name=user_language)

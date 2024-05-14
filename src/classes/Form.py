@@ -22,3 +22,10 @@ class Feedback(StatesGroup):
     phone = State()
     mail = State()
     name = State()
+
+class UserSettings(StatesGroup):
+    name = State()
+    number = State()
+    bdate = State()
+    gender = State()
+    email = State()

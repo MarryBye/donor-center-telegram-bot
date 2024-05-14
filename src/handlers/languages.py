@@ -10,7 +10,7 @@ from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
 from src.classes.Form import Form
 
-from src.funcs.core import pressed_button, message_translate
+from src.funcs.core import pressed_button, message_translate, language_name_to_id
 
 db = DatabaseController()
 hnd = HandlersController()
@@ -23,7 +23,7 @@ router = Router(name="LANGUAGES ROUTER")
 async def language_handler(msg: Message):
     user_id = msg.from_user.id
 
-    db.set_user_language(user_id=msg.from_user.id, language="uk-UK")
+    db.set_user_language(user_id=msg.from_user.id, language=language_name_to_id(language_name="uk-UK"))
 
     user_language = db.get_user_language(user_id=user_id)
 
@@ -38,7 +38,7 @@ async def language_handler(msg: Message):
 async def language_handler(msg: Message):
     user_id = msg.from_user.id
 
-    db.set_user_language(user_id=msg.from_user.id, language="en-EN")
+    db.set_user_language(user_id=msg.from_user.id, language=language_name_to_id(language_name="en-EN"))
 
     user_language = db.get_user_language(user_id=user_id)
 
@@ -53,7 +53,7 @@ async def language_handler(msg: Message):
 async def language_handler(msg: Message):
     user_id = msg.from_user.id
 
-    db.set_user_language(user_id=msg.from_user.id, language="ru-RU")
+    db.set_user_language(user_id=msg.from_user.id, language=language_name_to_id(language_name="ru-RU"))
 
     user_language = db.get_user_language(user_id=user_id)
 
@@ -68,7 +68,7 @@ async def language_handler(msg: Message):
 async def language_handler(msg: Message):
     user_id = msg.from_user.id
 
-    db.set_user_language(user_id=msg.from_user.id, language="de-DE")
+    db.set_user_language(user_id=msg.from_user.id, language=language_name_to_id(language_name="de-DE"))
 
     user_language = db.get_user_language(user_id=user_id)
 
@@ -83,7 +83,7 @@ async def language_handler(msg: Message):
 async def language_handler(msg: Message):
     user_id = msg.from_user.id
 
-    db.set_user_language(user_id=msg.from_user.id, language="cn-CN")
+    db.set_user_language(user_id=msg.from_user.id, language=language_name_to_id(language_name="cn-CN"))
 
     user_language = db.get_user_language(user_id=user_id)
 
@@ -98,7 +98,7 @@ async def language_handler(msg: Message):
 async def language_handler(msg: Message):
     user_id = msg.from_user.id
 
-    db.set_user_language(user_id=msg.from_user.id, language="fr-FR")
+    db.set_user_language(user_id=msg.from_user.id, language=language_name_to_id(language_name="fr-FR"))
 
     user_language = db.get_user_language(user_id=user_id)
 

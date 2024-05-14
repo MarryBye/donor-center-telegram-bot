@@ -35,7 +35,7 @@ async def main_handler(msg: Message, state: FSMContext):
 
     new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.CITIES, keyboard_type=KeyboardType.INLINE,
                                    language_name=user_language)
-    bot_message = message_translate(message_name="DONATION_REGISTERED_APPOINTMENT", language_name=user_language)
+    bot_message = message_translate(message_name="DONATION_SELECT_CITY", language_name=user_language)
 
     await bot.send_message(user_id, text=bot_message, reply_markup=new_keyboard)
 
@@ -51,7 +51,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
 
     new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.REGIONS, keyboard_type=KeyboardType.INLINE,
                                    language_name=user_language)
-    bot_message = message_translate(message_name="DONATION_REGISTERED_APPOINTMENT", language_name=user_language)
+    bot_message = message_translate(message_name="DONATION_SELECT_REGION", language_name=user_language)
 
     await bot.edit_message_reply_markup(
         chat_id=call.from_user.id,
@@ -87,7 +87,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
 
     new_keyboard = kb.get_keyboard(keyboard_name="CLINICS", keyboard_type=KeyboardType.INLINE,
                                    language_name=user_language)
-    bot_message = message_translate(message_name="DONATION_REGISTERED_APPOINTMENT", language_name=user_language)
+    bot_message = message_translate(message_name="DONATION_SELECT_CLINIC", language_name=user_language)
 
     await bot.edit_message_reply_markup(
         chat_id=call.from_user.id,
@@ -115,7 +115,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     new_appointment.set_status_id(status_id=3)
     new_appointment.set_donor_number_id(donor_number_id=donor.get_number_id())
     new_appointment.set_registration_date(f"{date.day}-{date.month}-{date.year}")
-    new_appointment.set_appointment_date(appointment_date=clinic["working_hours"])
+    new_appointment.set_appointment_date(appointment_date="19-05-2024")
     new_appointment.set_analysis_file_path(analysis_file_path=f"{donor.get_id()}%{clinic['ID']}%{date.day}{date.month}{date.year}.txt")
 
     db.register_donor_appointment(donor=donor, appointment=new_appointment)

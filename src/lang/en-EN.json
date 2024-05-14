@@ -1,74 +1,113 @@
 {
     "MESSAGES": {
+        "REGISTER_START": "Hello user!\n\nBefore we start registration, I would like to know in which language you prefer to communicate with me.\n\nPlease note that this choice will affect our further communication. After registration, your profile will indicate that you speak this language.",
+        "REGISTER_START_FAILURE": "You have not selected a language for communication!",
         
-        "REGISTER_START": "Привет, я бот центр по сдаче крови! Чтобы ты мог мною воспользоваться - пройди небольшую авторизацию.\n\nПервое что я попрошу - поделись со мной своими контактами, это очень сильно ускорит процесс регистрации. EN LANG",
-        "REGISTER_START_FAILURE": "Это не ваш контакт! Для отправки контакта воспользуйтесь кнопкой ниже. EN LANG",
-        "REGISTER_STEP_1": "Спасибо за то, что поделился данными! Теперь давай уточним некоторую информацию.\n\nПервое, введи, пожалуйста, свою дату рождения в формате DD-MM-YYY. EN LANG",
-        "REGISTER_STEP_1_FAILURE": "Неправильно введена дата! Пожалуйста, убедись что ты вводишь ее в формате DD-MM-YYYY. EN LANG",
-        "REGISTER_STEP_2": "Отлично! Дальше я бы хотел узнать, какого ты пола. Выбери один из вариантов на клавиатуре снизу. EN LANG",
-        "REGISTER_STEP_2_FAILURE": "Неправильно введен гендер! Пожалуйста, выберите один из представленных на клавиатуре. EN LANG",
-        "REGISTER_STEP_3": "Отлично! Дальше я бы хотел чтобы ты создал свой личный пароль. Ни при каких обстоятельствах его не распространяй, это твой ключ к личному кабинету на сайте. Пароль может состоять из цифр и букв латинского алфавита, минимум 8 символов. Нельзя использовать специальные символы! EN LANG",
-        "REGISTER_STEP_3_FAILURE": "Неправильно введен пароль! Убедитесь, что у вас минимум 8 символов, нет спец. символов и состоит он из цифр и букв латинского алфавита. EN LANG",
-        "SUCCESSFULL_REGISTER": "Отлично! Мы тебя зарегистрировали в системе, теперь ты можешь пользоваться всем функционалом! EN LANG",
-        "ALREADY_REGISTERED": "Вы уже зарегистрировали аккаунт! EN LANG",
+        "REGISTER_STEP_1": "Thank you! Now I can speak to you in a language that is convenient for you.\n\nMy name is CRM BOT, I help with our blood organization. To use me, you need to register an account. Nothing will happen to your data, and things like the password will be encrypted and will not be shared in any way. Let's start the registration process!\n\nThe first step. Send me your Telegram contact and we will speed up the registration process many times.",
+        "REGISTER_STEP_1_FAILURE": "This is not your contact! Please click the button below.",
+       
+        "REGISTER_STEP_2": "The second step. Enter your date of birth in the format DD-MM-YYYY. In case of a mistake, you will have one more try.",
+        "REGISTER_STEP_2_FAILURE": "Date of birth entered incorrectly! It must be written in the format DD-MM-YYYY.",
+        
+        "REGISTER_STEP_3": "The third step. Choose your gender.",
+        "REGISTER_STEP_3_FAILURE": "Wrong gender selected! Please select one of the above.",
+        
+        "REGISTER_STEP_4": "The fourth step. Enter your mail in the format mail@mail.com",
+        "REGISTER_STEP_4_FAILURE": "The mail was entered in the wrong format! Please write it as mail@mail.com.",
+        
+        "REGISTER_STEP_5": "The fifth step. Enter the password for your future account. The password will not be distributed anywhere and will be encrypted.\n\nThe password must consist of numbers, upper and lower case letters of the Latin alphabet. The use of special characters, except for the underscore, is prohibited.",
+        "REGISTER_STEP_5_FAILURE": "The password does not meet the requirements! Please create a password that meets the requirements above.",
+        
+        "SUCCESSFULL_REGISTER": "Perfectly! We have registered you in the system, now you can use all the functionality!",
+        "ALREADY_REGISTERED": "You are already registered in the system!",
 
-        "DONATION_REGISTERED_APPOINTMENT": "Вы зарегистрировались на прием! EN LANG",
+        "DONATION_SELECT_CITY": "Choose the city in which it is easier for you to get to the center from the following:",
+        "DONATION_SELECT_REGION": "Choose the area in which it is easier for you to get to the center from the following:",
+        "DONATION_SELECT_CLINIC": "With the help of previously received data, I have selected clinics for you. Choose the one you want to come to:",
+        "DONATION_REGISTERED_APPOINTMENT": "You are registered for the appointment!",
         
-        "CANNOT_REGISTER": "Вы уже зарегистрированы на прием! EN LANG",
-        "INFO_REGISTER": "С данными ничего не будет. EN LANG",
-        "CHANGE_LANGUAGE": "Оберіть одну з мов, наведених нижче... EN LANG",
-        "SUCCESFULLY_CHANGED_LANGUAGE": "Язык успешно изменен! EN LANG",
-        "MENU_OPEN": "Меню '%s'. Оберіть потрібну опцію. EN LANG",
-        "BACK": "Повернулись в %s. Оберіть потрібну опцію. EN LANG",
-        "NOTIFICATIONS_ON": "Включили уведомления! EN LANG",
-        "NOTIFICATIONS_OFF": "Выключили уведомления! EN LANG",
-        "DONATION_HISTORY_MESSAGE": "%s, Вы пожертвовали %s раз свою кровь в следующих центрах:\n%s EN LANG",
-        "DONATION_FIND_CENTERS_MESSAGE": "%s, Вы можете найти центры по сдачи крови по следующим адресам:\n%s EN LANG",
-        "FEEDBACK_MENU_OPEN": "Меню '%s'. Ви можете надати дані для зворотнього зв'язку нижче. EN LANG",
-        "FEEDBACK_PHONE_MESSAGE": "Напишіть свій номер телефону. EN LANG",
-        "FEEDBACK_MAIL_MESSAGE": "Напишіть свій адрес пошти. EN LANG",
-        "PHONE_SENT": "Номер прийнятий. Чекайте на відповідь. EN LANG",
-        "MAIL_SENT": "Пошта прийнята. Чекайте на відповідь. EN LANG",
-        "NAME_SENT": "Введіть своє ім'я. EN LANG",
-        "MAIL_PHONE_ERROR": "Введено неправильні дані. EN LANG",
-        "FEEDBACK_AFTER_NAME_MESSAGE": "Ім'я прийнято. Тепер Ви можете вибрати один з способів для зворотнього зв'язку. EN LANG",
-        "CANCELLED_STATE": "Вы отменили действие EN LANG"
+        "CANNOT_REGISTER": "You are already registered for the appointment!",
+        "INFO_REGISTER": "Nothing will happen to your data.",
+        "CHANGE_LANGUAGE": "Choose one of the languages below.",
+        "SUCCESFULLY_CHANGED_LANGUAGE": "Language changed successfully!",
+        "MENU_OPEN": "Menu '%s'. Select the desired option.",
+        "BACK": "Returned to %s. Select the desired option.",
+        "NOTIFICATIONS_ON": "Notifications are enabled!",
+        "NOTIFICATIONS_OFF": "Notifications have been turned off!",
+        "DONATION_HISTORY_MESSAGE": "%s, You have donated %s times your blood in the following centers:\n%s",
+        "DONATION_FIND_CENTERS_MESSAGE": "%s, You can find donation centers at the following addresses:\n%s",
+        "FEEDBACK_MENU_OPEN": "Menu '%s'. You can provide your feedback below.",
+        "FEEDBACK_PHONE_MESSAGE": "Write your phone number.",
+        "FEEDBACK_MAIL_MESSAGE": "Write your email address.",
+        "PHONE_SENT": "The number is accepted. Wait for a reply.",
+        "MAIL_SENT": "Mail received. Wait for a reply.",
+        "NAME_SENT": "Enter your name.",
+        "MAIL_PHONE_ERROR": "Incorrect data entered.",
+        "FEEDBACK_AFTER_NAME_MESSAGE": "The name is accepted. Now you can choose one of the methods for feedback.",
+        "CANCELLED_STATE": "You have canceled your last action.",
+
+        "PROFILE": "Your information:\nName: %s\nNumber: %s\nDate of Birth: %s\nGender: %s",
+        "PROFILE_NAME_REQUEST": "Please enter your new name. (For example, John)",
+        "PROFILE_NAME_CHANGED": "Name successfully changed, you can verify in your profile for certainty.",
+        "PROFILE_NAME_ERROR": "An error occurred! The name should only include lowercase and uppercase letters.",
+        "PROFILE_NUMBER_REQUEST": "Please enter your new number. (For example, +380637407856)",
+        "PROFILE_NUMBER_CHANGED": "Number successfully changed, you can verify in your profile for certainty.",
+        "PROFILE_NUMBER_ERROR": "An error occurred! The number should be in the format +380xxxxxxxxx",
+        "PROFILE_BDATE_REQUEST": "Please enter your new date of birth. (dd-mm-yyyy)",
+        "PROFILE_BDATE_CHANGED": "Date of birth successfully changed, you can verify in your profile for certainty.",
+        "PROFILE_BDATE_ERROR": "An error occurred! The date should be in the format dd-mm-yyyy. Example: 03-04-2001",
+        "PROFILE_GENDER_REQUEST": "Please enter your new gender.",
+        "PROFILE_GENDER_CHANGED": "Gender successfully changed, you can verify in your profile for certainty.",
+        "PROFILE_GENDER_ERROR": "An error occurred! Such gender does not exist.",
+        "PROFILE_EMAIL_REQUEST": "Please enter your new email.",
+        "PROFILE_EMAIL_CHANGED": "Email successfully changed, you can verify in your profile for certainty.",
+        "PROFILE_EMAIL_ERROR": "An error occurred! The email should be in the format mail@example.com"
     },
+
     "BUTTONS": {
-        "MAIN_MENU_DONATION": "🩸 Донация  EN LANG",
-        "MAIN_MENU_SETTINGS": "⚙️ Настройки  EN LANG",
-        "MAIN_MENU_FEEDBACK": "📞 Поддержка  EN LANG",
-        "MAIN_MENU_INFO": "❓ Что будет с моими данными?  EN LANG",
+        "MAIN_MENU_DONATION": "🩸 Donation",
+        "MAIN_MENU_SETTINGS": "⚙️ Settings",
+        "MAIN_MENU_PROFILE": "✨ Profile",
+        "MAIN_MENU_EVENTS": "🎈 Events and Promotions",
+        "MAIN_MENU_FEEDBACK": "📞 Support",
+        "MAIN_MENU_INFO": "❓ What will happen with my data?",
+   
+        "SEND_CONTACT": "💽 Send contact info",
+    
+        "DONATION_MENU_REGISTER": "🙋 Register for Donation",
+        "DONATION_MENU_FIND_CENTER": "🔎 Find Centers",
+        "DONATION_MENU_HISTORY": "📗 Donation History",
+    
+        "SETTINGS_MENU_NOTIFICATIONS": "💡 Notifications and Reminders",
+        "SETTINGS_MENU_LANGUAGES": "🌐 Change Language",
+    
+        "NOTIFICATIONS_MENU_ON": "✅ Enable Notifications",
+        "NOTIFICATIONS_MENU_OFF": "❎ Disable Notifications",
+    
+        "FEEDBACK_MENU_PHONE": "📞 Leave Phone Number",
+        "FEEDBACK_MENU_MAIL": "📧 Leave Email Address",
+        "FEEDBACK_MENU_NEED_OPERATOR": "🎧 Talk to an Operator",
+    
+        "LANGUAGES_MENU_UK": "🇺🇦 Ukrainian",
+        "LANGUAGES_MENU_EN": "🇬🇧 English",
+        "LANGUAGES_MENU_RU": "🇷🇺 Russian",
+        "LANGUAGES_MENU_DE": "🇩🇪 German",
+        "LANGUAGES_MENU_CN": "🇨🇳 Chinese",
+        "LANGUAGES_MENU_FR": "🇫🇷 French",
 
-        "SEND_CONTACT": "Отправить контактные данные EN LANG",
-
-        "DONATION_MENU_REGISTER": "🙋 Запис на донацію EN LANG",
-        "DONATION_MENU_FIND_CENTER": "🔎 Пошук центрів EN LANG",
-        "DONATION_MENU_HISTORY": "📗 История донаций EN LANG",
-
-        "SETTINGS_MENU_NOTIFICATIONS": "💡 Оповещения и напоминания EN LANG",
-        "SETTINGS_MENU_LANGUAGES": "🌐 Сменить язык EN LANG",
-
-        "NOTIFICATIONS_MENU_ON": "✅ Включить уведомления EN LANG",
-        "NOTIFICATIONS_MENU_OFF": "❎ Выключить уведомления EN LANG",
-
-        "FEEDBACK_MENU_PHONE": "📞 Залишити номер телефону EN LANG",
-        "FEEDBACK_MENU_MAIL": "📧 Залишити адрес пошти EN LANG",
-        "FEEDBACK_MENU_NEED_OPERATOR": "🎧 Звернутись до оператора EN LANG",
-
-        "LANGUAGES_MENU_UK": "🇺🇦 Український EN LANG",
-        "LANGUAGES_MENU_EN": "🇬🇧 English EN LANG",
-        "LANGUAGES_MENU_RU": "🇷🇺 Русский EN LANG",
-        "LANGUAGES_MENU_DE": "🇩🇪 Deutsch EN LANG",
-        "LANGUAGES_MENU_CN": "🇨🇳 中国人 EN LANG",
-        "LANGUAGES_MENU_FR": "🇫🇷 Français EN LANG",
+        "EDIT_PROFILE": "Edit",
+        "EDIT_PROFILE_NAME": "Edit Name",
+        "EDIT_PROFILE_NUMBER": "Edit Number",
+        "EDIT_PROFILE_BIRTHDATE": "Edit Birthdate",
+        "EDIT_PROFILE_GENDER": "Edit Gender",
+        "EDIT_PROFILE_EMAIL": "Edit Email",
         
-        "BUTTON_HOME": "🏠 Главное меню EN LANG",
-        "BUTTON_BACK": "⬅️ Назад EN LANG",
-
-        "MALE": "Мужчина EN LANG",
-        "FEMALE": "Женщина EN LANG",
-        "OTHER": "Боевой вертолет EN LANG",
-        "NODATA": "Не хочу говорить EN LANG"
+        "BUTTON_HOME": "🏠 Home",
+        "BUTTON_BACK": "⬅️ Back",
+    
+        "MALE": "Male",
+        "FEMALE": "Female",
+        "OTHER": "Other",
+        "NODATA": "Prefer not to say"
     }
 }

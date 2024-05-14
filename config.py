@@ -5,7 +5,6 @@ TOKEN = open("TOKEN", "r").read()
 # BOT CONFIGURATION
 
 DEFAULT_LANGUAGE = "en-EN"
-DONATION_MAXIMUM_YEAR = 80  # for example today 2024 year, so the minimum year is 2024 - 80 = 1944
 
 # PostgresSQL Server Configuration
 
@@ -62,8 +61,8 @@ AREAS = (
 )
 
 ADDRESSES = (
-    (1, 1, 4, 4, 1, 366),
-    (2, 2, 4, 4, 2, 2),
+    (1, 1, 1, 1, 1, 366),
+    (2, 2, 2, 2, 2, 24),
 )
 
 STATUSES = (
@@ -73,8 +72,8 @@ STATUSES = (
 )
 
 CLINICS = (
-    (1, "Blood center in Kharkiv", 1, "Mon-Fri 08:00-15:00 / Sat 08:00-13:00"),
-    (2, "blood center in 'Nikolskyi' mall", 2, "Tue, Thu, Sat 09:00-14:00"),
+    (1, "Odesa Center #1", 1, "8:00:00"),
+    (2, "Kiyv Center #1' mall", 2, "9:00:00"),
 )
 
 GENDERS = (
