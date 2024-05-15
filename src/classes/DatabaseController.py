@@ -137,7 +137,7 @@ class DatabaseController(metaclass=Singleton):
 
         self.__connection.commit()
 
-    def add_feedback_request(self, user_id: int | str, note: str) -> None:
+    def add_feedback_request(self, user_id: Union[int, str], note: str) -> None:
         """
         Добавляет запрос на поддержку в базу данных.
 
@@ -165,7 +165,7 @@ class DatabaseController(metaclass=Singleton):
         except Exception as e:
             print(f"Ошибка при обновлении номера телефона донора: {e}")
 
-    def update_donor_field(self, donor: Donor, field_name: str, new_value: str | int):
+    def update_donor_field(self, donor: Donor, field_name: str, new_value: Union[int, str]):
         """Меняет одно значение информации о пользователе
 
         - `donor` - объект `Donor` с информацией про нового донора.
@@ -193,7 +193,7 @@ class DatabaseController(metaclass=Singleton):
         except Exception as e:
             print(f"Ошибка при обновлении {field_name} донора: {e}")
 
-    def update_donor_fields(self, donor: Donor, **fields: dict[str, str | int]):
+    def update_donor_fields(self, donor: Donor, **fields: dict[str, Union[int, str]]):
         """Меняет несколько значений информации о пользователе
 
         - `donor` - объект `Donor` с информацией про нового донора.
