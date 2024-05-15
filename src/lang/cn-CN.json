@@ -1,101 +1,113 @@
 {
     "MESSAGES": {
-        
-        "REGISTER_START": "嗨，我是血液捐赠中心的机器人！要开始使用我的服务，请通过一个简短的认证过程。",
-        "REGISTER_START_FAILURE": "这不是您的联系方式！请使用下面的按钮发送您的联系方式。",
-        "REGISTER_STEP_1": "感谢您分享您的信息！现在，让我们澄清一些细节。\n\n首先，请以DD-MM-YYYY的格式输入您的出生日期。",
-        "REGISTER_STEP_1_FAILURE": "日期无效！请确保您以DD-MM-YYYY格式输入。",
-        "REGISTER_STEP_2": "太棒了！接下来，我想知道您的性别。请在下方的键盘上选择一个选项。",
-        "REGISTER_STEP_2_FAILURE": "性别无效！请在键盘上选择一个可用的选项。",
-        "REGISTER_STEP_3": "太好了！接下来，我想让您创建您的个人密码。永远不要分享它，这是您访问网站个人帐户的密钥。密码可以包含数字和拉丁字母，至少8个字符。不允许使用特殊字符！",
-        "REGISTER_STEP_3_FAILURE": "密码无效！确保它至少包含8个字符，没有特殊字符，并由数字和拉丁字母组成。",
-        "SUCCESSFULL_REGISTER": "太棒了！我们已经在系统中注册了您，现在您可以享受所有功能！",
-        "ALREADY_REGISTERED": "您已经注册了！",
-    
-        "DONATION_REGISTERED_APPOINTMENT": "您已注册捐赠！",
-        
-        "CANNOT_REGISTER": "您已经注册了捐赠！",
-        "INFO_REGISTER": "不会分享任何信息。",
-        "CHANGE_LANGUAGE": "请选择以下语言之一...",
-        "SUCCESFULLY_CHANGED_LANGUAGE": "语言已成功更改！",
-        "MENU_OPEN": "菜单'%s'。选择所需的选项。",
-        "BACK": "返回%s。选择所需的选项。",
-        "NOTIFICATIONS_ON": "通知已启用！",
-        "NOTIFICATIONS_OFF": "通知已禁用！",
-        "DONATION_HISTORY_MESSAGE": "%s，您在以下中心捐赠了%s次血液：\n%s",
-        "DONATION_FIND_CENTERS_MESSAGE": "%s，您可以在以下地址找到血液捐赠中心：\n%s",
-        "FEEDBACK_MENU_OPEN": "菜单'%s'。您可以在下面留下联系方式进行回拨。",
-        "FEEDBACK_PHONE_MESSAGE": "请输入您的电话号码。",
-        "FEEDBACK_MAIL_MESSAGE": "请输入您的电子邮件地址。",
-        "PHONE_SENT": "号码已接收。请等待回复。",
-        "MAIL_SENT": "邮件已接收。请等待回复。",
-        "NAME_SENT": "输入您的名字。",
-        "MAIL_PHONE_ERROR": "输入的数据无效。",
-        "FEEDBACK_AFTER_NAME_MESSAGE": "已收到姓名。您现在可以选择其中一种联系方法。",
-        "CANCELLED_STATE": "您已取消操作。",
-    
-        "PROFILE": "您的信息：\n姓名：%s\n号码：%s\n出生日期：%s\n性别：%s",
-        "PROFILE_NAME_REQUEST": "请输入您的新姓名。（例如，张三）",
-        "PROFILE_NAME_CHANGED": "姓名已成功更改，您可以在个人资料中进行验证以确保。",
-        "PROFILE_NAME_ERROR": "出错了！姓名应仅包含大小写字母。",
-        "PROFILE_NUMBER_REQUEST": "请输入您的新号码。（例如，+380637407856）",
-        "PROFILE_NUMBER_CHANGED": "号码已成功更改，您可以在个人资料中进行验证以确保。",
-        "PROFILE_NUMBER_ERROR": "出错了！号码应为格式+380xxxxxxxxx。",
-        "PROFILE_BDATE_REQUEST": "请输入您的新出生日期。（dd-mm-yyyy）",
-        "PROFILE_BDATE_CHANGED": "出生日期已成功更改，您可以在个人资料中进行验证以确保。",
-        "PROFILE_BDATE_ERROR": "出错了！日期应为格式dd-mm-yyyy。示例：03-04-2001",
-        "PROFILE_GENDER_REQUEST": "请输入您的新性别。",
-        "PROFILE_GENDER_CHANGED": "性别已成功更改，您可以在个人资料中进行验证以确保。",
-        "PROFILE_GENDER_ERROR": "出错了！不存在此性别。",
-        "PROFILE_EMAIL_REQUEST": "请输入您的新电子邮件地址。",
-        "PROFILE_EMAIL_CHANGED": "电子邮件地址已成功更改，您可以在个人资料中进行验证以确保。",
-        "PROFILE_EMAIL_ERROR": "出错了！电子邮件地址应为格式mail@example.com。"
+        "REGISTER_START": "Привіт користувач!\n\nПеред тим, як ми почнемо реєстрацію, я хотів би дізнатися, якою мовою ти волієш спілкуватися зі мною.\n\nЗверни увагу, що цей вибір вплине на наше подальше спілкування. Після реєстрації в твоєму профілі буде вказано, що ти говориш саме цією мовою.",
+        "REGISTER_START_FAILURE": "Ви не вибрали мову для спілкування!",
+
+        "REGISTER_STEP_1": "Дякую! Тепер я можу говорити з тобою зручною для тебе мовою.\n\nМене звуть CRM BOT, я допомагаю в питаннях нашої організації для крові. Щоб мною користуватися, тобі треба зареєструвати обліковий запис. З твоїми даними нічого не буде, а такі речі як пароль будуть зашифровані і в жодному разі не поширюватимуться. Давай розпочнемо процес реєстрації!\n\nПерший крок. Надішліть мені свій контакт Telegram, так ми прискоримо процес реєстрації у багато разів.",
+        "REGISTER_STEP_1_FAILURE": "Це не ваш контакт! Будь ласка, натисніть кнопку нижче.",
+
+        "REGISTER_STEP_2": "Другий крок. Введи дату народження у форматі DD-MM-YYYY. У разі помилки в тебе буде ще одна спроба.",
+        "REGISTER_STEP_2_FAILURE": "Неправильно введена дата народження! Вона має бути обов'язково написана в форматі DD-MM-YYYY.",
+
+        "REGISTER_STEP_3": "Третій крок. Вибери свій ґендер.",
+        "REGISTER_STEP_3_FAILURE": "Вибраний неправильний ґендер! Будь ласка, оберіть один з наведених вище.",
+
+        "REGISTER_STEP_4": "Четвертий крок. Введіть свою пошту у форматі mail@mail.com",
+        "REGISTER_STEP_4_FAILURE": "Пошта введена в неправильному форматі! Будь ласка, напишіть її у вигляді mail@mail.com.",
+
+        "REGISTER_STEP_5": "П'ятий крок. Введи пароль від свого майбутнього облікового запису. Пароль не буде ніде поширюватись і буде зашифрований.\n\nПароль обов'язково повинен складатися з цифр, великих та маленьких букв латинського алфавіту. Використання спеціальних символів, крім нижнього підкреслення, заборонено.",
+        "REGISTER_STEP_5_FAILURE": "Пароль не відповідає вимогам! Будь ласка, створіть такий пароль, який буде відповідати вимогам вище.",
+
+        "SUCCESSFULL_REGISTER": "Чудово! Ми тебе зареєстрували в системі, тепер ти можеш скористатися всім функціоналом!",
+        "ALREADY_REGISTERED": "Ви вже зареєстровані у системі!",
+
+        "DONATION_SELECT_CITY": "Оберіть місто, в якому вам легше прийти до центру з наведених нижче:",
+        "DONATION_SELECT_REGION": "Оберіть область, в якій вам легше прийти до центру з наведених нижче:",
+        "DONATION_SELECT_CLINIC": "За допомогою отриманих раніше даних я підібрав для вас клініки. Оберіть до якої бажаєте прийти:",
+        "DONATION_REGISTERED_APPOINTMENT": "Ви зареєстровані на прийом!",
+
+        "CANNOT_REGISTER": "Ви вже зареєстровані на прийом!",
+        "INFO_REGISTER": "З вашими даними нічого не буде.",
+        "CHANGE_LANGUAGE": "Оберіть одну з мов, наведених нижче.",
+        "SUCCESFULLY_CHANGED_LANGUAGE": "Мова успішно змінена!",
+        "MENU_OPEN": "Меню '%s'. Оберіть потрібну опцію.",
+        "BACK": "Повернулись в %s. Оберіть потрібну опцію.",
+        "NOTIFICATIONS_ON": "Увімкнули повідомлення!",
+        "NOTIFICATIONS_OFF": "Вимкнули повідомлення!",
+        "DONATION_HISTORY_MESSAGE": "%s, Ви пожертвували %s разів свою кров в наступних центрах:\n%s",
+        "DONATION_FIND_CENTERS_MESSAGE": "%s, Ви можете знайти центри для пожертвувань за наступними адресами:\n%s",
+        "FEEDBACK_MENU_OPEN": "Меню '%s'. Ви можете надати дані для зворотнього зв'язку нижче.",
+        "FEEDBACK_PHONE_MESSAGE": "Напишіть свій номер телефону.",
+        "FEEDBACK_MAIL_MESSAGE": "Напишіть свій адрес пошти.",
+        "PHONE_SENT": "Номер прийнятий. Чекайте на відповідь.",
+        "MAIL_SENT": "Пошта прийнята. Чекайте на відповідь.",
+        "NAME_SENT": "Введіть своє ім'я.",
+        "MAIL_PHONE_ERROR": "Введено неправильні дані.",
+        "FEEDBACK_AFTER_NAME_MESSAGE": "Ім'я прийнято. Тепер Ви можете вибрати один з способів для зворотнього зв'язку.",
+        "CANCELLED_STATE": "Ви скасували останню дію.",
+
+        "PROFILE": "Ваша інформація:\nІм'я: %s\nНомер: %s\nДата народження: %s\nСтать: %s",
+        "PROFILE_NAME_REQUEST": "Введіть, будь ласка, своє нове ім'я. (Наприклад, Іван)",
+        "PROFILE_NAME_CHANGED": "Ім'я успішно змінено, для впевненості можете перевірити в профілі.",
+        "PROFILE_NAME_ERROR": "Виникла помилка! Ім'я повинно включати в себе лише букви малі та великі.",
+        "PROFILE_NUMBER_REQUEST": "Введіть, будь ласка, своє новий номер. (Наприклад, +380637407856)",
+        "PROFILE_NUMBER_CHANGED": "Номер успішно змінено, для впевненості можете перевірити в профілі.",
+        "PROFILE_NUMBER_ERROR": "Виникла помилка! Номер повинен виглядати як +380ххххххххх",
+        "PROFILE_BDATE_REQUEST": "Введіть, будь ласка, свою нову дату народження. (дд-мм-рррр)",
+        "PROFILE_BDATE_CHANGED": "Дата народження успішно змінено, для впевненості можете перевірити в профілі.",
+        "PROFILE_BDATE_ERROR": "Виникла помилка! Дата повинна виглядати як дд-мм-рррр. Приклад: 03-04-2001",
+        "PROFILE_GENDER_REQUEST": "Введіть, будь ласка, свою нову стать.",
+        "PROFILE_GENDER_CHANGED": "Стать успішно змінено, для впевненості можете перевірити в профілі.",
+        "PROFILE_GENDER_ERROR": "Виникла помилка! Такого гендеру немає.",
+        "PROFILE_EMAIL_REQUEST": "Введіть, будь ласка, свою нову пошту.",
+        "PROFILE_EMAIL_CHANGED": "Пошту успішно змінено, для впевненості можете перевірити в профілі.",
+        "PROFILE_EMAIL_ERROR": "Виникла помилка! Пошта повинна виглядати як mail@example.com"
     },
+
     "BUTTONS": {
-        "MAIN_MENU_DONATION": "🩸 捐赠",
-        "MAIN_MENU_SETTINGS": "⚙️ 设置",
-        "MAIN_MENU_PROFILE": "✨ 个人资料",
-        "MAIN_MENU_EVENTS": "🎈 活动与促销",
-        "MAIN_MENU_FEEDBACK": "📞 支持",
-        "MAIN_MENU_INFO": "❓ 我的数据会怎样？",
-    
-        "SEND_CONTACT": "发送联系方式",
-    
-        "DONATION_MENU_REGISTER": "🙋 注册捐赠",
-        "DONATION_MENU_FIND_CENTER": "🔎 查找中心",
-        "DONATION_MENU_HISTORY": "📗 捐赠历史",
-    
-        "SETTINGS_MENU_NOTIFICATIONS": "💡 通知与提醒",
-        "SETTINGS_MENU_LANGUAGES": "🌐 更改语言",
-    
-        "NOTIFICATIONS_MENU_ON": "✅ 启用通知",
-        "NOTIFICATIONS_MENU_OFF": "❎ 禁用通知",
-    
-        "FEEDBACK_MENU_PHONE": "📞 留下电话号码",
-        "FEEDBACK_MENU_MAIL": "📧 留下电子邮件地址",
-        "FEEDBACK_MENU_NEED_OPERATOR": "🎧 与运营商交谈",
-    
-        "LANGUAGES_MENU_UK": "🇺🇦 乌克兰语",
-        "LANGUAGES_MENU_EN": "🇬🇧 英语",
-        "LANGUAGES_MENU_RU": "🇷🇺 俄语",
-        "LANGUAGES_MENU_DE": "🇩🇪 德语",
-        "LANGUAGES_MENU_CN": "🇨🇳 中文",
-        "LANGUAGES_MENU_FR": "🇫🇷 法语",
-    
-        "EDIT_PROFILE": "编辑",
-        "EDIT_PROFILE_NAME": "编辑姓名",
-        "EDIT_PROFILE_NUMBER": "编辑号码",
-        "EDIT_PROFILE_BIRTHDATE": "编辑出生日期",
-        "EDIT_PROFILE_GENDER": "编辑性别",
-        "EDIT_PROFILE_EMAIL": "编辑邮件",
-        
-        "BUTTON_HOME": "🏠 主页",
-        "BUTTON_BACK": "⬅️ 返回",
-    
-        "MALE": "男",
-        "FEMALE": "女",
-        "OTHER": "其他",
-        "NODATA": "不想说"
+        "MAIN_MENU_DONATION": "🩸 Пожертвування",
+        "MAIN_MENU_SETTINGS": "⚙️ Налаштування",
+        "MAIN_MENU_PROFILE": "✨ Профіль",
+        "MAIN_MENU_EVENTS": "🎈 Події та акції",
+        "MAIN_MENU_FEEDBACK": "📞 Підтримка",
+        "MAIN_MENU_INFO": "❓ Що буде з моїми даними?",
+
+        "SEND_CONTACT": "💽 Надіслати контактні дані",
+
+        "DONATION_MENU_REGISTER": "🙋 Запис на пожуртвування",
+        "DONATION_MENU_FIND_CENTER": "🔎 Пошук центрів",
+        "DONATION_MENU_HISTORY": "📗 Історія пожертвувань",
+
+        "SETTINGS_MENU_NOTIFICATIONS": "💡 Сповіщення та нагадування",
+        "SETTINGS_MENU_LANGUAGES": "🌐 Змінити мову",
+
+        "NOTIFICATIONS_MENU_ON": "✅ Увімкнути повідомлення",
+        "NOTIFICATIONS_MENU_OFF": "❎ Вимкнути повідомлення",
+
+        "FEEDBACK_MENU_PHONE": "📞 Залишити номер телефону",
+        "FEEDBACK_MENU_MAIL": "📧 Залишити поштову скриню",
+        "FEEDBACK_MENU_NEED_OPERATOR": "🎧 Звернутись до оператора",
+
+        "LANGUAGES_MENU_UK": "🇺🇦 Українська",
+        "LANGUAGES_MENU_EN": "🇬🇧 English",
+        "LANGUAGES_MENU_RU": "🇷🇺 Русский",
+        "LANGUAGES_MENU_DE": "🇩🇪 Deutsch",
+        "LANGUAGES_MENU_CN": "🇨🇳 中国人",
+        "LANGUAGES_MENU_FR": "🇫🇷 Français",
+
+        "EDIT_PROFILE": "Редагувати",
+        "EDIT_PROFILE_NAME": "Змінити ім'я",
+        "EDIT_PROFILE_NUMBER": "Змінити номер",
+        "EDIT_PROFILE_BIRTHDATE": "Змінити дату народження",
+        "EDIT_PROFILE_GENDER": "Змінити стать",
+        "EDIT_PROFILE_EMAIL": "Змінити пошту",
+
+        "BUTTON_HOME": "🏠 Головне меню",
+        "BUTTON_BACK": "⬅️ Повернутись",
+
+        "MALE": "Чоловік",
+        "FEMALE": "Жінка",
+        "OTHER": "Інше",
+        "NODATA": "Не хочу повідомляти"
     }
-    
 }

@@ -297,41 +297,42 @@ class DatabaseController(metaclass=Singleton):
                                  email=donor.get_email()).is_empty():
             return False
 
-        try:
-            donor.set_id(db_id=self.get_next_row_id(table="donor.donor"))
-            donor.set_number_id(number_id=self.get_next_row_id(table="number_telephone.donor_number"))
+        print("НЕТУ")
 
-            if not donor.is_full():
-                return False
+        donor.set_id(db_id=self.get_next_row_id(table="donor.donor"))
+        donor.set_number_id(number_id=self.get_next_row_id(table="number_telephone.donor_number"))
 
-            query = ('INSERT INTO donor.donor ("ID", "name_donor", "surname_donor", "date_of_birth", "gender_ID", '
-                     '"email", "telegram_ID", "password", "language_ID") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)')
-            self.__cursor.execute(query, (
-                donor.get_id(),
-                donor.get_name(),
-                donor.get_surname(),
-                donor.get_birthdate(),
-                donor.get_gender(),
-                donor.get_email(),
-                donor.get_telegram(),
-                Crypto().code(donor.get_password()),
-                donor.get_language()
-            )
-                                  )
-
-            query = 'INSERT INTO number_telephone.donor_number ("ID", "donor_ID", "number") VALUES (%s, %s, %s)'
-            self.__cursor.execute(query, (
-                donor.get_number_id(),
-                donor.get_id(),
-                donor.get_number()
-            )
-                                  )
-
-            self.__connection.commit()
-
-            return True
-        except:
+        if not donor.is_full():
             return False
+
+        print("ПОЛНЫЙ ДОНОР")
+
+        query = ('INSERT INTO donor.donor ("ID", "name_donor", "surname_donor", "date_of_birth", "gender_ID", '
+                 '"email", "telegram_ID", "password", "language_ID") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)')
+        self.__cursor.execute(query, (
+            donor.get_id(),
+            donor.get_name(),
+            donor.get_surname(),
+            donor.get_birthdate(),
+            donor.get_gender(),
+            donor.get_email(),
+            donor.get_telegram(),
+            Crypto().code(donor.get_password()),
+            donor.get_language()
+        )
+                              )
+
+        query = 'INSERT INTO number_telephone.donor_number ("ID", "donor_ID", "number") VALUES (%s, %s, %s)'
+        self.__cursor.execute(query, (
+            donor.get_number_id(),
+            donor.get_id(),
+            donor.get_number()
+        )
+                              )
+
+        self.__connection.commit()
+
+        return True
 
     def is_registered_donor_appointment(self, donor: Donor) -> bool:
 
@@ -406,9 +407,11 @@ class DatabaseController(metaclass=Singleton):
 
         if self.is_registered_donor_appointment(donor=donor):
             return False
+        print("НЕ ЗАРЕГАН")
 
         if donor.get_number_id() is None:
             return False
+        print("НОРМ")
 
         appointment.set_id(db_id=self.get_next_row_id(table="data_blood.appointment"))
         appointment.set_donor_number_id(donor_number_id=donor.get_number_id())
@@ -416,29 +419,27 @@ class DatabaseController(metaclass=Singleton):
 
         if not appointment.is_full():
             return False
+        print("FULL")
 
-        try:
+        query = ('INSERT INTO data_blood.appointment ("ID", "clinic_ID", "donor_number_ID", "status_ID", '
+                 '"registration_date", "appointment_date", "analysis_file_path") VALUES (%s, %s, %s, %s, %s, %s, '
+                 '%s)')
+        self.__cursor.execute(query, (
+            appointment.get_id(),
+            appointment.get_clinic_id(),
+            appointment.get_donor_number_id(),
+            appointment.get_status_id(),
+            appointment.get_registration_date(),
+            appointment.get_appointment_date(),
+            appointment.get_analysis_file_path()
+        )
+                              )
 
-            query = ('INSERT INTO data_blood.appointment ("ID", "clinic_ID", "donor_number_ID", "status_ID", '
-                     '"registration_date", "appointment_date", "analysis_file_path") VALUES (%s, %s, %s, %s, %s, %s, '
-                     '%s)')
-            self.__cursor.execute(query, (
-                appointment.get_id(),
-                appointment.get_clinic_id(),
-                appointment.get_donor_number_id(),
-                appointment.get_status_id(),
-                appointment.get_registration_date(),
-                appointment.get_appointment_date(),
-                appointment.get_analysis_file_path()
-            )
-                                  )
+        self.__connection.commit()
 
-            self.__connection.commit()
+        print("SAVE")
 
-            return True
-
-        except:
-            return False
+        return True
 
     def change_donor_appointment_status(self, appointment_id: int, donor: Donor):
         pass
@@ -512,9 +513,8 @@ class DatabaseController(metaclass=Singleton):
 
         return data if data is not None else []
 
-
-
-    def get_clinics_by(self, db_id: int = -1, city: int = -1, region: int = -1, street: int = -1, area: int = -1, address: int = -1) -> list:
+    def get_clinics_by(self, db_id: int = -1, city: int = -1, region: int = -1, street: int = -1, area: int = -1,
+                       address: int = -1) -> list:
 
         query = ('SELECT clinic.* '
                  'FROM '
@@ -572,7 +572,7 @@ class DatabaseController(metaclass=Singleton):
         if (not str(user_id) in self.languages_cache) or (self.languages_cache[str(user_id)] != language):
 
             if not only_cache:
-                query = 'UPDATE donor.donor AS donors SET donors.language_ID = %s WHERE donors."telegram_ID" = %s'
+                query = 'UPDATE donor.donor AS donors SET "language_ID" = %s WHERE donors."telegram_ID" = %s'
                 self.__cursor.execute(query, (real_language[0], user_id))
 
                 self.__connection.commit()

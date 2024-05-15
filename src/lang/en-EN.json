@@ -1,39 +1,51 @@
 {
     "MESSAGES": {
-        
-        "REGISTER_START": "Hi, I'm the blood donation center bot! To get started, please go through a quick authentication process.\n\nFirst thing I'll ask for - share your contacts with me, it will greatly speed up the registration process.",
-        "REGISTER_START_FAILURE": "This is not your contact! Please use the button below to send your contact.",
-        "REGISTER_STEP_1": "Thanks for sharing your info! Now, let's clarify some details.\n\nFirst, please enter your date of birth in the format DD-MM-YYYY.",
-        "REGISTER_STEP_1_FAILURE": "Invalid date! Please make sure you enter it in the format DD-MM-YYYY.",
-        "REGISTER_STEP_2": "Great! Next, I'd like to know your gender. Please choose one of the options on the keyboard below.",
-        "REGISTER_STEP_2_FAILURE": "Invalid gender! Please select one of the options available on the keyboard.",
-        "REGISTER_STEP_3": "Awesome! Next, I'd like you to create your personal password. Never share it, it's your key to access your personal account on the website. The password can contain numbers and letters of the Latin alphabet, at least 8 characters. Special characters are not allowed!",
-        "REGISTER_STEP_3_FAILURE": "Invalid password! Make sure it contains at least 8 characters, no special characters, and consists of numbers and letters of the Latin alphabet.",
-        "SUCCESSFULL_REGISTER": "Great! We've registered you in our system, you can now enjoy all the features!",
-        "ALREADY_REGISTERED": "You're already registered!",
-    
-        "DONATION_REGISTERED_APPOINTMENT": "You're registered for donation!",
-        
-        "CANNOT_REGISTER": "You're already registered for donation!",
-        "INFO_REGISTER": "No information will be shared.",
-        "CHANGE_LANGUAGE": "Choose one of the languages below...",
-        "SUCCESFULLY_CHANGED_LANGUAGE": "Language successfully changed!",
-        "MENU_OPEN": "Menu '%s'. Choose the desired option.",
-        "BACK": "Back to %s. Choose the desired option.",
-        "NOTIFICATIONS_ON": "Notifications enabled!",
-        "NOTIFICATIONS_OFF": "Notifications disabled!",
-        "DONATION_HISTORY_MESSAGE": "%s, you've donated your blood %s times in the following centers:\n%s",
-        "DONATION_FIND_CENTERS_MESSAGE": "%s, you can find blood donation centers at the following addresses:\n%s",
-        "FEEDBACK_MENU_OPEN": "Menu '%s'. You can leave your contact information for callback below.",
-        "FEEDBACK_PHONE_MESSAGE": "Please enter your phone number.",
-        "FEEDBACK_MAIL_MESSAGE": "Please enter your email address.",
-        "PHONE_SENT": "Number received. Await the response.",
-        "MAIL_SENT": "Email received. Await the response.",
+        "REGISTER_START": "Hello user!\n\nBefore we start registration, I would like to know in which language you prefer to communicate with me.\n\nPlease note that this choice will affect our further communication. After registration, your profile will indicate that you speak this language.",
+        "REGISTER_START_FAILURE": "You have not selected a language for communication!",
+
+        "REGISTER_STEP_1": "Thank you! Now I can speak to you in a language that is convenient for you.\n\nMy name is CRM BOT, I help with our blood organization. To use me, you need to register an account. Nothing will happen to your data, and things like the password will be encrypted and will not be shared in any way. Let's start the registration process!\n\nThe first step. Send me your Telegram contact and we will speed up the registration process many times.",
+        "REGISTER_STEP_1_FAILURE": "This is not your contact! Please click the button below.",
+
+        "REGISTER_STEP_2": "The second step. Enter your date of birth in the format DD-MM-YYYY. In case of a mistake, you will have one more try.",
+        "REGISTER_STEP_2_FAILURE": "Date of birth entered incorrectly! It must be written in the format DD-MM-YYYY.",
+
+        "REGISTER_STEP_3": "The third step. Choose your gender.",
+        "REGISTER_STEP_3_FAILURE": "Wrong gender selected! Please select one of the above.",
+
+        "REGISTER_STEP_4": "The fourth step. Enter your mail in the format mail@mail.com",
+        "REGISTER_STEP_4_FAILURE": "The mail was entered in the wrong format! Please write it as mail@mail.com.",
+
+        "REGISTER_STEP_5": "The fifth step. Enter the password for your future account. The password will not be distributed anywhere and will be encrypted.\n\nThe password must consist of numbers, upper and lower case letters of the Latin alphabet. The use of special characters, except for the underscore, is prohibited.",
+        "REGISTER_STEP_5_FAILURE": "The password does not meet the requirements! Please create a password that meets the requirements above.",
+
+        "SUCCESSFULL_REGISTER": "Perfectly! We have registered you in the system, now you can use all the functionality!",
+        "ALREADY_REGISTERED": "You are already registered in the system!",
+
+        "DONATION_SELECT_CITY": "Choose the city in which it is easier for you to get to the center from the following:",
+        "DONATION_SELECT_REGION": "Choose the area in which it is easier for you to get to the center from the following:",
+        "DONATION_SELECT_CLINIC": "With the help of previously received data, I have selected clinics for you. Choose the one you want to come to:",
+        "DONATION_REGISTERED_APPOINTMENT": "You are registered for the appointment!",
+
+        "CANNOT_REGISTER": "You are already registered for the appointment!",
+        "INFO_REGISTER": "Nothing will happen to your data.",
+        "CHANGE_LANGUAGE": "Choose one of the languages below.",
+        "SUCCESFULLY_CHANGED_LANGUAGE": "Language changed successfully!",
+        "MENU_OPEN": "Menu '%s'. Select the desired option.",
+        "BACK": "Returned to %s. Select the desired option.",
+        "NOTIFICATIONS_ON": "Notifications are enabled!",
+        "NOTIFICATIONS_OFF": "Notifications have been turned off!",
+        "DONATION_HISTORY_MESSAGE": "%s, You have donated %s times your blood in the following centers:\n%s",
+        "DONATION_FIND_CENTERS_MESSAGE": "%s, You can find donation centers at the following addresses:\n%s",
+        "FEEDBACK_MENU_OPEN": "Menu '%s'. You can provide your feedback below.",
+        "FEEDBACK_PHONE_MESSAGE": "Write your phone number.",
+        "FEEDBACK_MAIL_MESSAGE": "Write your email address.",
+        "PHONE_SENT": "The number is accepted. Wait for a reply.",
+        "MAIL_SENT": "Mail received. Wait for a reply.",
         "NAME_SENT": "Enter your name.",
-        "MAIL_PHONE_ERROR": "Invalid data entered.",
-        "FEEDBACK_AFTER_NAME_MESSAGE": "Name received. You can now choose one of the contact methods.",
-        "CANCELLED_STATE": "You have cancelled the action.",
-    
+        "MAIL_PHONE_ERROR": "Incorrect data entered.",
+        "FEEDBACK_AFTER_NAME_MESSAGE": "The name is accepted. Now you can choose one of the methods for feedback.",
+        "CANCELLED_STATE": "You have canceled your last action.",
+
         "PROFILE": "Your information:\nName: %s\nNumber: %s\nDate of Birth: %s\nGender: %s",
         "PROFILE_NAME_REQUEST": "Please enter your new name. (For example, John)",
         "PROFILE_NAME_CHANGED": "Name successfully changed, you can verify in your profile for certainty.",
@@ -51,6 +63,7 @@
         "PROFILE_EMAIL_CHANGED": "Email successfully changed, you can verify in your profile for certainty.",
         "PROFILE_EMAIL_ERROR": "An error occurred! The email should be in the format mail@example.com"
     },
+
     "BUTTONS": {
         "MAIN_MENU_DONATION": "🩸 Donation",
         "MAIN_MENU_SETTINGS": "⚙️ Settings",
@@ -58,44 +71,43 @@
         "MAIN_MENU_EVENTS": "🎈 Events and Promotions",
         "MAIN_MENU_FEEDBACK": "📞 Support",
         "MAIN_MENU_INFO": "❓ What will happen with my data?",
-    
-        "SEND_CONTACT": "Send contact info",
-    
+
+        "SEND_CONTACT": "💽 Send contact info",
+
         "DONATION_MENU_REGISTER": "🙋 Register for Donation",
         "DONATION_MENU_FIND_CENTER": "🔎 Find Centers",
         "DONATION_MENU_HISTORY": "📗 Donation History",
-    
+
         "SETTINGS_MENU_NOTIFICATIONS": "💡 Notifications and Reminders",
         "SETTINGS_MENU_LANGUAGES": "🌐 Change Language",
-    
+
         "NOTIFICATIONS_MENU_ON": "✅ Enable Notifications",
         "NOTIFICATIONS_MENU_OFF": "❎ Disable Notifications",
-    
+
         "FEEDBACK_MENU_PHONE": "📞 Leave Phone Number",
         "FEEDBACK_MENU_MAIL": "📧 Leave Email Address",
         "FEEDBACK_MENU_NEED_OPERATOR": "🎧 Talk to an Operator",
-    
+
         "LANGUAGES_MENU_UK": "🇺🇦 Ukrainian",
         "LANGUAGES_MENU_EN": "🇬🇧 English",
         "LANGUAGES_MENU_RU": "🇷🇺 Russian",
         "LANGUAGES_MENU_DE": "🇩🇪 German",
         "LANGUAGES_MENU_CN": "🇨🇳 Chinese",
         "LANGUAGES_MENU_FR": "🇫🇷 French",
-    
+
         "EDIT_PROFILE": "Edit",
         "EDIT_PROFILE_NAME": "Edit Name",
         "EDIT_PROFILE_NUMBER": "Edit Number",
         "EDIT_PROFILE_BIRTHDATE": "Edit Birthdate",
         "EDIT_PROFILE_GENDER": "Edit Gender",
         "EDIT_PROFILE_EMAIL": "Edit Email",
-        
+
         "BUTTON_HOME": "🏠 Home",
         "BUTTON_BACK": "⬅️ Back",
-    
+
         "MALE": "Male",
         "FEMALE": "Female",
         "OTHER": "Other",
         "NODATA": "Prefer not to say"
     }
-    
 }
