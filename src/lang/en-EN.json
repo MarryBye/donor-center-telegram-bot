@@ -2,22 +2,22 @@
     "MESSAGES": {
         "REGISTER_START": "Hello user!\n\nBefore we start registration, I would like to know in which language you prefer to communicate with me.\n\nPlease note that this choice will affect our further communication. After registration, your profile will indicate that you speak this language.",
         "REGISTER_START_FAILURE": "You have not selected a language for communication!",
-        
+
         "REGISTER_STEP_1": "Thank you! Now I can speak to you in a language that is convenient for you.\n\nMy name is CRM BOT, I help with our blood organization. To use me, you need to register an account. Nothing will happen to your data, and things like the password will be encrypted and will not be shared in any way. Let's start the registration process!\n\nThe first step. Send me your Telegram contact and we will speed up the registration process many times.",
         "REGISTER_STEP_1_FAILURE": "This is not your contact! Please click the button below.",
-       
+
         "REGISTER_STEP_2": "The second step. Enter your date of birth in the format DD-MM-YYYY. In case of a mistake, you will have one more try.",
         "REGISTER_STEP_2_FAILURE": "Date of birth entered incorrectly! It must be written in the format DD-MM-YYYY.",
-        
+
         "REGISTER_STEP_3": "The third step. Choose your gender.",
         "REGISTER_STEP_3_FAILURE": "Wrong gender selected! Please select one of the above.",
-        
+
         "REGISTER_STEP_4": "The fourth step. Enter your mail in the format mail@mail.com",
         "REGISTER_STEP_4_FAILURE": "The mail was entered in the wrong format! Please write it as mail@mail.com.",
-        
+
         "REGISTER_STEP_5": "The fifth step. Enter the password for your future account. The password will not be distributed anywhere and will be encrypted.\n\nThe password must consist of numbers, upper and lower case letters of the Latin alphabet. The use of special characters, except for the underscore, is prohibited.",
         "REGISTER_STEP_5_FAILURE": "The password does not meet the requirements! Please create a password that meets the requirements above.",
-        
+
         "SUCCESSFULL_REGISTER": "Perfectly! We have registered you in the system, now you can use all the functionality!",
         "ALREADY_REGISTERED": "You are already registered in the system!",
 
@@ -25,7 +25,7 @@
         "DONATION_SELECT_REGION": "Choose the area in which it is easier for you to get to the center from the following:",
         "DONATION_SELECT_CLINIC": "With the help of previously received data, I have selected clinics for you. Choose the one you want to come to:",
         "DONATION_REGISTERED_APPOINTMENT": "You are registered for the appointment!",
-        
+
         "CANNOT_REGISTER": "You are already registered for the appointment!",
         "INFO_REGISTER": "Nothing will happen to your data.",
         "CHANGE_LANGUAGE": "Choose one of the languages below.",
@@ -71,23 +71,23 @@
         "MAIN_MENU_EVENTS": "🎈 Events and Promotions",
         "MAIN_MENU_FEEDBACK": "📞 Support",
         "MAIN_MENU_INFO": "❓ What will happen with my data?",
-   
+
         "SEND_CONTACT": "💽 Send contact info",
-    
+
         "DONATION_MENU_REGISTER": "🙋 Register for Donation",
         "DONATION_MENU_FIND_CENTER": "🔎 Find Centers",
         "DONATION_MENU_HISTORY": "📗 Donation History",
-    
+
         "SETTINGS_MENU_NOTIFICATIONS": "💡 Notifications and Reminders",
         "SETTINGS_MENU_LANGUAGES": "🌐 Change Language",
-    
+
         "NOTIFICATIONS_MENU_ON": "✅ Enable Notifications",
         "NOTIFICATIONS_MENU_OFF": "❎ Disable Notifications",
-    
+
         "FEEDBACK_MENU_PHONE": "📞 Leave Phone Number",
         "FEEDBACK_MENU_MAIL": "📧 Leave Email Address",
         "FEEDBACK_MENU_NEED_OPERATOR": "🎧 Talk to an Operator",
-    
+
         "LANGUAGES_MENU_UK": "🇺🇦 Ukrainian",
         "LANGUAGES_MENU_EN": "🇬🇧 English",
         "LANGUAGES_MENU_RU": "🇷🇺 Russian",
@@ -101,10 +101,10 @@
         "EDIT_PROFILE_BIRTHDATE": "Edit Birthdate",
         "EDIT_PROFILE_GENDER": "Edit Gender",
         "EDIT_PROFILE_EMAIL": "Edit Email",
-        
+
         "BUTTON_HOME": "🏠 Home",
         "BUTTON_BACK": "⬅️ Back",
-    
+
         "MALE": "Male",
         "FEMALE": "Female",
         "OTHER": "Other",

@@ -7,4 +7,5 @@ from src.handlers.donation import *
 from src.handlers.feedback import *
 from src.handlers.commands import *
 from src.handlers.start_register import *
+from src.handlers.start_register import *
 from src.handlers.profile import *

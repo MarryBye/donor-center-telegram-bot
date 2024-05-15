@@ -137,7 +137,7 @@ class DatabaseController(metaclass=Singleton):
 
         self.__connection.commit()
 
-    def add_feedback_request(self, user_id: int | str, note: str) -> None:
+    def add_feedback_request(self, user_id: Union[int, str], note: str) -> None:
         """
         Добавляет запрос на поддержку в базу данных.
 
@@ -152,7 +152,7 @@ class DatabaseController(metaclass=Singleton):
             print("`add_support_request` sent successfully!")
         except Exception as error:
             print("`add_support_request` ERROR:", error)
-            
+
     def update_donor_number(self, donor_id, new_phone_number):
         try:
             with self.__connection.cursor() as cur:
@@ -165,32 +165,35 @@ class DatabaseController(metaclass=Singleton):
         except Exception as e:
             print(f"Ошибка при обновлении номера телефона донора: {e}")
 
-    def update_donor_field(self, donor: Donor, field_name: str, new_value: str | int):
+    def update_donor_field(self, donor: Donor, field_name: str, new_value: Union[int, str]):
         """Меняет одно значение информации о пользователе
 
         - `donor` - объект `Donor` с информацией про нового донора.
-        - `field_name` - название колонки информации. Их список: `name_donor`, `email`, `password`, `date_of_birth`, `gender_ID`, `number`.
+        - `field_name` - название колонки информации. Их список: `name_donor`, `email`, `password`, `date_of_birth`, `gender_ID`, `phone_number`.
         - `new_value` - новое значение колонки.
         """
-
+        
         try:
-            user_id = donor.get_id()
-
-            if field_name == "phone_number":
-                self.update_donor_number(user_id, new_value)
-
-            with self.__connection.cursor() as cur:
-                cur.execute(
-                    f"""UPDATE donor.donor SET {field_name} = %s WHERE "ID" = %s;""",
-                    (new_value, user_id),
-                )
-            self.__connection.commit()
-
-            print(f"{field_name} донора успешно обновлено.")
+            if field_name in ['name_donor', 'email', 'password', 'date_of_birth', 'gender_ID', 'phone_number']:
+                user_id = donor.get_id()
+    
+                if field_name == "phone_number":
+                    self.update_donor_number(user_id, new_value)
+    
+                with self.__connection.cursor() as cur:
+                    cur.execute(
+                        f'''UPDATE donor.donor SET "{field_name}" = %s WHERE "ID" = %s;''',
+                        (new_value, user_id),
+                    )
+                self.__connection.commit()
+    
+                print(f"{field_name} донора успешно обновлено.")
+            else:
+                print("Такого названия колонки нет в списке доступных:\n['name_donor', 'email', 'password', 'date_of_birth', 'gender_ID', 'phone_number']")
         except Exception as e:
             print(f"Ошибка при обновлении {field_name} донора: {e}")
 
-    def update_donor_fields(self, donor: Donor, **fields: dict[str, str | int]):
+    def update_donor_fields(self, donor: Donor, **fields: dict[str, Union[int, str]]):
         """Меняет несколько значений информации о пользователе
 
         - `donor` - объект `Donor` с информацией про нового донора.
@@ -202,14 +205,14 @@ class DatabaseController(metaclass=Singleton):
         - `gender_ID`: Новый идентификатор гендера донора.
         - `phone_number`: Новый номер телефона донора.
         Пример:
-            update(donor, fields={"name_donor": "NewName", "email": "new.mail@gmail.com"})
+            update_donor_fields(donor, name_donor="NewName", email="new.mail@gmail.com")
         """
 
         try:
             user_id = donor.get_id()
             fields = fields.get('fields')
             
-            set_fields = ", ".join([f"{field} = %s" for field in fields.keys()])
+            set_fields = ", ".join([f'"{field}" = %s' for field in fields.keys()])
 
             if "phone_number" in fields:
                 self.update_donor_number(user_id, fields.pop("phone_number"))
@@ -293,7 +296,7 @@ class DatabaseController(metaclass=Singleton):
         if not self.get_donor_by(db_id=donor.get_id(), telegram_id=donor.get_telegram(), number=donor.get_number(),
                                  email=donor.get_email()).is_empty():
             return False
-        
+
         print("НЕТУ")
 
         donor.set_id(db_id=self.get_next_row_id(table="donor.donor"))
@@ -301,11 +304,11 @@ class DatabaseController(metaclass=Singleton):
 
         if not donor.is_full():
             return False
-        
+
         print("ПОЛНЫЙ ДОНОР")
 
         query = ('INSERT INTO donor.donor ("ID", "name_donor", "surname_donor", "date_of_birth", "gender_ID", '
-                    '"email", "telegram_ID", "password", "language_ID") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)')
+                 '"email", "telegram_ID", "password", "language_ID") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)')
         self.__cursor.execute(query, (
             donor.get_id(),
             donor.get_name(),
@@ -317,7 +320,7 @@ class DatabaseController(metaclass=Singleton):
             Crypto().code(donor.get_password()),
             donor.get_language()
         )
-                                )
+                              )
 
         query = 'INSERT INTO number_telephone.donor_number ("ID", "donor_ID", "number") VALUES (%s, %s, %s)'
         self.__cursor.execute(query, (
@@ -325,7 +328,7 @@ class DatabaseController(metaclass=Singleton):
             donor.get_id(),
             donor.get_number()
         )
-                                )
+                              )
 
         self.__connection.commit()
 
@@ -419,8 +422,8 @@ class DatabaseController(metaclass=Singleton):
         print("FULL")
 
         query = ('INSERT INTO data_blood.appointment ("ID", "clinic_ID", "donor_number_ID", "status_ID", '
-                    '"registration_date", "appointment_date", "analysis_file_path") VALUES (%s, %s, %s, %s, %s, %s, '
-                    '%s)')
+                 '"registration_date", "appointment_date", "analysis_file_path") VALUES (%s, %s, %s, %s, %s, %s, '
+                 '%s)')
         self.__cursor.execute(query, (
             appointment.get_id(),
             appointment.get_clinic_id(),
@@ -430,10 +433,10 @@ class DatabaseController(metaclass=Singleton):
             appointment.get_appointment_date(),
             appointment.get_analysis_file_path()
         )
-                                )
+                              )
 
         self.__connection.commit()
-        
+
         print("SAVE")
 
         return True
@@ -510,9 +513,8 @@ class DatabaseController(metaclass=Singleton):
 
         return data if data is not None else []
 
-
-
-    def get_clinics_by(self, db_id: int = -1, city: int = -1, region: int = -1, street: int = -1, area: int = -1, address: int = -1) -> list:
+    def get_clinics_by(self, db_id: int = -1, city: int = -1, region: int = -1, street: int = -1, area: int = -1,
+                       address: int = -1) -> list:
 
         query = ('SELECT clinic.* '
                  'FROM '

@@ -12,6 +12,7 @@ from src.classes.DatabaseController import DatabaseController
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
 
+
 cache = Cache()
 
 db = DatabaseController()
@@ -116,6 +117,7 @@ async def process_phone(msg: Message, state: FSMContext):
 
 @router.message(pressed_button(button_name="FEEDBACK_MENU_MAIL"))
 async def feedback_mail_handler(msg: Message, state: FSMContext):
+
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
@@ -135,8 +137,10 @@ async def feedback_mail_handler(msg: Message, state: FSMContext):
 
 @router.message(Feedback.mail)
 async def process_phone(msg: Message, state: FSMContext):
+
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
+
     mail = msg.text
 
     new_keyboard = kb.get_keyboard(

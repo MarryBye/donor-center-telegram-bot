@@ -120,5 +120,42 @@ async def events_and_promo_handler(msg):
     # events = db.get_events()
     ...
 
+@router.message(pressed_button(button_name="MAIN_MENU_PROFILE"))
+async def profile_handler(msg: Message):
+    genders = {i: j for i, j in cfg.GENDERS}
+
+    user_id = msg.from_user.id
+    user_language = db.get_user_language(user_id=user_id)
+
+    donor = db.get_donor_by(telegram_id=user_id)
+
+    if donor:
+        gender = donor.get_gender()
+        name = donor.get_name()
+        phone = donor.get_number()
+        bdate = donor.get_birthdate()
+        gender = button_translate(
+            button_name=genders[gender], language_name=user_language
+        )
+
+        bot_message = message_translate("PROFILE", language_name=user_language) % (
+            name,
+            phone,
+            bdate,
+            gender,
+        )
+
+        keyboard = kb.get_keyboard(
+            keyboard_name=KeyboardName.EDIT_PROFILE,
+            keyboard_type=KeyboardType.INLINE,
+            language_name=user_language,
+        )
+        await msg.answer(bot_message, reply_markup=keyboard)
+
+
+@router.message(pressed_button(button_name="MAIN_MENU_EVENTS"))
+async def events_and_promo_handler(msg):
+    # events = db.get_events()
+    ...
 
 hnd.add_router(router)

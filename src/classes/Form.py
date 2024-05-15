@@ -23,6 +23,7 @@ class Feedback(StatesGroup):
     mail = State()
     name = State()
 
+
 class UserSettings(StatesGroup):
     name = State()
     number = State()
