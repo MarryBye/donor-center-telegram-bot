@@ -1,31 +1,17 @@
-import asyncio
-import config as cfg
-
 from re import match
-from random import choice
 
 from aiogram import Router
-from aiogram.types import Message, CallbackQuery, ReplyKeyboardRemove
-from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import State, StatesGroup
+from aiogram.types import Message, CallbackQuery
 
 from src.classes.CRMBot import CRMBot
+from src.classes.Form import UserSettings
 from src.classes.DatabaseController import DatabaseController
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
-from src.classes.Form import Form, Feedback, UserSettings
-from src.classes.Donor import Donor
 
-from src.funcs.core import (
-    pressed_button,
-    message_translate,
-    button_translate,
-    language_name_to_id,
-    gender_name_to_id,
-    get_command_variations,
-    sent_callback,
-)
+from src.funcs.core import message_translate, gender_name_to_id
+
 
 bot = CRMBot()
 
@@ -79,7 +65,7 @@ async def update_profile(call: CallbackQuery, state: FSMContext):
 async def check_name(msg: Message):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
-    donor = db.get_donor_by(db_id=user_id)
+    donor = db.get_donor_by(telegram_id=user_id)
 
     pattern = r"^[a-zA-Zа-яА-ЯёЁ]+$"
     if match(pattern, msg.text):
@@ -117,7 +103,7 @@ async def update_profile(call: CallbackQuery, state: FSMContext):
 async def check_name(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
-    donor = db.get_donor_by(db_id=user_id)
+    donor = db.get_donor_by(telegram_id=user_id)
 
     pattern = r"^\+\d{12}$"
     if match(pattern, msg.text):
@@ -157,7 +143,7 @@ async def update_profile(call: CallbackQuery, state: FSMContext):
 async def check_name(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
-    donor = db.get_donor_by(db_id=user_id)
+    donor = db.get_donor_by(telegram_id=user_id)
 
     birthday_pattern = (
         r"^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(19[4-9][0-9]|20[0-9]{2})$"
@@ -205,14 +191,20 @@ async def update_profile(call: CallbackQuery, state: FSMContext):
 async def check_name(call: Message):
     user_id = call.from_user.id
     user_language = db.get_user_language(user_id=user_id)
-    donor = db.get_donor_by(db_id=user_id)
+    donor = db.get_donor_by(telegram_id=user_id)
 
     gender_id = gender_name_to_id(call.data)
 
     db.update_donor_field(donor, "gender_ID", gender_id)
 
-    await call.answer(
-        message_translate("PROFILE_GENDER_CHANGED", language_name=user_language)
+    await bot.answer_callback_query(call.id)
+    new_text = message_translate("PROFILE_GENDER_CHANGED", language_name=user_language)
+
+    await bot.edit_message_text(
+        chat_id=call.message.chat.id,
+        message_id=call.message.message_id,
+        text=new_text,
+        reply_markup=None,
     )
 
 
@@ -239,7 +231,7 @@ async def update_profile(call: CallbackQuery, state: FSMContext):
 async def check_name(msg: Message):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
-    donor = db.get_donor_by(db_id=user_id)
+    donor = db.get_donor_by(telegram_id=user_id)
 
     pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
 
