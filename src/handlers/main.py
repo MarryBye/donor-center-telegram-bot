@@ -1,17 +1,15 @@
 import config as cfg
 
-from random import choice
-
 from aiogram import Router
 from aiogram.types import Message
-from aiogram.filters import Command
+from aiogram.enums import ParseMode
 from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import State, StatesGroup
 
+from src.classes.Form import Feedback
+from classes.NewsController import NewsDatabase
 from src.classes.DatabaseController import DatabaseController
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
-from src.classes.Form import Form, Feedback
 
 from src.funcs.core import pressed_button, message_translate, button_translate
 
@@ -82,43 +80,19 @@ async def feedback_handler(msg: Message, state: FSMContext):
 
         await msg.answer(bot_message, reply_markup=new_keyboard)
         
-@router.message(pressed_button(button_name="MAIN_MENU_PROFILE"))
-async def profile_handler(msg: Message):
-    genders = {i: j for i, j in cfg.GENDERS}
+@router.message(pressed_button(button_name="MAIN_MENU_EVENTS"))
+async def events_and_promo_handler(msg: Message):
+    nb = NewsDatabase()
 
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
+    news_list = nb.fetch_news(limit=5)
 
-    donor = db.get_donor_by(telegram_id=user_id)
+    await msg.answer(
+        nb.format_news_for_telegram(news_list, lang=user_language),
+        parse_mode=ParseMode.MARKDOWN_V2,
+    )
 
-    if donor:
-        gender = donor.get_gender()
-        name = donor.get_name()
-        phone = donor.get_number()
-        bdate = donor.get_birthdate()
-        gender = button_translate(
-            button_name=genders[gender], language_name=user_language
-        )
-
-        bot_message = message_translate("PROFILE", language_name=user_language) % (
-            name,
-            phone,
-            bdate,
-            gender,
-        )
-
-        keyboard = kb.get_keyboard(
-            keyboard_name=KeyboardName.EDIT_PROFILE,
-            keyboard_type=KeyboardType.INLINE,
-            language_name=user_language,
-        )
-        await msg.answer(bot_message, reply_markup=keyboard)
-
-
-@router.message(pressed_button(button_name="MAIN_MENU_EVENTS"))
-async def events_and_promo_handler(msg):
-    # events = db.get_events()
-    ...
 
 @router.message(pressed_button(button_name="MAIN_MENU_PROFILE"))
 async def profile_handler(msg: Message):
@@ -141,7 +115,7 @@ async def profile_handler(msg: Message):
         bot_message = message_translate("PROFILE", language_name=user_language) % (
             name,
             phone,
-            bdate,
+            bdate.strftime("%d-%m-%Y"),
             gender,
         )
 
@@ -151,11 +125,5 @@ async def profile_handler(msg: Message):
             language_name=user_language,
         )
         await msg.answer(bot_message, reply_markup=keyboard)
-
-
-@router.message(pressed_button(button_name="MAIN_MENU_EVENTS"))
-async def events_and_promo_handler(msg):
-    # events = db.get_events()
-    ...
 
 hnd.add_router(router)
