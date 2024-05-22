@@ -39,6 +39,7 @@ def button_translate(button_name: str, language_name: str):
     """Возвращает текст кнопки, переведенный на указанный язык"""
     return LANGUAGES[language_name]["BUTTONS"][button_name]
 
+
 # Data tranformation
 
 def month_name_to_id(month_name: str):
@@ -93,23 +94,6 @@ def generate_keyboard_days(month: int, year: int):
         i += 1
 
         if len(row) == 5 or days_count - i == 0:
-            kb_scheme.append(row)
-            row = []
-
-    return ReplyKeyboardMarkup(keyboard=kb_scheme, resize_keyboard=True)
-
-
-def generate_keyboard_years():
-    current_year = date.today().year
-    minimum_year = current_year - cfg.DONATION_MAXIMUM_YEAR
-
-    kb_scheme = []
-
-    row = []
-    for year in range(current_year, minimum_year + 1, -1):
-        if len(row) < 5:
-            row.append(KeyboardButton(text=str(year)))
-        else:
             kb_scheme.append(row)
             row = []
 

@@ -17,6 +17,7 @@ from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
 from src.classes.Form import Form, Feedback
 
 from src.funcs.core import pressed_button, message_translate, button_translate
+from src.funcs.debug_print import debug_print
 
 bot = CRMBot()
 
@@ -24,11 +25,12 @@ db = DatabaseController()
 hnd = HandlersController()
 kb = KeyboardController()
 
-router = Router(name="COMMANDS ROUTER")
+router = Router(name="User commands router")
 
 
 @router.message(Command("cancel"))
 async def main_handler(msg: Message, state: FSMContext):
+
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
@@ -40,6 +42,8 @@ async def main_handler(msg: Message, state: FSMContext):
         bot_message = message_translate(message_name="CANCELLED_STATE", language_name=user_language)
 
         await msg.reply(text=bot_message, reply_markup=new_keyboard)
+
+    debug_print("User", user_id, "has cancelled last command!")
 
 
 @router.message(Command("notify_all"))
@@ -69,6 +73,17 @@ async def main_handler(msg: Message, state: FSMContext):
         await asyncio.sleep(3)
 
     await msg.reply(text=bot_message)
+
+    debug_print("Admin", user_id, "has notified all users!")
+
+@router.message(Command("admin_panel"))
+async def main_handler(msg: Message, state: FSMContext):
+    # TODO Когда в базе данных появятся админы - добавить защиту
+
+    user_id = msg.from_user.id
+    user_language = db.get_user_language(user_id=user_id)
+
+    debug_print("User", user_id, "has authorized as admin!")
 
 
 hnd.add_router(router)

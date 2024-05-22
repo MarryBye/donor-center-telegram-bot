@@ -75,10 +75,10 @@ class KeyboardController(metaclass=Singleton):
     def __init__(self):
         self.keyboards = {}
 
-    def add_keyboard(self, keyboard_name: str, keyboard: Keyboard):
+    def add_keyboard(self, keyboard_name: KeyboardName | str, keyboard: Keyboard):
         self.keyboards[keyboard_name] = keyboard
 
-    def get_keyboard(self, keyboard_name: str, keyboard_type: int, language_name: str) -> Union[InlineKeyboardMarkup, ReplyKeyboardMarkup]:
+    def get_keyboard(self, keyboard_name: KeyboardName | str, keyboard_type: KeyboardType | int, language_name: str) -> Union[InlineKeyboardMarkup, ReplyKeyboardMarkup]:
         return self.keyboards[keyboard_name].regenerate_reply_keyboard(
             language_name=language_name) if keyboard_type == KeyboardType.REPLY else self.keyboards[
             keyboard_name].regenerate_inline_keyboard(language_name=language_name)

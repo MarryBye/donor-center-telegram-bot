@@ -5,12 +5,13 @@ TOKEN = open("TOKEN", "r").read()
 # BOT CONFIGURATION
 
 DEFAULT_LANGUAGE = "en-EN"
+NEED_DEBUG = True
 
 # PostgresSQL Server Configuration
 
 DATABASE_NAME = "crm"
-IP_ADDRESS = "108.181.197.190"
-PORT = "19008"
+IP_ADDRESS = "108.181.157.246"
+PORT = "10066"
 USERNAME = "temshik_shemshik"
 PASSWORD = "3211234545"
 
@@ -52,17 +53,17 @@ REGIONS = (
 
 STREETS = (
     (1, "Klochkivska"),
-    (2, "Pushkin's"),
+    (2, "Pushkin's")
 )
 
 AREAS = (
     (1, "Shevchenkivskyi"),
-    (2, "Kyivіkyi"),
+    (2, "Kyivіkyi")
 )
 
 ADDRESSES = (
     (1, 1, 1, 1, 1, 366),
-    (2, 2, 2, 2, 2, 24),
+    (2, 2, 2, 2, 2, 24)
 )
 
 STATUSES = (
@@ -73,7 +74,7 @@ STATUSES = (
 
 CLINICS = (
     (1, "Odesa Center #1", 1, "8:00:00"),
-    (2, "Kiyv Center #1' mall", 2, "9:00:00"),
+    (2, "Kiyv Center #1' mall", 2, "9:00:00")
 )
 
 GENDERS = (
@@ -81,4 +82,9 @@ GENDERS = (
     (2, "FEMALE"),
     (3, "OTHER"),
     (4, "NODATA")
+)
+
+ADMINS = (
+    (1, "SuperAdminC1", "qwerty", 1),
+    (2, "SuperAdminC2", "qwerty", 2)
 )
