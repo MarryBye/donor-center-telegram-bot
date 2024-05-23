@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DdlMappings">
+    <mapping uuid="919de45f-3f2e-4ac7-8171-d2a727e62808" name="DDL Mapping">
+      <data-sources db="d6323e44-5fd2-4383-9bb7-201fb65516fa" ddl="735cf518-d84d-4d4a-9ce0-2575cd6bf674" />
+      <scope>
+        <node kind="database" qname="crm">
+          <node kind="schema">
+            <name qname="admin" />
+            <name qname="data_blood" />
+            <name qname="donor" />
+            <name qname="number_telephone" />
+          </node>
+        </node>
+      </scope>
+    </mapping>
+  </component>
+  <component name="SqlDataSourceStorage">
+    <option name="dataSources">
+      <list>
+        <State>
+          <option name="id" value="735cf518-d84d-4d4a-9ce0-2575cd6bf674" />
+          <option name="name" value="crm@108.181.157.246 (DDL)" />
+          <option name="dbmsName" value="POSTGRES" />
+          <option name="urls">
+            <array />
+          </option>
+          <option name="outLayout" value="File per object by schema.groovy" />
+        </State>
+      </list>
+    </option>
+  </component>
+</project>

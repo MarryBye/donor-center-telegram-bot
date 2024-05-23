@@ -1,7 +1,8 @@
+from hashlib import sha256
 from src.classes.Singleton import Singleton
 
 
-class Crypto(metaclass=Singleton):
+class CryptoRSA(metaclass=Singleton):
     """
     Класс для шифрования строк (паролей, например) при помощи алгоритма RSA.
     """
@@ -24,3 +25,18 @@ class Crypto(metaclass=Singleton):
     def decode(self, coded_message: list):
         decoded_symbols_list = [chr(ord(symbol) ** self.__d % self.__n) for symbol in coded_message]
         return "".join(decoded_symbols_list)
+
+
+class CryptoSHA256(metaclass=Singleton):
+    @staticmethod
+    def crypt(string: str, salt: str = "StandardSalt"):
+        string_number = int(''.join([str(ord(symbol) * i) for i, symbol in enumerate(string, start=1)]))
+        salt_number = int(''.join([str(ord(symbol) * i) for i, symbol in enumerate(salt, start=1)]))
+
+        string_salted_text = str(string_number + salt_number)
+
+        hash_string = string_salted_text
+        for i in range(512):
+            hash_string = sha256(hash_string.encode()).hexdigest()
+
+        return hash_string
