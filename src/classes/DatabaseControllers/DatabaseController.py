@@ -324,7 +324,7 @@ class DatabaseController(metaclass=Singleton):
             'AND '
             '(donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s)'
         )
-        self.cursor.execute(query + additional_filters, (donor.get_id(), donor.get_telegram(), donor.get_number(), donor.get_email(), *additional_filters_args))
+        self.cursor.execute(query + additional_filters, (donor.get_id(), donor.get_telegram_id(), donor.get_telephone().get_number(), donor.get_email(), *additional_filters_args))
 
         if only_last:
             data = self.cursor.fetchone()
