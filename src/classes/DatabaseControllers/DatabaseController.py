@@ -12,6 +12,8 @@ from src.classes.Datatypes.Address import Address
 from src.classes.Datatypes.Clinic import Clinic
 from src.classes.Datatypes.Blood import Blood
 from src.classes.Datatypes.Status import Status
+from src.classes.Datatypes.Donor import Donor
+from src.classes.Datatypes.Review import Review
 
 from src.funcs.debug_print import debug_print
 
@@ -155,6 +157,69 @@ class DatabaseController(metaclass=Singleton):
         data = self.cursor.fetchone()
 
         return Status(data=data) if data is not None else None
+
+    def get_review(self, review_id: int | str) -> Review | None:
+
+        query = (
+            'SELECT '
+            'review."ID",'
+            'review."donor_ID" AS donor,'
+            'review."clinic_ID" AS clinic,'
+            'review."rating",'
+            'review."comment",'
+            'review.date_added '
+            'FROM data_blood."reviews" AS review '
+            'WHERE review."ID" = %s'
+        )
+
+        self.cursor.execute(query, (review_id, ))
+
+        data = self.cursor.fetchone()
+
+        data["donor"] = self.get_donor(db_id=data["donor"])
+        data["clinic"] = self.get_clinic(clinic_id=data["clinic"])
+
+        return Review(data=data) if data is not None else None
+
+    def get_donor(self, db_id: int = -1, telegram_id: int = -1, number: str = "-1", email: str = "-1") -> Donor | None:
+        """
+        Сформировать объект ``Donor`` по данным из БД. В качестве параметров передается одно из или несколько следующих
+        значений:
+        - ``id`` - номер донора в БД;
+        - ``telegram_id`` - номер профиля Телеграма пользоваля;
+        - ``number`` - номер телефона пользователя;
+        - ``email`` - электронная почта пользователя.\n
+        Метод возвращает объект ``Donor`` если донор существует или нет, но во втором случае все данные про донора будут
+        равняться ``None``.
+        """
+
+        query = (
+            'SELECT '
+            'donors.*, '
+            'numbers."ID" AS "number_ID", '
+            'numbers.number AS number '
+            'FROM donor.donor as donors, '
+            'number_telephone.donor_number AS numbers '
+            'WHERE donors."ID" = numbers."donor_ID" '
+            'AND '
+            '(donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s)'
+        )
+        self.cursor.execute(query, (db_id, telegram_id, number, email))
+
+        data = self.cursor.fetchone()
+
+        return Donor(data=data) if data is not None else None
+
+
+
+
+
+
+
+
+
+
+
 
     def get_clinics_by(self, db_id: int = -1, city: int = -1, region: int = -1, street: int = -1, area: int = -1,
                        address: int = -1) -> list:
