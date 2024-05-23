@@ -79,6 +79,17 @@ class DatabaseController(metaclass=Singleton):
 
         return City(data=data) if data is not None else None
 
+    def get_cities(self, n=-1) -> list[City] | None:
+
+        query = 'SELECT * FROM data_blood.city'
+        self.cursor.execute(query)
+        data = self.cursor.fetchmany(n)
+
+        for i, data_component in enumerate(data, start=0):
+            data[i] = City(data=data_component)
+
+        return data if data is not None else None
+
     def get_region(self, region_id: int | str) -> Region | None:
 
         query = 'SELECT * FROM data_blood.region AS region WHERE region."ID" = %s'
@@ -87,12 +98,34 @@ class DatabaseController(metaclass=Singleton):
 
         return Region(data=data) if data is not None else None
 
+    def get_regions(self, n=-1) -> list[Region] | None:
+
+        query = 'SELECT * FROM data_blood.region'
+        self.cursor.execute(query)
+        data = self.cursor.fetchmany(n)
+
+        for i, data_component in enumerate(data, start=0):
+            data[i] = City(data=data_component)
+
+        return data if data is not None else None
+
     def get_street(self, street_id: int | str) -> Street | None:
         query = 'SELECT * FROM data_blood.street AS street WHERE street."ID" = %s'
         self.cursor.execute(query, (street_id,))
         data = self.cursor.fetchone()
 
         return Street(data=data) if data is not None else None
+
+    def get_streets(self, n=-1) -> list[Street] | None:
+
+        query = 'SELECT * FROM data_blood.street'
+        self.cursor.execute(query)
+        data = self.cursor.fetchmany(n)
+
+        for i, data_component in enumerate(data, start=0):
+            data[i] = City(data=data_component)
+
+        return data if data is not None else None
 
     def get_area(self, area_id: int | str) -> Area | None:
 
@@ -101,6 +134,17 @@ class DatabaseController(metaclass=Singleton):
         data = self.cursor.fetchone()
 
         return Area(data=data) if data is not None else None
+
+    def get_areas(self, n=-1) -> list[Area] | None:
+
+        query = 'SELECT * FROM data_blood.area'
+        self.cursor.execute(query)
+        data = self.cursor.fetchmany(n)
+
+        for i, data_component in enumerate(data, start=0):
+            data[i] = City(data=data_component)
+
+        return data if data is not None else None
 
     def get_address(self, address_id: int | str) -> Address | None:
 
@@ -126,14 +170,40 @@ class DatabaseController(metaclass=Singleton):
 
         return Address(data=data) if data is not None else None
 
+    def get_addresses(self, n=-1) -> list[Address] | None:
+
+        query = (
+            'SELECT '
+            'address."ID", '
+            'address."area_ID" AS area, '
+            'address."city_ID" AS city, '
+            'address."region_ID" AS region, '
+            'address."street_ID" AS street, '
+            'address."house_number" AS house '
+            'FROM data_blood.address AS address '
+        )
+        self.cursor.execute(query)
+        data = self.cursor.fetchmany(n)
+
+        for i, data_component in enumerate(data, start=0):
+
+            data_component["area"] = self.get_area(area_id=data_component["area"])
+            data_component["city"] = self.get_city(city_id=data_component["city"])
+            data_component["region"] = self.get_region(region_id=data_component["region"])
+            data_component["street"] = self.get_street(street_id=data_component["street"])
+
+            data[i] = Address(data=data_component)
+
+        return data if data is not None else None
+
     def get_clinic(self, clinic_id: int | str) -> Clinic | None:
 
         query = (
             'SELECT '
             'clinic."ID", '
-            'clinic."clinic_name" AS clinic_name, '
+            'clinic."clinic_name", '
             'clinic."address_ID" AS address, '
-            'clinic."working_hours" AS working_hours '
+            'clinic."working_hours" '
             'FROM data_blood.clinic AS clinic '
             'WHERE clinic."ID" = %s'
         )
@@ -146,6 +216,28 @@ class DatabaseController(metaclass=Singleton):
 
         return Clinic(data=data) if data is not None else None
 
+    def get_clinics(self, n=-1) -> list[Clinic] | None:
+
+        query = (
+            'SELECT '
+            'clinic."ID", '
+            'clinic."clinic_name", '
+            'clinic."address_ID" AS address, '
+            'clinic."working_hours" '
+            'FROM data_blood.clinic AS clinic '
+        )
+        self.cursor.execute(query)
+        data = self.cursor.fetchmany(n)
+
+        for i, data_component in enumerate(data, start=0):
+
+            data_component["address"] = self.get_address(address_id=data_component["address"])
+            # data_component["has_blood"] = self.get_has_blood(clinic_id=data_component["ID"])
+
+            data[i] = Clinic(data=data_component)
+
+        return data if data is not None else None
+
     def get_blood(self, blood_id: int | str) -> Blood | None:
 
         query = 'SELECT blood.* FROM data_blood.blood_and_components AS blood WHERE blood."ID" = %s'
@@ -155,6 +247,17 @@ class DatabaseController(metaclass=Singleton):
 
         return Blood(data=data) if data is not None else None
 
+    def get_bloods(self, n=-1) -> list[Blood] | None:
+
+        query = 'SELECT * FROM data_blood.blood_and_components'
+        self.cursor.execute(query)
+        data = self.cursor.fetchmany(n)
+
+        for i, data_component in enumerate(data, start=0):
+            data[i] = Blood(data=data_component)
+
+        return data if data is not None else None
+
     def get_status(self, status_id: int | str) -> Status | None:
 
         query = 'SELECT status.* FROM data_blood.status_appointment AS status WHERE status."ID" = %s'
@@ -163,6 +266,17 @@ class DatabaseController(metaclass=Singleton):
         data = self.cursor.fetchone()
 
         return Status(data=data) if data is not None else None
+
+    def get_statuses(self, n=-1) -> list[Status] | None:
+
+        query = 'SELECT * FROM data_blood.status_appointment'
+        self.cursor.execute(query)
+        data = self.cursor.fetchmany(n)
+
+        for i, data_component in enumerate(data, start=0):
+            data[i] = Status(data=data_component)
+
+        return data if data is not None else None
 
     def get_review(self, review_id: int | str) -> Review | None:
 
@@ -187,6 +301,30 @@ class DatabaseController(metaclass=Singleton):
 
         return Review(data=data) if data is not None else None
 
+    def get_reviews(self, n=-1) -> list[Review] | None:
+
+        query = (
+            'SELECT '
+            'review."ID",'
+            'review."donor_ID" AS donor,'
+            'review."clinic_ID" AS clinic,'
+            'review."rating",'
+            'review."comment",'
+            'review.date_added '
+            'FROM data_blood."reviews" AS review '
+        )
+        self.cursor.execute(query)
+        data = self.cursor.fetchmany(n)
+
+        for i, data_component in enumerate(data, start=0):
+
+            data_component["donor"] = self.get_donor(db_id=data_component["donor"])
+            data_component["clinic"] = self.get_clinic(clinic_id=data_component["clinic"])
+
+            data[i] = Review(data=data_component)
+
+        return data if data is not None else None
+
     def get_gender(self, gender_id: int | str) -> Gender | None:
 
         query = 'SELECT * FROM donor."gender" AS gender WHERE gender."ID" = %s'
@@ -195,6 +333,17 @@ class DatabaseController(metaclass=Singleton):
 
         return Gender(data=data) if data is not None else None
 
+    def get_genders(self, n=-1) -> list[Gender] | None:
+
+        query = 'SELECT * FROM donor."gender"'
+        self.cursor.execute(query)
+        data = self.cursor.fetchmany(n)
+
+        for i, data_component in enumerate(data, start=0):
+            data[i] = Gender(data=data_component)
+
+        return data if data is not None else None
+
     def get_language(self, language_id: int | str) -> Language | None:
 
         query = 'SELECT * FROM donor."language" AS language WHERE language."ID" = %s'
@@ -202,6 +351,17 @@ class DatabaseController(metaclass=Singleton):
         data = self.cursor.fetchone()
 
         return Language(data=data) if data is not None else None
+
+    def get_languages(self, n=-1) -> list[Gender] | None:
+
+        query = 'SELECT * FROM donor."language"'
+        self.cursor.execute(query)
+        data = self.cursor.fetchmany(n)
+
+        for i, data_component in enumerate(data, start=0):
+            data[i] = Language(data=data_component)
+
+        return data if data is not None else None
 
     def get_telephone(self, telephone_id: int | str) -> Telephone | None:
 
@@ -217,6 +377,16 @@ class DatabaseController(metaclass=Singleton):
 
         return Telephone(data=data) if data is not None else None
 
+    def get_telephones(self, n=-1) -> list[Gender] | None:
+
+        query = 'SELECT * FROM number_telephone."donor_number"'
+        self.cursor.execute(query)
+        data = self.cursor.fetchmany(n)
+
+        for i, data_component in enumerate(data, start=0):
+            data[i] = Telephone(data=data_component)
+
+        return data if data is not None else None
 
     def get_has_blood(self, blood_id: int | str = -1, clinic_id: int | str = -1):
 
@@ -277,8 +447,38 @@ class DatabaseController(metaclass=Singleton):
 
         return Donor(data=data) if data is not None else None
 
-    def get_donor_appointments(self, donor: Donor, need_status: int = None, need_registration_date: str = None,
-                               need_appointment_date: str = None, only_last: bool = True) -> Appointment | list[Appointment] | None:
+    def get_donors(self, n=-1) -> list[Donor] | None:
+
+        query = (
+            'SELECT '
+            'donors."ID",'
+            'donors."name_donor",'
+            'donors."surname_donor",'
+            'donors."date_of_birth",'
+            'donors."gender_ID" AS gender,'
+            'donors."email",'
+            'donors."telegram_ID",'
+            'donors."password",'
+            'donors."language_ID" AS language, '
+            'numbers."ID" AS "telephone" '
+            'FROM donor.donor as donors, '
+            'number_telephone.donor_number AS numbers '
+            'WHERE donors."ID" = numbers."donor_ID" '
+        )
+        self.cursor.execute(query)
+        data = self.cursor.fetchmany(n)
+
+        for i, data_component in enumerate(data, start=0):
+
+            data["telephone"] = self.get_telephone(telephone_id=data["telephone"])
+            data["gender"] = self.get_gender(gender_id=data["gender"])
+            data["language"] = self.get_language(language_id=data["language"])
+
+            data[i] = Donor(data=data_component)
+
+        return data if data is not None else None
+
+    def get_donor_appointment(self, donor: Donor, only_last: bool = True, n: int=-1) -> Appointment | list[Appointment] | None:
 
         """
         Сформировать объект ``Appointment`` по данным из БД, если донор существует. В качестве параметра принимает:
@@ -290,19 +490,6 @@ class DatabaseController(metaclass=Singleton):
         - ``need_registration_date`` - получить только с определенной датой регистрации встречи.\n
         Метод возвращает ``False`` если донора не существует.
         """
-
-        additional_filters = ''
-        additional_filters_args = []
-
-        if need_status is not None:
-            additional_filters += ' AND appointments."status_ID" = %s'
-            additional_filters_args.append(need_status)
-        if need_registration_date is not None:
-            additional_filters += ' AND appointments.registration_date = %s'
-            additional_filters_args.append(need_registration_date)
-        if need_appointment_date is not None:
-            additional_filters += ' AND appointments.appointment_date = %s'
-            additional_filters_args.append(need_appointment_date)
 
         query = (
             'SELECT '
@@ -324,7 +511,7 @@ class DatabaseController(metaclass=Singleton):
             'AND '
             '(donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s)'
         )
-        self.cursor.execute(query + additional_filters, (donor.get_id(), donor.get_telegram_id(), donor.get_telephone().get_number(), donor.get_email(), *additional_filters_args))
+        self.cursor.execute(query, (donor.get_id(), donor.get_telegram_id(), donor.get_telephone().get_number(), donor.get_email()))
 
         if only_last:
             data = self.cursor.fetchone()
@@ -335,7 +522,7 @@ class DatabaseController(metaclass=Singleton):
 
             return Appointment(data=data) if data is not None else None
         else:
-            data = self.cursor.fetchall()
+            data = self.cursor.fetchmany(n)
             for i, data_component in enumerate(data, start=0):
 
                 data_component["clinic"] = self.get_clinic(clinic_id=data_component["clinic"])
@@ -346,45 +533,39 @@ class DatabaseController(metaclass=Singleton):
 
             return data if data is not None else None
 
-    def get_clinics_by(self, db_id: int = -1, city: int = -1, region: int = -1, street: int = -1, area: int = -1,
-                       address: int = -1) -> list:
+    def get_appointments(self, n: int = -1) -> list[Appointment] | None:
 
-        query = ('SELECT clinic.* '
-                 'FROM '
-                 'data_blood.clinic AS clinic, '
-                 'data_blood.city AS city, '
-                 'data_blood.region AS region, '
-                 'data_blood.street AS street, '
-                 'data_blood.area AS area, '
-                 'data_blood.address AS address'
-                 ' WHERE '
-                 'clinic."address_ID" = address."ID"'
-                 ' AND '
-                 'address."area_ID" = area."ID"'
-                 ' AND '
-                 'address."city_ID" = city."ID"'
-                 ' AND '
-                 'address."region_ID" = region."ID"'
-                 ' AND '
-                 'address."street_ID" = street."ID"'
-                 ' AND '
-                 '(clinic."ID" = %s'
-                 ' OR '
-                 'city."ID" = %s'
-                 ' OR '
-                 'region."ID" = %s'
-                 ' OR '
-                 'street."ID" = %s'
-                 ' OR '
-                 'area."ID" = %s'
-                 ' OR '
-                 'clinic."address_ID" = %s)')
+        query = (
+            'SELECT '
+            'appointments."ID",'
+            'appointments."clinic_ID" AS clinic,'
+            'donors."ID" AS donor,'
+            'appointments."status_ID" AS status,'
+            'appointments."registration_date",'
+            'appointments."appointment_date",'
+            'appointments."analysis_file_path" '
+            'FROM '
+            'donor.donor as donors, '
+            'number_telephone.donor_number as numbers, '
+            'data_blood.appointment as appointments '
+            'WHERE '
+            'appointments."donor_number_ID" = numbers."ID" '
+            'AND '
+            'numbers."donor_ID" = donors."ID" '
+        )
+        self.cursor.execute(query)
 
-        self.cursor.execute(query, (db_id, city, region, street, area, address))
+        data = self.cursor.fetchmany(n)
 
-        data = self.cursor.fetchall()
+        for i, data_component in enumerate(data, start=0):
 
-        return data if data is not None else []
+            data_component["clinic"] = self.get_clinic(clinic_id=data_component["clinic"])
+            data_component["donor"] = self.get_donor(db_id=data_component["donor"])
+            data_component["status"] = self.get_status(status_id=data_component["status"])
+
+            data[i] = Appointment(data=data_component)
+
+        return data if data is not None else None
 
     def add_bloods(self):
 

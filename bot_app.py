@@ -16,6 +16,8 @@ from src.classes.DatabaseControllers.AppointmentsDatabaseController import Appoi
 #     asyncio.run(bot.start_bot())
 
 d = DatabaseController().get_donor(telegram_id=482613937)
-a = DatabaseController().get_donor_appointments(donor=d).get_donor().get_gender().get_gender_name()
+a = DatabaseController().get_donor_appointment(donor=d, only_last=True)
+aa = DatabaseController().get_appointments()[0].get_donor().get_email()
 
 print(a)
+print(aa)
