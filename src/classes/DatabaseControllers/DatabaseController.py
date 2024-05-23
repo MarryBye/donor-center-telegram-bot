@@ -10,6 +10,8 @@ from src.classes.Datatypes.Street import Street
 from src.classes.Datatypes.Area import Area
 from src.classes.Datatypes.Address import Address
 from src.classes.Datatypes.Clinic import Clinic
+from src.classes.Datatypes.Blood import Blood
+from src.classes.Datatypes.Status import Status
 
 from src.funcs.debug_print import debug_print
 
@@ -135,6 +137,24 @@ class DatabaseController(metaclass=Singleton):
         data["address"] = self.get_address(address_id=data["address"])
 
         return Clinic(data=data) if data is not None else None
+
+    def get_blood(self, blood_id: int | str) -> Blood | None:
+
+        query = 'SELECT blood.* FROM data_blood.blood_and_components AS blood WHERE blood."ID" = %s'
+
+        self.cursor.execute(query, (blood_id, ))
+        data = self.cursor.fetchone()
+
+        return Blood(data=data) if data is not None else None
+
+    def get_status(self, status_id: int | str) -> Status | None:
+
+        query = 'SELECT status.* FROM data_blood.status_appointment AS status WHERE status."ID" = %s'
+
+        self.cursor.execute(query, (status_id, ))
+        data = self.cursor.fetchone()
+
+        return Status(data=data) if data is not None else None
 
     def get_clinics_by(self, db_id: int = -1, city: int = -1, region: int = -1, street: int = -1, area: int = -1,
                        address: int = -1) -> list:
