@@ -1,6 +1,6 @@
-from src.classes.DatabaseController import DatabaseController
-from src.classes.Appointment import Appointment
-from src.classes.Donor import Donor
+from src.classes.DatabaseControllers.DatabaseController import DatabaseController
+from src.classes.Datatypes.Appointment import Appointment
+from src.classes.Datatypes.Donor import Donor
 from src.classes.TerminalColors import TerminalColors
 
 from src.funcs.debug_print import debug_print

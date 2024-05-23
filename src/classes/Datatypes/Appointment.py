@@ -1,4 +1,4 @@
-from src.classes.CRMBaseDataType import CRMBaseDataType
+from src.classes.Datatypes.CRMBaseDataType import CRMBaseDataType
 
 
 class Appointment(CRMBaseDataType):

@@ -1,23 +1,20 @@
 import datetime
-from random import choice
 
 from aiogram import Router
-from aiogram.types import Message, CallbackQuery, ContentType
-from aiogram.filters import Command
-from aiogram.fsm.state import State, StatesGroup
+from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
 
 from src.classes.CRMBot import CRMBot
-from src.classes.DatabaseController import DatabaseController
-from src.classes.DonorsDatabaseController import DonorsDatabaseController
-from src.classes.AppointmentsDatabaseController import AppointmentsDatabaseController
+from src.classes.DatabaseControllers.DatabaseController import DatabaseController
+from src.classes.DatabaseControllers.DonorsDatabaseController import DonorsDatabaseController
+from src.classes.DatabaseControllers.AppointmentsDatabaseController import AppointmentsDatabaseController
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType, Keyboard
 from src.classes.Form import FormAppointment
-from src.classes.Appointment import Appointment
+from src.classes.Datatypes.Appointment import Appointment
 from datetime import datetime
 
-from src.funcs.core import pressed_button, message_translate, language_name_to_id, sent_callback
+from src.funcs.core import pressed_button, message_translate
 
 bot = CRMBot()
 

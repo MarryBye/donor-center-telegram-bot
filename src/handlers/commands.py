@@ -1,22 +1,16 @@
 import asyncio
-import config as cfg
-
-from re import match
-from random import choice
 
 from aiogram import Router
 from aiogram.types import Message
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import State, StatesGroup
 
 from src.classes.CRMBot import CRMBot
-from src.classes.DatabaseController import DatabaseController
+from src.classes.DatabaseControllers.DatabaseController import DatabaseController
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
-from src.classes.Form import Form, Feedback
 
-from src.funcs.core import pressed_button, message_translate, button_translate
+from src.funcs.core import message_translate
 from src.funcs.debug_print import debug_print
 
 bot = CRMBot()

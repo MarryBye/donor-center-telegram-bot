@@ -1,5 +1,5 @@
-from src.classes.DatabaseController import DatabaseController
-from src.classes.Donor import Donor
+from src.classes.DatabaseControllers.DatabaseController import DatabaseController
+from src.classes.Datatypes.Donor import Donor
 from src.classes.Crypto import CryptoSHA256
 from src.classes.TerminalColors import TerminalColors
 
