@@ -14,6 +14,7 @@ from src.classes.Datatypes.Blood import Blood
 from src.classes.Datatypes.Status import Status
 from src.classes.Datatypes.Donor import Donor
 from src.classes.Datatypes.Review import Review
+from src.classes.Datatypes.HasBlood import HasBlood
 
 from src.funcs.debug_print import debug_print
 
@@ -69,7 +70,7 @@ class DatabaseController(metaclass=Singleton):
     def get_city(self, city_id: int | str) -> City | None:
 
         query = 'SELECT * FROM data_blood.city AS city WHERE city."ID" = %s'
-        self.cursor.execute(query, (city_id, ))
+        self.cursor.execute(query, (city_id,))
         data = self.cursor.fetchone()
 
         return City(data=data) if data is not None else None
@@ -77,14 +78,14 @@ class DatabaseController(metaclass=Singleton):
     def get_region(self, region_id: int | str) -> Region | None:
 
         query = 'SELECT * FROM data_blood.region AS region WHERE region."ID" = %s'
-        self.cursor.execute(query, (region_id, ))
+        self.cursor.execute(query, (region_id,))
         data = self.cursor.fetchone()
 
         return Region(data=data) if data is not None else None
 
     def get_street(self, street_id: int | str) -> Street | None:
         query = 'SELECT * FROM data_blood.street AS street WHERE street."ID" = %s'
-        self.cursor.execute(query, (street_id, ))
+        self.cursor.execute(query, (street_id,))
         data = self.cursor.fetchone()
 
         return Street(data=data) if data is not None else None
@@ -92,7 +93,7 @@ class DatabaseController(metaclass=Singleton):
     def get_area(self, area_id: int | str) -> Area | None:
 
         query = 'SELECT * FROM data_blood.area AS area WHERE area."ID" = %s'
-        self.cursor.execute(query, (area_id, ))
+        self.cursor.execute(query, (area_id,))
         data = self.cursor.fetchone()
 
         return Area(data=data) if data is not None else None
@@ -111,7 +112,7 @@ class DatabaseController(metaclass=Singleton):
             'WHERE address."ID" = %s'
         )
 
-        self.cursor.execute(query, (address_id, ))
+        self.cursor.execute(query, (address_id,))
         data = self.cursor.fetchone()
 
         data["area"] = self.get_area(area_id=data["area"])
@@ -133,7 +134,7 @@ class DatabaseController(metaclass=Singleton):
             'WHERE clinic."ID" = %s'
         )
 
-        self.cursor.execute(query, (clinic_id, ))
+        self.cursor.execute(query, (clinic_id,))
         data = self.cursor.fetchone()
 
         data["address"] = self.get_address(address_id=data["address"])
@@ -144,7 +145,7 @@ class DatabaseController(metaclass=Singleton):
 
         query = 'SELECT blood.* FROM data_blood.blood_and_components AS blood WHERE blood."ID" = %s'
 
-        self.cursor.execute(query, (blood_id, ))
+        self.cursor.execute(query, (blood_id,))
         data = self.cursor.fetchone()
 
         return Blood(data=data) if data is not None else None
@@ -153,7 +154,7 @@ class DatabaseController(metaclass=Singleton):
 
         query = 'SELECT status.* FROM data_blood.status_appointment AS status WHERE status."ID" = %s'
 
-        self.cursor.execute(query, (status_id, ))
+        self.cursor.execute(query, (status_id,))
         data = self.cursor.fetchone()
 
         return Status(data=data) if data is not None else None
@@ -172,7 +173,7 @@ class DatabaseController(metaclass=Singleton):
             'WHERE review."ID" = %s'
         )
 
-        self.cursor.execute(query, (review_id, ))
+        self.cursor.execute(query, (review_id,))
 
         data = self.cursor.fetchone()
 
@@ -180,6 +181,25 @@ class DatabaseController(metaclass=Singleton):
         data["clinic"] = self.get_clinic(clinic_id=data["clinic"])
 
         return Review(data=data) if data is not None else None
+
+    def get_has_blood(self, blood_id: int | str = -1, clinic_id: int | str = -1):
+
+        query = (
+            'SELECT '
+            'has_blood."blood_and_comp_ID" AS blood,'
+            'has_blood."clinic_ID" AS clinic,'
+            'has_blood."kol" '
+            'FROM data_blood.clinic_has_blood_and_comp AS has_blood '
+            'WHERE (has_blood."blood_and_comp_ID" = %s OR has_blood."clinic_ID" = %s)'
+        )
+        self.cursor.execute(query, (blood_id, clinic_id))
+
+        data = self.cursor.fetchone()
+
+        data["blood"] = self.get_blood(blood_id=data["blood"])
+        data["clinic"] = self.get_clinic(clinic_id=data["clinic"])
+
+        return HasBlood(data=data) if data is not None else None
 
     def get_donor(self, db_id: int = -1, telegram_id: int = -1, number: str = "-1", email: str = "-1") -> Donor | None:
         """
@@ -209,17 +229,6 @@ class DatabaseController(metaclass=Singleton):
         data = self.cursor.fetchone()
 
         return Donor(data=data) if data is not None else None
-
-
-
-
-
-
-
-
-
-
-
 
     def get_clinics_by(self, db_id: int = -1, city: int = -1, region: int = -1, street: int = -1, area: int = -1,
                        address: int = -1) -> list:
