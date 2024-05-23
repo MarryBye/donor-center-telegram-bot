@@ -8,12 +8,14 @@ from aiogram.fsm.context import FSMContext
 from src.classes.Form import Feedback
 from src.classes.NewsController import NewsDatabase
 from src.classes.DatabaseController import DatabaseController
+from src.classes.DonorsDatabaseController import DonorsDatabaseController
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
 
 from src.funcs.core import pressed_button, message_translate, button_translate
 
 db = DatabaseController()
+db_donor = DonorsDatabaseController()
 hnd = HandlersController()
 kb = KeyboardController()
 
@@ -61,7 +63,7 @@ async def feedback_handler(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
-    if db.get_donor_by(telegram_id=user_id):
+    if db_donor.get_donor_by(telegram_id=user_id):
 
         new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.FEEDBACK, keyboard_type=KeyboardType.REPLY,
                                        language_name=user_language)
@@ -101,7 +103,7 @@ async def profile_handler(msg: Message):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
-    donor = db.get_donor_by(telegram_id=user_id)
+    donor = db_donor.get_donor_by(telegram_id=user_id)
 
     if donor:
         gender = donor.get_gender()

@@ -11,7 +11,9 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
 from src.classes.CRMBot import CRMBot
-from src.classes.DatabaseController import DatabaseController, DonorsDatabaseController
+from src.classes.DatabaseController import DatabaseController
+from src.classes.DonorsDatabaseController import DonorsDatabaseController
+from src.classes.AppointmentsDatabaseController import AppointmentsDatabaseController
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
 from src.classes.Form import Form, Feedback
