@@ -13,6 +13,7 @@ from src.classes.Datatypes.Clinic import Clinic
 from src.classes.Datatypes.Blood import Blood
 from src.classes.Datatypes.Status import Status
 from src.classes.Datatypes.Donor import Donor
+from src.classes.Datatypes.Appointment import Appointment
 from src.classes.Datatypes.Review import Review
 from src.classes.Datatypes.HasBlood import HasBlood
 
@@ -138,7 +139,7 @@ class DatabaseController(metaclass=Singleton):
         data = self.cursor.fetchone()
 
         data["address"] = self.get_address(address_id=data["address"])
-        data["has_blood"] = self.get_has_blood(clinic_id=data["ID"])
+        #data["has_blood"] = self.get_has_blood(clinic_id=data["ID"])
 
         return Clinic(data=data) if data is not None else None
 
@@ -230,6 +231,75 @@ class DatabaseController(metaclass=Singleton):
         data = self.cursor.fetchone()
 
         return Donor(data=data) if data is not None else None
+
+    def get_donor_appointments(self, donor: Donor, need_status: int = None, need_registration_date: str = None,
+                               need_appointment_date: str = None, only_last: bool = True) -> Appointment | list[Appointment] | None:
+
+        """
+        Сформировать объект ``Appointment`` по данным из БД, если донор существует. В качестве параметра принимает:
+        - ``donor`` - объект ``Donor`` с информацией про донора.\n
+        Далее идут необязательные параметры для фильтрации данных:
+        - ``need_status`` - с каким статусом искать приемы. Если не указано, то возвращаются все приемы;
+        - ``only_last`` - получить только последнюю запись из БД;
+        - ``need_appointment_date`` - получить только с определенной датой встречи;
+        - ``need_registration_date`` - получить только с определенной датой регистрации встречи.\n
+        Метод возвращает ``False`` если донора не существует.
+        """
+
+        additional_filters = ''
+        additional_filters_args = []
+
+        if need_status is not None:
+            additional_filters += ' AND appointments."status_ID" = %s'
+            additional_filters_args.append(need_status)
+        if need_registration_date is not None:
+            additional_filters += ' AND appointments.registration_date = %s'
+            additional_filters_args.append(need_registration_date)
+        if need_appointment_date is not None:
+            additional_filters += ' AND appointments.appointment_date = %s'
+            additional_filters_args.append(need_appointment_date)
+
+        query = (
+            'SELECT '
+            'appointments."ID",'
+            'appointments."clinic_ID" AS clinic,'
+            'donors."ID" AS donor,'
+            'appointments."status_ID" AS status,'
+            'appointments."registration_date",'
+            'appointments."appointment_date",'
+            'appointments."analysis_file_path" '
+            'FROM '
+            'donor.donor as donors, '
+            'number_telephone.donor_number as numbers, '
+            'data_blood.appointment as appointments '
+            'WHERE '
+            'appointments."donor_number_ID" = numbers."ID" '
+            'AND '
+            'numbers."donor_ID" = donors."ID" '
+            'AND '
+            '(donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s)'
+        )
+        self.cursor.execute(query + additional_filters, (donor.get_id(), donor.get_telegram(), donor.get_number(), donor.get_email(), *additional_filters_args))
+
+        if only_last:
+            data = self.cursor.fetchone()
+
+            data["clinic"] = self.get_clinic(clinic_id=data["clinic"])
+            data["donor"] = self.get_donor(db_id=data["donor"])
+            data["status"] = self.get_status(status_id=data["status"])
+
+            return Appointment(data=data) if data is not None else None
+        else:
+            data = self.cursor.fetchall()
+            for i, data_component in enumerate(data, start=0):
+
+                data_component["clinic"] = self.get_clinic(clinic_id=data_component["clinic"])
+                data_component["donor"] = self.get_donor(db_id=data_component["donor"])
+                data_component["status"] = self.get_status(status_id=data_component["status"])
+
+                data[i] = Appointment(data=data_component)
+
+            return data if data is not None else None
 
     def get_clinics_by(self, db_id: int = -1, city: int = -1, region: int = -1, street: int = -1, area: int = -1,
                        address: int = -1) -> list:

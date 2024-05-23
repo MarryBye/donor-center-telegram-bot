@@ -15,6 +15,7 @@ from src.classes.DatabaseControllers.AppointmentsDatabaseController import Appoi
 #     #DatabaseController().setup_database()
 #     asyncio.run(bot.start_bot())
 
-a = DatabaseController().get_clinic(clinic_id=1).get_address().get_city().get_city_name()
+d = DatabaseController().get_donor(telegram_id=482613937)
+a = DatabaseController().get_donor_appointments(donor=d).get_donor().get_email()
 
 print(a)

@@ -1,4 +1,7 @@
 from src.classes.Datatypes.CRMBaseDataType import CRMBaseDataType
+from src.classes.Datatypes.Clinic import Clinic
+from src.classes.Datatypes.Donor import Donor
+from src.classes.Datatypes.Status import Status
 
 
 class Appointment(CRMBaseDataType):
@@ -8,23 +11,23 @@ class Appointment(CRMBaseDataType):
     это кортеж.
     """
 
-    def set_clinic_id(self, clinic_id: int):
-        self.data["clinic_ID"] = clinic_id
+    def set_clinic(self, clinic: Clinic):
+        self.data["clinic"] = clinic
 
-    def get_clinic_id(self) -> int:
-        return self.get_from_data(key_name="clinic_ID")
+    def get_clinic(self) -> Clinic:
+        return self.get_from_data(key_name="clinic")
 
-    def set_donor_number_id(self, donor_number_id):
-        self.data["donor_number_ID"] = donor_number_id
+    def set_donor(self, donor: Donor):
+        self.data["donor"] = donor
 
-    def get_donor_number_id(self) -> int:
-        return self.get_from_data(key_name="donor_number_ID")
+    def get_donor(self) -> Donor:
+        return self.get_from_data(key_name="donor")
 
-    def set_status_id(self, status_id):
-        self.data["status_ID"] = status_id
+    def set_status(self, status: Status):
+        self.data["status"] = status
 
-    def get_status_id(self) -> int:
-        return self.get_from_data(key_name="status_ID")
+    def get_status(self) -> Status:
+        return self.get_from_data(key_name="status")
 
     def set_registration_date(self, registration_date: str):
         self.data["registration_date"] = registration_date
