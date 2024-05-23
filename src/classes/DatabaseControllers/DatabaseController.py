@@ -138,6 +138,7 @@ class DatabaseController(metaclass=Singleton):
         data = self.cursor.fetchone()
 
         data["address"] = self.get_address(address_id=data["address"])
+        data["has_blood"] = self.get_has_blood(clinic_id=data["ID"])
 
         return Clinic(data=data) if data is not None else None
 
@@ -188,7 +189,7 @@ class DatabaseController(metaclass=Singleton):
             'SELECT '
             'has_blood."blood_and_comp_ID" AS blood,'
             'has_blood."clinic_ID" AS clinic,'
-            'has_blood."kol" '
+            'has_blood."kol" AS quantity '
             'FROM data_blood.clinic_has_blood_and_comp AS has_blood '
             'WHERE (has_blood."blood_and_comp_ID" = %s OR has_blood."clinic_ID" = %s)'
         )
