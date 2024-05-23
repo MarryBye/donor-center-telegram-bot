@@ -1,4 +1,7 @@
 from src.classes.Datatypes.CRMBaseDataType import CRMBaseDataType
+from src.classes.Datatypes.Gender import Gender
+from src.classes.Datatypes.Telephone import Telephone
+from src.classes.Datatypes.Language import Language
 
 
 class Donor(CRMBaseDataType):
@@ -27,11 +30,11 @@ class Donor(CRMBaseDataType):
     def get_birthdate(self) -> str:
         return self.get_from_data(key_name="date_of_birth")
 
-    def set_gender(self, gender_id: int):
-        self.data["gender_ID"] = gender_id
+    def set_gender(self, gender: Gender):
+        self.data["gender"] = gender
 
-    def get_gender(self) -> int:
-        return self.get_from_data(key_name="gender_ID")
+    def get_gender(self) -> Gender:
+        return self.get_from_data(key_name="gender")
 
     def set_email(self, email: str):
         self.data["email"] = email
@@ -39,10 +42,10 @@ class Donor(CRMBaseDataType):
     def get_email(self) -> str:
         return self.get_from_data(key_name="email")
 
-    def set_telegram(self, telegram_id: int):
+    def set_telegram_id(self, telegram_id: int):
         self.data["telegram_ID"] = telegram_id
 
-    def get_telegram(self) -> int:
+    def get_telegram_id(self) -> int:
         return self.get_from_data(key_name="telegram_ID")
 
     def set_password(self, password: str):
@@ -51,20 +54,14 @@ class Donor(CRMBaseDataType):
     def get_password(self) -> str:
         return self.get_from_data(key_name="password")
 
-    def set_language(self, language_id: int):
-        self.data["language_ID"] = language_id
+    def set_language(self, language: Language):
+        self.data["language"] = language
 
-    def get_language(self) -> int:
-        return self.get_from_data(key_name="language_ID")
+    def get_language(self) -> Language:
+        return self.get_from_data(key_name="language")
 
-    def set_number_id(self, number_id: int):
-        self.data["number_ID"] = number_id
+    def set_telephone(self, telephone: Telephone):
+        self.data["telephone"] = telephone
 
-    def get_number_id(self) -> int:
-        return self.get_from_data(key_name="number_ID")
-
-    def set_number(self, number: str):
-        self.data["number"] = number
-
-    def get_number(self) -> str:
-        return self.get_from_data(key_name="number")
+    def get_telephone(self) -> Telephone:
+        return self.get_from_data(key_name="telephone")
