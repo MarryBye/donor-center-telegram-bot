@@ -4,6 +4,12 @@ import config as cfg
 import json
 
 from src.classes.Singleton import Singleton
+from src.classes.Datatypes.City import City
+from src.classes.Datatypes.Region import Region
+from src.classes.Datatypes.Street import Street
+from src.classes.Datatypes.Area import Area
+from src.classes.Datatypes.Address import Address
+
 from src.funcs.debug_print import debug_print
 
 
@@ -55,44 +61,59 @@ class DatabaseController(metaclass=Singleton):
 
         return 1 if data is None else data["ID"] + 1
 
-    def get_cities(self):
+    def get_city(self, city_id: int | str) -> City | None:
 
-        query = 'SELECT * FROM data_blood.city'
-        self.cursor.execute(query)
-        data = self.cursor.fetchall()
+        query = 'SELECT * FROM data_blood.city AS city WHERE city."ID" = %s'
+        self.cursor.execute(query, (city_id, ))
+        data = self.cursor.fetchone()
 
-        return data if data is not None else []
+        return City(data=data) if data is not None else None
 
-    def get_regions(self):
+    def get_region(self, region_id: int | str) -> Region | None:
 
-        query = 'SELECT * FROM data_blood.region'
-        self.cursor.execute(query)
-        data = self.cursor.fetchall()
+        query = 'SELECT * FROM data_blood.region AS region WHERE region."ID" = %s'
+        self.cursor.execute(query, (region_id, ))
+        data = self.cursor.fetchone()
 
-        return data if data is not None else []
+        return Region(data=data) if data is not None else None
 
-    def get_streets(self):
-        query = 'SELECT * FROM data_blood.street'
-        self.cursor.execute(query)
-        data = self.cursor.fetchall()
+    def get_street(self, street_id: int | str) -> Street | None:
+        query = 'SELECT * FROM data_blood.street AS street WHERE street."ID" = %s'
+        self.cursor.execute(query, (street_id, ))
+        data = self.cursor.fetchone()
 
-        return data if data is not None else []
+        return Street(data=data) if data is not None else None
 
-    def get_areas(self):
+    def get_area(self, area_id: int | str) -> Area | None:
 
-        query = 'SELECT * FROM data_blood.area'
-        self.cursor.execute(query)
-        data = self.cursor.fetchall()
+        query = 'SELECT * FROM data_blood.area AS area WHERE area."ID" = %s'
+        self.cursor.execute(query, (area_id, ))
+        data = self.cursor.fetchone()
 
-        return data if data is not None else []
+        return Area(data=data) if data is not None else None
 
-    def get_addresses(self):
+    def get_address(self, address_id: int | str) -> Address | None:
 
-        query = 'SELECT * FROM data_blood.address'
-        self.cursor.execute(query)
-        data = self.cursor.fetchall()
+        query = (
+            'SELECT '
+            'address."area_ID" AS area, '
+            'address."city_ID" AS city, '
+            'address."region_ID" AS region, '
+            'address."street_ID" AS street, '
+            'address."house_number" AS house '
+            'FROM data_blood.address AS address '
+            'WHERE address."ID" = %s'
+        )
 
-        return data if data is not None else []
+        self.cursor.execute(query, (address_id, ))
+        data = self.cursor.fetchone()
+
+        data["area"] = self.get_area(area_id=data["area"])
+        data["city"] = self.get_city(city_id=data["city"])
+        data["region"] = self.get_region(region_id=data["region"])
+        data["street"] = self.get_street(street_id=data["street"])
+
+        return Address(data=data) if data is not None else None
 
     def get_clinics(self):
 

@@ -1,11 +1,20 @@
-from handlers_imports import *
+# from handlers_imports import *
+# from keyboards_imports import *
+
+from src.classes.DatabaseControllers.DatabaseController import DatabaseController
+from src.classes.DatabaseControllers.DonorsDatabaseController import DonorsDatabaseController
+from src.classes.DatabaseControllers.AppointmentsDatabaseController import AppointmentsDatabaseController
 
 # id_my = 482613937
 
-bot = CRMBot()
+# bot = CRMBot()
+#
+# bot.include_routers()
+#
+# if __name__ == "__main__":
+#     #DatabaseController().setup_database()
+#     asyncio.run(bot.start_bot())
 
-bot.include_routers()
+a = DatabaseController().get_address(address_id=2).get_city().get_city_name()
 
-if __name__ == "__main__":
-    #DatabaseController().setup_database()
-    asyncio.run(bot.start_bot())
+print(a)
