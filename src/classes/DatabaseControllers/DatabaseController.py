@@ -16,6 +16,9 @@ from src.classes.Datatypes.Donor import Donor
 from src.classes.Datatypes.Appointment import Appointment
 from src.classes.Datatypes.Review import Review
 from src.classes.Datatypes.HasBlood import HasBlood
+from src.classes.Datatypes.Gender import Gender
+from src.classes.Datatypes.Telephone import Telephone
+from src.classes.Datatypes.Language import Language
 
 from src.funcs.debug_print import debug_print
 
@@ -184,6 +187,37 @@ class DatabaseController(metaclass=Singleton):
 
         return Review(data=data) if data is not None else None
 
+    def get_gender(self, gender_id: int | str) -> Gender | None:
+
+        query = 'SELECT * FROM donor."gender" AS gender WHERE gender."ID" = %s'
+        self.cursor.execute(query, (gender_id,))
+        data = self.cursor.fetchone()
+
+        return Gender(data=data) if data is not None else None
+
+    def get_language(self, language_id: int | str) -> Language | None:
+
+        query = 'SELECT * FROM donor."language" AS language WHERE language."ID" = %s'
+        self.cursor.execute(query, (language_id,))
+        data = self.cursor.fetchone()
+
+        return Language(data=data) if data is not None else None
+
+    def get_telephone(self, telephone_id: int | str) -> Telephone | None:
+
+        query = (
+            'SELECT '
+            'number."ID",'
+            'number."number" '
+            'FROM number_telephone."donor_number" AS number '
+            'WHERE number."ID" = %s'
+        )
+        self.cursor.execute(query, (telephone_id,))
+        data = self.cursor.fetchone()
+
+        return Telephone(data=data) if data is not None else None
+
+
     def get_has_blood(self, blood_id: int | str = -1, clinic_id: int | str = -1):
 
         query = (
@@ -217,9 +251,16 @@ class DatabaseController(metaclass=Singleton):
 
         query = (
             'SELECT '
-            'donors.*, '
-            'numbers."ID" AS "number_ID", '
-            'numbers.number AS number '
+            'donors."ID",'
+            'donors."name_donor",'
+            'donors."surname_donor",'
+            'donors."date_of_birth",'
+            'donors."gender_ID" AS gender,'
+            'donors."email",'
+            'donors."telegram_ID",'
+            'donors."password",'
+            'donors."language_ID" AS language, '
+            'numbers."ID" AS "telephone" '
             'FROM donor.donor as donors, '
             'number_telephone.donor_number AS numbers '
             'WHERE donors."ID" = numbers."donor_ID" '
@@ -229,6 +270,10 @@ class DatabaseController(metaclass=Singleton):
         self.cursor.execute(query, (db_id, telegram_id, number, email))
 
         data = self.cursor.fetchone()
+
+        data["telephone"] = self.get_telephone(telephone_id=data["telephone"])
+        data["gender"] = self.get_gender(gender_id=data["gender"])
+        data["language"] = self.get_language(language_id=data["language"])
 
         return Donor(data=data) if data is not None else None
 
