@@ -9,6 +9,7 @@ from src.classes.Datatypes.Region import Region
 from src.classes.Datatypes.Street import Street
 from src.classes.Datatypes.Area import Area
 from src.classes.Datatypes.Address import Address
+from src.classes.Datatypes.Clinic import Clinic
 
 from src.funcs.debug_print import debug_print
 
@@ -96,6 +97,7 @@ class DatabaseController(metaclass=Singleton):
 
         query = (
             'SELECT '
+            'address."ID", '
             'address."area_ID" AS area, '
             'address."city_ID" AS city, '
             'address."region_ID" AS region, '
@@ -115,13 +117,24 @@ class DatabaseController(metaclass=Singleton):
 
         return Address(data=data) if data is not None else None
 
-    def get_clinics(self):
+    def get_clinic(self, clinic_id: int | str) -> Clinic | None:
 
-        query = 'SELECT * FROM data_blood.clinic'
-        self.cursor.execute(query)
-        data = self.cursor.fetchall()
+        query = (
+            'SELECT '
+            'clinic."ID", '
+            'clinic."clinic_name" AS clinic_name, '
+            'clinic."address_ID" AS address, '
+            'clinic."working_hours" AS working_hours '
+            'FROM data_blood.clinic AS clinic '
+            'WHERE clinic."ID" = %s'
+        )
 
-        return data if data is not None else []
+        self.cursor.execute(query, (clinic_id, ))
+        data = self.cursor.fetchone()
+
+        data["address"] = self.get_address(address_id=data["address"])
+
+        return Clinic(data=data) if data is not None else None
 
     def get_clinics_by(self, db_id: int = -1, city: int = -1, region: int = -1, street: int = -1, area: int = -1,
                        address: int = -1) -> list:

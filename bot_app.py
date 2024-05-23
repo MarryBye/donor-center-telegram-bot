@@ -15,6 +15,6 @@ from src.classes.DatabaseControllers.AppointmentsDatabaseController import Appoi
 #     #DatabaseController().setup_database()
 #     asyncio.run(bot.start_bot())
 
-a = DatabaseController().get_address(address_id=2).get_city().get_city_name()
+a = DatabaseController().get_clinic(clinic_id=1).get_address().get_city().get_city_name()
 
 print(a)
