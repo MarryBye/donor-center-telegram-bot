@@ -5,9 +5,9 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
 
 from src.classes.CRMBot import CRMBot
-from src.classes.DatabaseControllers.DatabaseController import DatabaseController
-from src.classes.DatabaseControllers.DonorsDatabaseController import DonorsDatabaseController
-from src.classes.DatabaseControllers.AppointmentsDatabaseController import AppointmentsDatabaseController
+from src.classes.Controllers.DatabaseController import DatabaseController
+from src.classes.Controllers.DonorsDatabaseController import DonorsDatabaseController
+from src.classes.Controllers.AppointmentsDatabaseController import AppointmentsDatabaseController
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType, Keyboard
 from src.classes.Form import FormAppointment

@@ -1,7 +1,7 @@
 from aiogram import F
 
 import config as cfg
-from src.classes.DatabaseControllers.DatabaseController import DatabaseController
+from src.classes.Controllers.DatabaseController import DatabaseController
 from src.classes.Keyboards import ReplyKeyboardMarkup, KeyboardButton
 from src.lang.languages import LANGUAGES
 

@@ -1,7 +1,7 @@
 from aiogram import Router
 from aiogram.types import Message
 
-from src.classes.DatabaseControllers.DatabaseController import DatabaseController
+from src.classes.Controllers.DatabaseController import DatabaseController
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
 

@@ -8,3 +8,4 @@ class Telephone(CRMBaseDataType):
 
     def get_number(self) -> str:
         return self.get_from_data(key_name="number")
+

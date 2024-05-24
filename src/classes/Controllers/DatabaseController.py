@@ -12,12 +12,11 @@ from src.classes.Datatypes.Address import Address
 from src.classes.Datatypes.Clinic import Clinic
 from src.classes.Datatypes.Blood import Blood
 from src.classes.Datatypes.Status import Status
-from src.classes.Datatypes.Donor import Donor
+from src.classes.Datatypes.Donor import Donor, Telephone
 from src.classes.Datatypes.Appointment import Appointment
 from src.classes.Datatypes.Review import Review
 from src.classes.Datatypes.HasBlood import HasBlood
 from src.classes.Datatypes.Gender import Gender
-from src.classes.Datatypes.Telephone import Telephone
 from src.classes.Datatypes.Language import Language
 
 from src.funcs.debug_print import debug_print
@@ -71,6 +70,16 @@ class DatabaseController(metaclass=Singleton):
 
         return 1 if data is None else data["ID"] + 1
 
+    def add_cities(self):
+
+        query = 'DELETE FROM data_blood.city'
+        self.cursor.execute(query)
+
+        query = 'INSERT INTO data_blood.city ("ID", "city_name") VALUES (%s, %s)'
+        self.cursor.executemany(query, cfg.CITIES)
+
+        self.connection.commit()
+
     def get_city(self, city_id: int | str) -> City | None:
 
         query = 'SELECT * FROM data_blood.city AS city WHERE city."ID" = %s'
@@ -89,6 +98,16 @@ class DatabaseController(metaclass=Singleton):
             data[i] = City(data=data_component)
 
         return data if data is not None else None
+
+    def add_regions(self):
+
+        query = 'DELETE FROM data_blood.region'
+        self.cursor.execute(query)
+
+        query = 'INSERT INTO data_blood.region ("ID", "region_name") VALUES (%s, %s)'
+        self.cursor.executemany(query, cfg.REGIONS)
+
+        self.connection.commit()
 
     def get_region(self, region_id: int | str) -> Region | None:
 
@@ -109,6 +128,16 @@ class DatabaseController(metaclass=Singleton):
 
         return data if data is not None else None
 
+    def add_streets(self):
+
+        query = 'DELETE FROM data_blood.street'
+        self.cursor.execute(query)
+
+        query = 'INSERT INTO data_blood.street ("ID", "street_name") VALUES (%s, %s)'
+        self.cursor.executemany(query, cfg.STREETS)
+
+        self.connection.commit()
+
     def get_street(self, street_id: int | str) -> Street | None:
         query = 'SELECT * FROM data_blood.street AS street WHERE street."ID" = %s'
         self.cursor.execute(query, (street_id,))
@@ -126,6 +155,16 @@ class DatabaseController(metaclass=Singleton):
             data[i] = City(data=data_component)
 
         return data if data is not None else None
+
+    def add_areas(self):
+
+        query = 'DELETE FROM data_blood.area'
+        self.cursor.execute(query)
+
+        query = 'INSERT INTO data_blood.area ("ID", "area_name") VALUES (%s, %s)'
+        self.cursor.executemany(query, cfg.AREAS)
+
+        self.connection.commit()
 
     def get_area(self, area_id: int | str) -> Area | None:
 
@@ -145,6 +184,17 @@ class DatabaseController(metaclass=Singleton):
             data[i] = City(data=data_component)
 
         return data if data is not None else None
+
+    def add_addresses(self):
+
+        query = 'DELETE FROM data_blood.address'
+        self.cursor.execute(query)
+
+        query = ('INSERT INTO data_blood.address ("ID", "region_ID", "city_ID", "area_ID", "street_ID", '
+                 '"house_number") VALUES (%s, %s, %s, %s, %s, %s)')
+        self.cursor.executemany(query, cfg.ADDRESSES)
+
+        self.connection.commit()
 
     def get_address(self, address_id: int | str) -> Address | None:
 
@@ -196,6 +246,31 @@ class DatabaseController(metaclass=Singleton):
 
         return data if data is not None else None
 
+    def add_clinics(self):
+
+        query = 'DELETE FROM data_blood.clinic'
+        self.cursor.execute(query)
+
+        query = 'DELETE FROM data_blood.clinic_has_blood_and_comp'
+        self.cursor.execute(query)
+
+        query = ('INSERT INTO data_blood.clinic ("ID", "clinic_name", "address_ID", "working_hours") VALUES (%s, %s, '
+                 '%s, %s)')
+        self.cursor.executemany(query, cfg.CLINICS)
+
+        query = ('INSERT INTO data_blood.clinic_has_blood_and_comp ("blood_and_comp_ID", "clinic_ID", "kol") VALUES (%s, %s, '
+                 '%s)')
+
+        query_args = []
+
+        for clinic in cfg.CLINICS:
+            for blood in cfg.BLOODS:
+                query_args.append((blood[0], clinic[0], 0))
+
+        self.cursor.executemany(query, query_args)
+
+        self.connection.commit()
+
     def get_clinic(self, clinic_id: int | str) -> Clinic | None:
 
         query = (
@@ -212,7 +287,7 @@ class DatabaseController(metaclass=Singleton):
         data = self.cursor.fetchone()
 
         data["address"] = self.get_address(address_id=data["address"])
-        #data["has_blood"] = self.get_has_blood(clinic_id=data["ID"])
+        data["has_blood"] = self.get_has_blood(clinic_id=data["ID"])
 
         return Clinic(data=data) if data is not None else None
 
@@ -232,11 +307,21 @@ class DatabaseController(metaclass=Singleton):
         for i, data_component in enumerate(data, start=0):
 
             data_component["address"] = self.get_address(address_id=data_component["address"])
-            # data_component["has_blood"] = self.get_has_blood(clinic_id=data_component["ID"])
+            data_component["has_blood"] = self.get_has_blood(clinic_id=data_component["ID"])
 
             data[i] = Clinic(data=data_component)
 
         return data if data is not None else None
+
+    def add_bloods(self):
+
+        query = 'DELETE FROM data_blood.blood_and_components'
+        self.cursor.execute(query)
+
+        query = 'INSERT INTO data_blood.blood_and_components ("ID", "blood_and_comp_name") VALUES (%s, %s)'
+        self.cursor.executemany(query, cfg.BLOODS)
+
+        self.connection.commit()
 
     def get_blood(self, blood_id: int | str) -> Blood | None:
 
@@ -257,6 +342,16 @@ class DatabaseController(metaclass=Singleton):
             data[i] = Blood(data=data_component)
 
         return data if data is not None else None
+
+    def add_statuses(self):
+
+        query = 'DELETE FROM data_blood.status_appointment'
+        self.cursor.execute(query)
+
+        query = 'INSERT INTO data_blood.status_appointment ("ID", "name_status") VALUES (%s, %s)'
+        self.cursor.executemany(query, cfg.STATUSES)
+
+        self.connection.commit()
 
     def get_status(self, status_id: int | str) -> Status | None:
 
@@ -325,6 +420,16 @@ class DatabaseController(metaclass=Singleton):
 
         return data if data is not None else None
 
+    def add_genders(self):
+
+        query = 'DELETE FROM donor.gender'
+        self.cursor.execute(query)
+
+        query = 'INSERT INTO donor.gender ("ID", "gender_name") VALUES (%s, %s)'
+        self.cursor.executemany(query, cfg.GENDERS)
+
+        self.connection.commit()
+
     def get_gender(self, gender_id: int | str) -> Gender | None:
 
         query = 'SELECT * FROM donor."gender" AS gender WHERE gender."ID" = %s'
@@ -343,6 +448,16 @@ class DatabaseController(metaclass=Singleton):
             data[i] = Gender(data=data_component)
 
         return data if data is not None else None
+
+    def add_languages(self):
+
+        query = 'DELETE FROM donor.language'
+        self.cursor.execute(query)
+
+        query = 'INSERT INTO donor.language ("ID", "lang_name") VALUES (%s, %s)'
+        self.cursor.executemany(query, cfg.LANGUAGES)
+
+        self.connection.commit()
 
     def get_language(self, language_id: int | str) -> Language | None:
 
@@ -368,6 +483,7 @@ class DatabaseController(metaclass=Singleton):
         query = (
             'SELECT '
             'number."ID",'
+            'number."donor_ID" AS donor, '
             'number."number" '
             'FROM number_telephone."donor_number" AS number '
             'WHERE number."ID" = %s'
@@ -377,7 +493,7 @@ class DatabaseController(metaclass=Singleton):
 
         return Telephone(data=data) if data is not None else None
 
-    def get_telephones(self, n=-1) -> list[Gender] | None:
+    def get_telephones(self, n=-1) -> list[Telephone] | None:
 
         query = 'SELECT * FROM number_telephone."donor_number"'
         self.cursor.execute(query)
@@ -388,7 +504,7 @@ class DatabaseController(metaclass=Singleton):
 
         return data if data is not None else None
 
-    def get_has_blood(self, blood_id: int | str = -1, clinic_id: int | str = -1):
+    def get_has_blood(self, blood_id: int | str = -1, clinic_id: int | str = -1) -> list[HasBlood] | None:
 
         query = (
             'SELECT '
@@ -400,12 +516,15 @@ class DatabaseController(metaclass=Singleton):
         )
         self.cursor.execute(query, (blood_id, clinic_id))
 
-        data = self.cursor.fetchone()
+        data = self.cursor.fetchall()
 
-        data["blood"] = self.get_blood(blood_id=data["blood"])
-        data["clinic"] = self.get_clinic(clinic_id=data["clinic"])
+        for i, data_component in enumerate(data, start=0):
 
-        return HasBlood(data=data) if data is not None else None
+            data_component["blood"] = self.get_blood(blood_id=data_component["blood"])
+
+            data[i] = HasBlood(data=data_component)
+
+        return data if data is not None else None
 
     def get_donor(self, db_id: int = -1, telegram_id: int = -1, number: str = "-1", email: str = "-1") -> Donor | None:
         """
@@ -478,7 +597,7 @@ class DatabaseController(metaclass=Singleton):
 
         return data if data is not None else None
 
-    def get_donor_appointment(self, donor: Donor, only_last: bool = True, n: int=-1) -> Appointment | list[Appointment] | None:
+    def get_donor_appointment(self, donor: Donor, only_last: bool = True, n: int = -1) -> Appointment | list[Appointment] | None:
 
         """
         Сформировать объект ``Appointment`` по данным из БД, если донор существует. В качестве параметра принимает:
@@ -566,108 +685,6 @@ class DatabaseController(metaclass=Singleton):
             data[i] = Appointment(data=data_component)
 
         return data if data is not None else None
-
-    def add_bloods(self):
-
-        query = 'DELETE FROM data_blood.blood_and_components'
-        self.cursor.execute(query)
-
-        query = 'INSERT INTO data_blood.blood_and_components ("ID", "blood_and_comp_name") VALUES (%s, %s)'
-        self.cursor.executemany(query, cfg.BLOODS)
-
-        self.connection.commit()
-
-    def add_languages(self):
-
-        query = 'DELETE FROM donor.language'
-        self.cursor.execute(query)
-
-        query = 'INSERT INTO donor.language ("ID", "lang_name") VALUES (%s, %s)'
-        self.cursor.executemany(query, cfg.LANGUAGES)
-
-        self.connection.commit()
-
-    def add_cities(self):
-
-        query = 'DELETE FROM data_blood.city'
-        self.cursor.execute(query)
-
-        query = 'INSERT INTO data_blood.city ("ID", "city_name") VALUES (%s, %s)'
-        self.cursor.executemany(query, cfg.CITIES)
-
-        self.connection.commit()
-
-    def add_regions(self):
-
-        query = 'DELETE FROM data_blood.region'
-        self.cursor.execute(query)
-
-        query = 'INSERT INTO data_blood.region ("ID", "region_name") VALUES (%s, %s)'
-        self.cursor.executemany(query, cfg.REGIONS)
-
-        self.connection.commit()
-
-    def add_streets(self):
-
-        query = 'DELETE FROM data_blood.street'
-        self.cursor.execute(query)
-
-        query = 'INSERT INTO data_blood.street ("ID", "street_name") VALUES (%s, %s)'
-        self.cursor.executemany(query, cfg.STREETS)
-
-        self.connection.commit()
-
-    def add_areas(self):
-
-        query = 'DELETE FROM data_blood.area'
-        self.cursor.execute(query)
-
-        query = 'INSERT INTO data_blood.area ("ID", "area_name") VALUES (%s, %s)'
-        self.cursor.executemany(query, cfg.AREAS)
-
-        self.connection.commit()
-
-    def add_addresses(self):
-
-        query = 'DELETE FROM data_blood.address'
-        self.cursor.execute(query)
-
-        query = ('INSERT INTO data_blood.address ("ID", "region_ID", "city_ID", "area_ID", "street_ID", '
-                 '"house_number") VALUES (%s, %s, %s, %s, %s, %s)')
-        self.cursor.executemany(query, cfg.ADDRESSES)
-
-        self.connection.commit()
-
-    def add_statuses(self):
-
-        query = 'DELETE FROM data_blood.status_appointment'
-        self.cursor.execute(query)
-
-        query = 'INSERT INTO data_blood.status_appointment ("ID", "name_status") VALUES (%s, %s)'
-        self.cursor.executemany(query, cfg.STATUSES)
-
-        self.connection.commit()
-
-    def add_genders(self):
-
-        query = 'DELETE FROM donor.gender'
-        self.cursor.execute(query)
-
-        query = 'INSERT INTO donor.gender ("ID", "gender_name") VALUES (%s, %s)'
-        self.cursor.executemany(query, cfg.GENDERS)
-
-        self.connection.commit()
-
-    def add_clinics(self):
-
-        query = 'DELETE FROM data_blood.clinic'
-        self.cursor.execute(query)
-
-        query = ('INSERT INTO data_blood.clinic ("ID", "clinic_name", "address_ID", "working_hours") VALUES (%s, %s, '
-                 '%s, %s)')
-        self.cursor.executemany(query, cfg.CLINICS)
-
-        self.connection.commit()
 
     def add_admins(self):
 

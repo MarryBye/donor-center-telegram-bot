@@ -8,7 +8,7 @@ from aiogram.fsm.context import FSMContext
 from src.funcs.core import pressed_button, message_translate
 
 from src.classes.Form import Feedback
-from src.classes.DatabaseControllers.DatabaseController import DatabaseController
+from src.classes.Controllers.DatabaseController import DatabaseController
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
 

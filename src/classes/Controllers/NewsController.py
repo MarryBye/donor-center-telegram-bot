@@ -3,7 +3,7 @@ import psycopg2.extras as psql_extra
 
 from datetime import datetime
 from src.funcs.core import message_translate
-from src.classes.DatabaseControllers.DatabaseController import DatabaseController
+from src.classes.Controllers.DatabaseController import DatabaseController
 
 
 class News:

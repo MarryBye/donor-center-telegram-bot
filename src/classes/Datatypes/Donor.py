@@ -1,7 +1,7 @@
 from src.classes.Datatypes.CRMBaseDataType import CRMBaseDataType
 from src.classes.Datatypes.Gender import Gender
-from src.classes.Datatypes.Telephone import Telephone
 from src.classes.Datatypes.Language import Language
+from src.classes.Datatypes.Telephone import Telephone
 
 
 class Donor(CRMBaseDataType):

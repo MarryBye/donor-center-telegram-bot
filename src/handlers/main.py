@@ -6,9 +6,9 @@ from aiogram.enums import ParseMode
 from aiogram.fsm.context import FSMContext
 
 from src.classes.Form import Feedback
-from src.classes.DatabaseControllers.NewsController import NewsDatabase
-from src.classes.DatabaseControllers.DatabaseController import DatabaseController
-from src.classes.DatabaseControllers.DonorsDatabaseController import DonorsDatabaseController
+from src.classes.Controllers.NewsController import NewsDatabase
+from src.classes.Controllers.DatabaseController import DatabaseController
+from src.classes.Controllers.DonorsDatabaseController import DonorsDatabaseController
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
 

@@ -1,4 +1,4 @@
-from src.classes.DatabaseControllers.DatabaseController import DatabaseController
+from src.classes.Controllers.DatabaseController import DatabaseController
 from src.classes.Datatypes.Appointment import Appointment
 from src.classes.Datatypes.Donor import Donor
 from src.classes.TerminalColors import TerminalColors

@@ -3,7 +3,7 @@ import config as cfg
 from aiogram import Bot, Dispatcher
 from aiogram.types import ReplyKeyboardRemove
 
-from src.classes.DatabaseControllers.DatabaseController import DatabaseController
+from src.classes.Controllers.DatabaseController import DatabaseController
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, Keyboard, KeyboardName, KeyboardType
 from src.classes.Singleton import Singleton
