@@ -31,13 +31,15 @@ async def main_handler(msg: Message, state: FSMContext):
     if await state.get_state() is not None:
         await state.clear()
 
-        new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.MAIN, keyboard_type=KeyboardType.REPLY,
-                                       language_name=user_language)
-        bot_message = message_translate(message_name="CANCELLED_STATE", language_name=user_language)
+        await bot.answer(
+            user_id=user_id,
+            text="CANCELLED_STATE",
+            keyboard_name=KeyboardName.MAIN,
+            keyboard_type=KeyboardType.REPLY,
+            language_name=user_language
+        )
 
-        await msg.reply(text=bot_message, reply_markup=new_keyboard)
-
-    debug_print("User", user_id, "has cancelled last command!")
+        debug_print("User", user_id, "has cancelled last command!")
 
 
 @router.message(Command("notify_all"))

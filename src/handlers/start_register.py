@@ -47,7 +47,7 @@ async def main_handler(msg: Message, state: FSMContext):
         return False
 
     donor_data = Donor()
-    donor_data.set_telegram(telegram_id=user_id)
+    donor_data.set_telegram_id(telegram_id=user_id)
 
     db.set_user_notifications(user_id=user_id, option=True)
     db.set_user_language(user_id=user_id, language=cfg.DEFAULT_LANGUAGE, only_cache=True)
@@ -71,7 +71,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     user_language = call.data
 
     donor_data = await state.get_data()
-    donor_data["donor_data"].set_language(language_id=language_name_to_id(user_language))
+    donor_data["donor_data"].set_language(language=language_name_to_id(user_language))
 
     db.set_user_language(user_id=user_id, language=user_language, only_cache=True)
 

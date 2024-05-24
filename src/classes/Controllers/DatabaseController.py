@@ -124,7 +124,7 @@ class DatabaseController(metaclass=Singleton):
         data = self.cursor.fetchmany(n)
 
         for i, data_component in enumerate(data, start=0):
-            data[i] = City(data=data_component)
+            data[i] = Region(data=data_component)
 
         return data if data is not None else None
 

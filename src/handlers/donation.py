@@ -33,9 +33,10 @@ async def main_handler(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
-    donor = db_donors.get_donor_by(telegram_id=user_id)
+    donor = db.get_donor(telegram_id=user_id)
+    last_appointment = db.get_donor_appointment(donor=donor, only_last=True)
 
-    if not db_appointments.get_donor_appointments(donor=donor, need_status=3, only_last=True).is_empty():
+    if last_appointment is None or last_appointment.get_status().get_name_status() == "Waiting":
 
         await bot.answer(
             user_id=user_id,
@@ -47,6 +48,7 @@ async def main_handler(msg: Message, state: FSMContext):
 
         return False
 
+    await state.update_data(donor=donor)
     await state.set_state(FormAppointment.registerAppointment_city)
 
     await bot.answer(
@@ -93,13 +95,21 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
 
     data = await state.get_data()
 
-    clinics = db.get_clinics_by(city=data["city_id"], region=data["region_id"])
+    all_clinics = db.get_clinics()
+    regional_clinics = []
+
+    for clinic in all_clinics:
+        clinic_address = clinic.get_address()
+        clinic_region, clinic_city = clinic_address.get_region(), clinic_address.get_city()
+
+        if clinic_region.get_id() == data["region_id"] and clinic_city.get_id() == data["city_id"]:
+            regional_clinics.append(clinic)
 
     kb_scheme = []
     kb_scheme_row = []
-    for i, clinic in enumerate(clinics, start=0):
-        kb_scheme_row.append({clinic["clinic_name"]: {"callback_data": str(clinic["ID"])}})
-        if i % 3 == 0 or i >= len(clinics) - 1:
+    for i, clinic in enumerate(regional_clinics, start=0):
+        kb_scheme_row.append({clinic.get_clinic_name(): {"callback_data": str(clinic.get_id())}})
+        if i % 3 == 0 or i >= len(regional_clinics) - 1:
             kb_scheme.append(kb_scheme_row)
             kb_scheme_row = []
 
@@ -125,15 +135,18 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     user_id = call.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
-    clinic = db.get_clinics_by(db_id=int(call.data))[0]
-    donor = db_donors.get_donor_by(telegram_id=user_id)
+    data = await state.get_data()
+
+    clinic = db.get_clinic(clinic_id=call.data)
+    donor = data["donor"]
+
     date = datetime.now()
 
     new_appointment = Appointment()
     new_appointment.set_id(db.get_next_row_id("data_blood.appointment"))
-    new_appointment.set_clinic_id(clinic_id=clinic["ID"])
-    new_appointment.set_status_id(status_id=3)
-    new_appointment.set_donor_number_id(donor_number_id=donor.get_number_id())
+    new_appointment.set_clinic(clinic=clinic)
+    new_appointment.set_status(status=db.get_status(status_id=3))
+    new_appointment.set_donor(donor=donor)
     new_appointment.set_registration_date(f"{date.day}-{date.month}-{date.year}")
     new_appointment.set_appointment_date(appointment_date="19-05-2024")
     new_appointment.set_analysis_file_path(analysis_file_path=f"{donor.get_id()}%{clinic['ID']}%{date.day}{date.month}{date.year}.txt")
@@ -185,7 +198,7 @@ async def main_handler(msg: Message):
 
     if all_appointments:
         for appointment in all_appointments:
-            history_text += f"{appointment.get_id()}: центр {appointment.get_clinic_id()}, статус: {appointment.get_status_id()}\n"
+            history_text += f"{appointment.get_id()}: центр {appointment.get_clinic_id()}, статус: {appointment.get_status()}\n"
         quantity_appointments = len(all_appointments)
 
     new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.DONATION, keyboard_type=KeyboardType.REPLY,
