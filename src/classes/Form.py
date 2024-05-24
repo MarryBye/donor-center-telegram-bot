@@ -11,6 +11,10 @@ class Form(StatesGroup):
     registerUser_email = State()
 
 
+class ChooseLanguage(StatesGroup):
+    chooseLanguage = State()
+
+
 class FormAppointment(StatesGroup):
     registerAppointment_city = State()
     registerAppointment_region = State()

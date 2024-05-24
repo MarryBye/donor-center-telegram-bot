@@ -1,12 +1,21 @@
 from src.classes.Keyboards import Keyboard, KeyboardController, KeyboardName
+from src.classes.Controllers.DatabaseController import DatabaseController
 
 kb = KeyboardController()
+db = DatabaseController()
 
-kb_scheme = [
-    [{"LANGUAGES_MENU_UK": {}}, {"LANGUAGES_MENU_EN": {}}, {"LANGUAGES_MENU_RU": {}}],
-    [{"LANGUAGES_MENU_DE": {}}, {"LANGUAGES_MENU_CN": {}}, {"LANGUAGES_MENU_FR": {}}],
-    [{"BUTTON_HOME": {}}]
-]
+languages = db.get_languages()
+
+kb_scheme = []
+
+kb_scheme_row = []
+for i, language in enumerate(languages, start=0):
+    kb_scheme_row.append({language.get_lang_name(): {"callback_data": str(language.get_id())}})
+    if i % 3 == 0 or i >= len(languages) - 1:
+        kb_scheme.append(kb_scheme_row)
+        kb_scheme_row = []
+
+kb_scheme.append([{"BUTTON_HOME": {}}])
 
 keyboard = Keyboard(keyboard_scheme=kb_scheme)
 kb.add_keyboard(keyboard_name=KeyboardName.LANGUAGES, keyboard=keyboard)

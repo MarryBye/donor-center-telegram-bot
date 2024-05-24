@@ -4,6 +4,7 @@ import config as cfg
 import json
 
 from src.classes.Singleton import Singleton
+
 from src.classes.Datatypes.City import City
 from src.classes.Datatypes.Region import Region
 from src.classes.Datatypes.Street import Street
@@ -18,6 +19,9 @@ from src.classes.Datatypes.Review import Review
 from src.classes.Datatypes.HasBlood import HasBlood
 from src.classes.Datatypes.Gender import Gender
 from src.classes.Datatypes.Language import Language
+
+from src.classes.Crypto import CryptoSHA256
+from src.classes.TerminalColors import TerminalColors
 
 from src.funcs.debug_print import debug_print
 
@@ -467,7 +471,7 @@ class DatabaseController(metaclass=Singleton):
 
         return Language(data=data) if data is not None else None
 
-    def get_languages(self, n=-1) -> list[Gender] | None:
+    def get_languages(self, n=-1) -> list[Language] | None:
 
         query = 'SELECT * FROM donor."language"'
         self.cursor.execute(query)
@@ -526,6 +530,67 @@ class DatabaseController(metaclass=Singleton):
 
         return data if data is not None else None
 
+    def add_donor(self, donor: Donor) -> bool:
+
+        """
+        Регистрация донора и добавление его в БД если его в ней нет. В качестве аргумента принимает:
+        - ``donor`` - объект ``Donor`` с информацией про нового донора.\n
+        В случае успешного выполнения будет возвращено значение ``True``, в ином случае ``False``.
+        """
+
+        new_donor_id = self.get_next_row_id(table="donor.donor")
+        new_telephone_id = self.get_next_row_id(table="number_telephone.donor_number")
+
+        try:
+
+            query = (
+                'INSERT INTO '
+                'donor.donor ("ID", "name_donor", "surname_donor", "date_of_birth", "gender_ID", "email", "telegram_ID", "password", "language_ID") '
+                'VALUES '
+                '(%s, %s, %s, %s, %s, %s, %s, %s, %s)'
+            )
+            self.cursor.execute(query, (
+                new_donor_id,
+                donor.get_name(),
+                donor.get_surname(),
+                donor.get_birthdate(),
+                donor.get_gender().get_id(),
+                donor.get_email(),
+                donor.get_telegram_id(),
+                CryptoSHA256.crypt(string=donor.get_password(), salt=donor.get_email()),
+                donor.get_language().get_id()
+                )
+            )
+
+            debug_print("Donor has inserted into database!")
+
+            query = (
+                'INSERT INTO '
+                'number_telephone.donor_number ("ID", "donor_ID", "number") '
+                'VALUES '
+                '(%s, %s, %s)'
+            )
+            self.cursor.execute(query, (
+                new_telephone_id,
+                new_donor_id,
+                donor.get_telephone().get_number()
+                )
+            )
+
+            self.connection.commit()
+
+            debug_print("Donor telephone has inserted into database!")
+
+            debug_print("Donor has successfully registered!")
+
+            return True
+
+        except Exception as e:
+
+            debug_print(f"Donor can`t be registered! Error: \n{e}", color=TerminalColors.FAIL)
+
+            return False
+
     def get_donor(self, db_id: int = -1, telegram_id: int = -1, number: str = "-1", email: str = "-1") -> Donor | None:
         """
         Сформировать объект ``Donor`` по данным из БД. В качестве параметров передается одно из или несколько следующих
@@ -560,11 +625,15 @@ class DatabaseController(metaclass=Singleton):
 
         data = self.cursor.fetchone()
 
-        data["telephone"] = self.get_telephone(telephone_id=data["telephone"])
-        data["gender"] = self.get_gender(gender_id=data["gender"])
-        data["language"] = self.get_language(language_id=data["language"])
+        if data is not None:
 
-        return Donor(data=data) if data is not None else None
+            data["telephone"] = self.get_telephone(telephone_id=data["telephone"])
+            data["gender"] = self.get_gender(gender_id=data["gender"])
+            data["language"] = self.get_language(language_id=data["language"])
+
+            return Donor(data=data)
+
+        return None
 
     def get_donors(self, n=-1) -> list[Donor] | None:
 

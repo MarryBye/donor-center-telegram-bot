@@ -88,12 +88,12 @@
         "FEEDBACK_MENU_MAIL": "📧 Leave Email Address",
         "FEEDBACK_MENU_NEED_OPERATOR": "🎧 Talk to an Operator",
 
-        "LANGUAGES_MENU_UK": "🇺🇦 Ukrainian",
-        "LANGUAGES_MENU_EN": "🇬🇧 English",
-        "LANGUAGES_MENU_RU": "🇷🇺 Russian",
-        "LANGUAGES_MENU_DE": "🇩🇪 German",
-        "LANGUAGES_MENU_CN": "🇨🇳 Chinese",
-        "LANGUAGES_MENU_FR": "🇫🇷 French",
+        "uk-UK": "🇺🇦 Українська",
+        "en-EN": "🇬🇧 English",
+        "ru-RU": "🇷🇺 Русский",
+        "de-DE": "🇩🇪 Deutsch",
+        "cn-CN": "🇨🇳 中国人",
+        "fr-FR": "🇫🇷 Français",
 
         "EDIT_PROFILE": "Edit",
         "EDIT_PROFILE_NAME": "Edit Name",

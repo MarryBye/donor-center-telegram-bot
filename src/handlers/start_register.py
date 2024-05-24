@@ -15,6 +15,7 @@ from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
 from src.classes.Form import Form
 from src.classes.Datatypes.Donor import Donor
+from src.classes.Datatypes.Telephone import Telephone
 
 from src.funcs.core import language_name_to_id, gender_name_to_id
 
@@ -34,7 +35,7 @@ async def main_handler(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
-    if not donors_db.get_donor_by(telegram_id=user_id).is_empty():
+    if db.get_donor(telegram_id=user_id) is not None:
 
         await bot.answer(
             user_id=user_id,
@@ -46,13 +47,10 @@ async def main_handler(msg: Message, state: FSMContext):
 
         return False
 
-    donor_data = Donor()
-    donor_data.set_telegram_id(telegram_id=user_id)
-
     db.set_user_notifications(user_id=user_id, option=True)
     db.set_user_language(user_id=user_id, language=cfg.DEFAULT_LANGUAGE, only_cache=True)
 
-    await state.update_data(donor_data=donor_data)
+    await state.update_data(telegram_ID=user_id)
     await state.set_state(Form.registerUser_language)
 
     await bot.answer(
@@ -68,14 +66,11 @@ async def main_handler(msg: Message, state: FSMContext):
 async def main_handler(call: CallbackQuery, state: FSMContext):
 
     user_id = call.from_user.id
-    user_language = call.data
+    user_language = db.get_language(language_id=call.data)
 
-    donor_data = await state.get_data()
-    donor_data["donor_data"].set_language(language=language_name_to_id(user_language))
+    db.set_user_language(user_id=user_id, language=user_language.get_lang_name(), only_cache=True)
 
-    db.set_user_language(user_id=user_id, language=user_language, only_cache=True)
-
-    await state.update_data(donor_data=donor_data["donor_data"])
+    await state.update_data(language=user_language)
     await state.set_state(Form.registerUser_contact)
 
     await bot.edit_message_reply_markup(
@@ -89,7 +84,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
         text="REGISTER_STEP_1",
         keyboard_name=KeyboardName.MSG_SHARECONTACT,
         keyboard_type=KeyboardType.REPLY,
-        language_name=user_language
+        language_name=user_language.get_lang_name()
     )
 
 
@@ -115,16 +110,13 @@ async def main_handler(msg: Message, state: FSMContext):
 
         return False
 
-    user_phone = user_contact.phone_number
+    user_telephone = Telephone(data={"number": user_contact.phone_number})
     user_firstname = user_contact.first_name or "NODATA"
     user_lastname = user_contact.last_name or "NODATA"
 
-    donor_data = await state.get_data()
-    donor_data["donor_data"].set_name(name=user_firstname)
-    donor_data["donor_data"].set_surname(surname=user_lastname)
-    donor_data["donor_data"].set_number(number=user_phone)
-
-    await state.update_data(donor_data=donor_data["donor_data"])
+    await state.update_data(name_donor=user_firstname)
+    await state.update_data(surname_donor=user_lastname)
+    await state.update_data(telephone=user_telephone)
     await state.set_state(Form.registerUser_birthday)
 
     await bot.answer(
@@ -158,10 +150,7 @@ async def main_handler(msg: Message, state: FSMContext):
 
         return False
 
-    donor_data = await state.get_data()
-    donor_data["donor_data"].set_birthdate(birthdate=user_birthday)
-
-    await state.update_data(donor_data=donor_data["donor_data"])
+    await state.update_data(date_of_birth=user_birthday)
     await state.set_state(Form.registerUser_gender)
 
     await bot.answer(
@@ -182,10 +171,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     user_language = db.get_user_language(user_id=user_id)
     user_gender = call.data
 
-    donor_data = await state.get_data()
-    donor_data["donor_data"].set_gender(gender_id=gender_name_to_id(user_gender))
-
-    await state.update_data(donor_data=donor_data["donor_data"])
+    await state.update_data(gender=db.get_gender(gender_id=user_gender))
     await state.set_state(Form.registerUser_email)
 
     await bot.edit_message_reply_markup(
@@ -223,10 +209,7 @@ async def main_handler(msg: Message, state: FSMContext):
 
         return False
 
-    donor_data = await state.get_data()
-    donor_data["donor_data"].set_email(email=user_email)
-
-    await state.update_data(donor_data=donor_data["donor_data"])
+    await state.update_data(email=user_email)
     await state.set_state(Form.registerUser_password)
 
     await bot.answer(
@@ -260,10 +243,14 @@ async def main_handler(msg: Message, state: FSMContext):
 
         return False
 
-    donor_data = await state.get_data()
-    donor_data["donor_data"].set_password(password=user_password)
+    await state.update_data(password=user_password)
+    await state.set_state(Form.registerUser_password)
 
-    donors_db.register_donor(donor=donor_data["donor_data"])
+    data = await state.get_data()
+
+    donor_form = Donor(data=data)
+
+    db.add_donor(donor=donor_form)
 
     await state.clear()
 
