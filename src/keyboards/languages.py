@@ -15,7 +15,5 @@ for i, language in enumerate(languages, start=0):
         kb_scheme.append(kb_scheme_row)
         kb_scheme_row = []
 
-kb_scheme.append([{"BUTTON_HOME": {}}])
-
 keyboard = Keyboard(keyboard_scheme=kb_scheme)
 kb.add_keyboard(keyboard_name=KeyboardName.LANGUAGES, keyboard=keyboard)

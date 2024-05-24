@@ -3,8 +3,7 @@ from src.classes.Keyboards import Keyboard, KeyboardController, KeyboardName
 kb = KeyboardController()
 
 kb_scheme = [
-    [{"NOTIFICATIONS_MENU_ON": {}}, {"NOTIFICATIONS_MENU_OFF": {}}],
-    [{"BUTTON_HOME": {}}]
+    [{"NOTIFICATIONS_MENU_ON": {"callback_data": "True"}}, {"NOTIFICATIONS_MENU_OFF": {"callback_data": "False"}}]
 ]
 
 keyboard = Keyboard(keyboard_scheme=kb_scheme)

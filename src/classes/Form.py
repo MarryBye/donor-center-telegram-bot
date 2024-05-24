@@ -12,7 +12,11 @@ class Form(StatesGroup):
 
 
 class ChooseLanguage(StatesGroup):
-    chooseLanguage = State()
+    choose_language = State()
+
+
+class ChooseNotifications(StatesGroup):
+    choose_notification = State()
 
 
 class FormAppointment(StatesGroup):

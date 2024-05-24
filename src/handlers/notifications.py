@@ -1,11 +1,16 @@
 from aiogram import Router
-from aiogram.types import Message
+from aiogram.types import Message, CallbackQuery
+from aiogram.fsm.context import FSMContext
 
+from src.classes.CRMBot import CRMBot
 from src.classes.Controllers.DatabaseController import DatabaseController
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
+from src.classes.Form import ChooseNotifications
 
-from src.funcs.core import pressed_button, message_translate
+from src.funcs.core import pressed_button, message_translate, sent_callback
+
+bot = CRMBot()
 
 db = DatabaseController()
 hnd = HandlersController()
@@ -14,32 +19,30 @@ kb = KeyboardController()
 router = Router(name="NOTIFICATIONS ROUTER")
 
 
-@router.message(pressed_button(button_name="NOTIFICATIONS_MENU_ON"))
-async def main_handler(msg: Message):
-    user_id = msg.from_user.id
+@router.callback_query(ChooseNotifications.choose_notification)
+async def main_handler(call: CallbackQuery, state: FSMContext):
+
+    user_id = call.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
-    db.set_user_notifications(user_id=user_id, option=True)
+    notify_status = True if call.data == "True" else False
 
-    new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.MAIN, keyboard_type=KeyboardType.REPLY,
-                                   language_name=user_language)
-    bot_message = message_translate(message_name="NOTIFICATIONS_ON", language_name=user_language)
+    db.set_user_notifications(user_id=user_id, option=notify_status)
 
-    await msg.reply(text=bot_message, reply_markup=new_keyboard)
+    await state.clear()
 
+    await bot.edit_message_reply_markup(
+        chat_id=call.from_user.id,
+        message_id=call.message.message_id,
+        reply_markup=None
+    )
 
-@router.message(pressed_button(button_name="NOTIFICATIONS_MENU_OFF"))
-async def main_handler(msg: Message):
-    user_id = msg.from_user.id
-    user_language = db.get_user_language(user_id=user_id)
-
-    db.set_user_notifications(user_id=user_id, option=False)
-
-    new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.MAIN, keyboard_type=KeyboardType.REPLY,
-                                   language_name=user_language)
-    bot_message = message_translate(message_name="NOTIFICATIONS_ON", language_name=user_language)
-
-    await msg.reply(text=bot_message, reply_markup=new_keyboard)
-
+    await bot.answer(
+        user_id=user_id,
+        text="NOTIFICATIONS_ON" if notify_status else "NOTIFICATIONS_OFF",
+        keyboard_name=KeyboardName.MAIN,
+        keyboard_type=KeyboardType.REPLY,
+        language_name=user_language
+    )
 
 hnd.add_router(router)
