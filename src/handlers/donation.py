@@ -1,5 +1,3 @@
-import datetime
-
 from aiogram import Router
 from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
@@ -12,7 +10,7 @@ from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType, Keyboard
 from src.classes.Form import FormAppointment
 from src.classes.Datatypes.Appointment import Appointment
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from src.funcs.core import pressed_button, message_translate
 
@@ -36,7 +34,7 @@ async def main_handler(msg: Message, state: FSMContext):
     donor = db.get_donor(telegram_id=user_id)
     last_appointment = db.get_donor_appointment(donor=donor, only_last=True)
 
-    if last_appointment is None or last_appointment.get_status().get_name_status() == "Waiting":
+    if last_appointment is not None and last_appointment.get_status().get_name_status() == "Waiting":
 
         await bot.answer(
             user_id=user_id,
@@ -102,8 +100,26 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
         clinic_address = clinic.get_address()
         clinic_region, clinic_city = clinic_address.get_region(), clinic_address.get_city()
 
-        if clinic_region.get_id() == data["region_id"] and clinic_city.get_id() == data["city_id"]:
+        if str(clinic_region.get_id()) == data["region_id"] and str(clinic_city.get_id()) == data["city_id"]:
             regional_clinics.append(clinic)
+
+    if len(regional_clinics) == 0:
+        state.clear()
+        await bot.edit_message_reply_markup(
+            chat_id=call.from_user.id,
+            message_id=call.message.message_id,
+            reply_markup=None
+        )
+
+        await bot.answer(
+            user_id=user_id,
+            text="DONATION_SELECT_CLINIC",
+            keyboard_name=KeyboardName.DONATION,
+            keyboard_type=KeyboardType.REPLY,
+            language_name=user_language
+        )
+
+        return False
 
     kb_scheme = []
     kb_scheme_row = []
@@ -140,18 +156,19 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     clinic = db.get_clinic(clinic_id=call.data)
     donor = data["donor"]
 
-    date = datetime.now()
+    register_date = datetime.now()
+    appointment_date = register_date + timedelta(days=7)
 
     new_appointment = Appointment()
     new_appointment.set_id(db.get_next_row_id("data_blood.appointment"))
     new_appointment.set_clinic(clinic=clinic)
     new_appointment.set_status(status=db.get_status(status_id=3))
     new_appointment.set_donor(donor=donor)
-    new_appointment.set_registration_date(f"{date.day}-{date.month}-{date.year}")
-    new_appointment.set_appointment_date(appointment_date="19-05-2024")
-    new_appointment.set_analysis_file_path(analysis_file_path=f"{donor.get_id()}%{clinic['ID']}%{date.day}{date.month}{date.year}.txt")
+    new_appointment.set_registration_date(registration_date=register_date)
+    new_appointment.set_appointment_date(appointment_date=appointment_date)
+    new_appointment.set_analysis_file_path(analysis_file_path=f"{donor.get_id()}%{clinic.get_id()}%{register_date.day}{register_date.month}{register_date.year}.txt")
 
-    db_appointments.register_donor_appointment(donor=donor, appointment=new_appointment)
+    db.register_appointment(donor=donor, appointment=new_appointment)
 
     await state.clear()
 
@@ -175,7 +192,18 @@ async def main_handler(msg: Message):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
-    clinics_text = "\n".join([" - ".join(list(map(str, clinic.values()))) for clinic in db.get_clinics()])
+    clinics = [clinic for clinic in db.get_clinics()]
+
+    clinics_text = ""
+
+    for clinic in clinics:
+        address = clinic.get_address()
+        region = address.get_region().get_region_name()
+        city = address.get_city().get_city_name()
+        street = address.get_street().get_street_name()
+        area = address.get_area().get_area_name()
+        house = address.get_house_number()
+        clinics_text += f"#{clinic.get_id()}: {clinic.get_clinic_name()}\nАдреса: м. {city}, {region}, вул. {street}, площа {area}, будинок №{house}\n\n"
 
     new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.DONATION, keyboard_type=KeyboardType.REPLY,
                                    language_name=user_language)
@@ -190,15 +218,26 @@ async def main_handler(msg: Message):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
-    donor = db_donors.get_donor_by(telegram_id=user_id)
-    all_appointments = db_appointments.get_donor_appointments(donor=donor, only_last=False)
+    donor = db.get_donor(telegram_id=user_id)
+    all_appointments = db.get_donor_appointment(donor=donor, only_last=False)
 
     history_text = ""
     quantity_appointments = 0
 
     if all_appointments:
         for appointment in all_appointments:
-            history_text += f"{appointment.get_id()}: центр {appointment.get_clinic_id()}, статус: {appointment.get_status()}\n"
+            clinic = appointment.get_clinic()
+            address = clinic.get_address()
+            region = address.get_region().get_region_name()
+            city = address.get_city().get_city_name()
+            street = address.get_street().get_street_name()
+            area = address.get_area().get_area_name()
+            house = address.get_house_number()
+            clinic_name = clinic.get_clinic_name()
+            status_name = appointment.get_status().get_name_status()
+            registration_date = appointment.get_registration_date()
+            appointment_date = appointment.get_appointment_date()
+            history_text += f"№{appointment.get_id()}\nДата реєстрації: {registration_date}\nДата прийому: {appointment_date}\nЦентр: '{clinic_name}, Адреса: м. {city}, {region}, вул. {street}, площа {area}, будинок №{house}'\nСтатус: {status_name}\n\n"
         quantity_appointments = len(all_appointments)
 
     new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.DONATION, keyboard_type=KeyboardType.REPLY,

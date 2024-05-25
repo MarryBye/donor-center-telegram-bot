@@ -81,45 +81,7 @@ class AppointmentsDatabaseController(DatabaseController):
 
         return is_registered
 
-    def register_donor_appointment(self, appointment: Appointment, donor: Donor):
 
-        """
-        Зарегистрировать донора на прием. Принимает следующие аргументы:
-        - ``appointment`` - принимает объект ``Appointment`` с данными про новый прием;
-        - ``donor`` - принимает объект ``Donor`` с данными про донора.\n
-        Метод возвращает ``False`` если донор уже зарегистрирован на прием или нет данных о доноре.
-        """
-
-        appointment.set_id(db_id=self.get_next_row_id(table="data_blood.appointment"))
-        appointment.set_donor_number_id(donor_number_id=donor.get_number_id())
-        appointment.set_status_id(status_id=3)
-
-        try:
-
-            query = (
-                'INSERT INTO data_blood.appointment ("ID", "clinic_ID", "donor_number_ID", "status_ID", "registration_date", "appointment_date", "analysis_file_path") VALUES (%s, %s, %s, %s, %s, %s, %s)')
-            self.cursor.execute(query, (
-                appointment.get_id(),
-                appointment.get_clinic_id(),
-                appointment.get_donor_number_id(),
-                appointment.get_status_id(),
-                appointment.get_registration_date(),
-                appointment.get_appointment_date(),
-                appointment.get_analysis_file_path()
-            )
-                                )
-
-            self.connection.commit()
-
-            debug_print("Donor appointment has successfully registered!")
-
-            return True
-
-        except Exception as e:
-
-            debug_print(f"Donor appointment can`t be registered! Error: \n{e}", color=TerminalColors.FAIL)
-
-            return False
 
     def delete_donor_appointment(self, donor: Donor, appointment: Appointment):
         pass

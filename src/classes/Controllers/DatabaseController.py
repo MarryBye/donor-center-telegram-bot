@@ -666,6 +666,47 @@ class DatabaseController(metaclass=Singleton):
 
         return data if data is not None else None
 
+    def register_appointment(self, appointment: Appointment, donor: Donor):
+
+        """
+        Зарегистрировать донора на прием. Принимает следующие аргументы:
+        - ``appointment`` - принимает объект ``Appointment`` с данными про новый прием;
+        - ``donor`` - принимает объект ``Donor`` с данными про донора.\n
+        Метод возвращает ``False`` если донор уже зарегистрирован на прием или нет данных о доноре.
+        """
+
+        new_appointment_id = self.get_next_row_id(table="data_blood.appointment")
+        donor_number = donor.get_telephone().get_id()
+        new_appointment_status = appointment.get_status().get_id()
+        new_appointment_clinic = appointment.get_clinic().get_id()
+
+        try:
+
+            query = (
+                'INSERT INTO data_blood.appointment ("ID", "clinic_ID", "donor_number_ID", "status_ID", "registration_date", "appointment_date", "analysis_file_path") VALUES (%s, %s, %s, %s, %s, %s, %s)')
+            self.cursor.execute(query, (
+                appointment.get_id(),
+                new_appointment_clinic,
+                donor_number,
+                new_appointment_status,
+                appointment.get_registration_date(),
+                appointment.get_appointment_date(),
+                appointment.get_analysis_file_path()
+            )
+                                )
+
+            self.connection.commit()
+
+            debug_print("Donor appointment has successfully registered!")
+
+            return True
+
+        except Exception as e:
+
+            debug_print(f"Donor appointment can`t be registered! Error: \n{e}", color=TerminalColors.FAIL)
+
+            return False
+
     def get_donor_appointment(self, donor: Donor, only_last: bool = True, n: int = -1) -> Appointment | list[Appointment] | None:
 
         """
@@ -704,22 +745,30 @@ class DatabaseController(metaclass=Singleton):
         if only_last:
             data = self.cursor.fetchone()
 
-            data["clinic"] = self.get_clinic(clinic_id=data["clinic"])
-            data["donor"] = self.get_donor(db_id=data["donor"])
-            data["status"] = self.get_status(status_id=data["status"])
+            if data is not None:
 
-            return Appointment(data=data) if data is not None else None
+                data["clinic"] = self.get_clinic(clinic_id=data["clinic"])
+                data["donor"] = self.get_donor(db_id=data["donor"])
+                data["status"] = self.get_status(status_id=data["status"])
+
+                return Appointment(data=data)
+
         else:
             data = self.cursor.fetchmany(n)
-            for i, data_component in enumerate(data, start=0):
 
-                data_component["clinic"] = self.get_clinic(clinic_id=data_component["clinic"])
-                data_component["donor"] = self.get_donor(db_id=data_component["donor"])
-                data_component["status"] = self.get_status(status_id=data_component["status"])
+            if data is not None:
 
-                data[i] = Appointment(data=data_component)
+                for i, data_component in enumerate(data, start=0):
 
-            return data if data is not None else None
+                    data_component["clinic"] = self.get_clinic(clinic_id=data_component["clinic"])
+                    data_component["donor"] = self.get_donor(db_id=data_component["donor"])
+                    data_component["status"] = self.get_status(status_id=data_component["status"])
+
+                    data[i] = Appointment(data=data_component)
+
+                return data
+
+        return None
 
     def get_appointments(self, n: int = -1) -> list[Appointment] | None:
 
