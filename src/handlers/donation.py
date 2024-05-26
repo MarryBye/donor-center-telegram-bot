@@ -22,7 +22,7 @@ db_appointments = AppointmentsDatabaseController()
 hnd = HandlersController()
 kb = KeyboardController()
 
-router = Router(name="DONATION ROUTER")
+router = Router(name="Donor`s registration for appointment router")
 
 
 @router.message(pressed_button(button_name="DONATION_MENU_REGISTER"))
@@ -104,7 +104,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
             regional_clinics.append(clinic)
 
     if len(regional_clinics) == 0:
-        state.clear()
+        await state.clear()
         await bot.edit_message_reply_markup(
             chat_id=call.from_user.id,
             message_id=call.message.message_id,
@@ -203,7 +203,9 @@ async def main_handler(msg: Message):
         street = address.get_street().get_street_name()
         area = address.get_area().get_area_name()
         house = address.get_house_number()
-        clinics_text += f"#{clinic.get_id()}: {clinic.get_clinic_name()}\nАдреса: м. {city}, {region}, вул. {street}, площа {area}, будинок №{house}\n\n"
+        clinics_text = message_translate(message_name="DONATION_CENTERS", language_name=user_language) % (
+            clinic.get_id(), clinic.get_clinic_name(), city, region, street, area, house
+        )
 
     new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.DONATION, keyboard_type=KeyboardType.REPLY,
                                    language_name=user_language)
@@ -237,7 +239,9 @@ async def main_handler(msg: Message):
             status_name = appointment.get_status().get_name_status()
             registration_date = appointment.get_registration_date()
             appointment_date = appointment.get_appointment_date()
-            history_text += f"№{appointment.get_id()}\nДата реєстрації: {registration_date}\nДата прийому: {appointment_date}\nЦентр: '{clinic_name}, Адреса: м. {city}, {region}, вул. {street}, площа {area}, будинок №{house}'\nСтатус: {status_name}\n\n"
+            history_text += message_translate(message_name="DONATION_HISTORY", language_name=user_language) % (
+                appointment.get_id(), registration_date, appointment_date, clinic_name, city, region, street, area, house, status_name
+            )
         quantity_appointments = len(all_appointments)
 
     new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.DONATION, keyboard_type=KeyboardType.REPLY,

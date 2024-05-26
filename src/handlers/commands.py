@@ -72,14 +72,5 @@ async def main_handler(msg: Message, state: FSMContext):
 
     debug_print("Admin", user_id, "has notified all users!")
 
-@router.message(Command("admin_panel"))
-async def main_handler(msg: Message, state: FSMContext):
-    # TODO Когда в базе данных появятся админы - добавить защиту
-
-    user_id = msg.from_user.id
-    user_language = db.get_user_language(user_id=user_id)
-
-    debug_print("User", user_id, "has authorized as admin!")
-
 
 hnd.add_router(router)

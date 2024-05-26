@@ -15,6 +15,14 @@ class ChooseLanguage(StatesGroup):
     choose_language = State()
 
 
+class FormAdmin(StatesGroup):
+    input_login = State()
+    input_password = State()
+    input_city = State()
+    input_region = State()
+    input_clinic = State()
+
+
 class ChooseNotifications(StatesGroup):
     choose_notification = State()
 
