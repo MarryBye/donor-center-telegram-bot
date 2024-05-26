@@ -275,8 +275,7 @@ class DatabaseController(metaclass=Singleton):
 
         self.connection.commit()
 
-    def get_clinic(self, db_id: int | str = -1, address_id: int | str = -1, city_id: int | str = -1,
-                   region_id: int | str = -1) -> Clinic | None:
+    def get_clinic(self, db_id: int | str = -1, address_id: int | str = -1, city_id: int | str = -1, region_id: int | str = -1) -> Clinic | None:
 
         query = (
             'SELECT '
@@ -298,8 +297,7 @@ class DatabaseController(metaclass=Singleton):
 
         return Clinic(data=data) if data is not None else None
 
-    def get_clinics(self, n: int = -1, address_id: int | str = -1, city_id: int | str = -1,
-                    region_id: int | str = -1) -> list[Clinic] | None:
+    def get_clinics(self, n: int = -1) -> list[Clinic] | None:
 
         query = (
             'SELECT '
@@ -307,12 +305,9 @@ class DatabaseController(metaclass=Singleton):
             'clinic."clinic_name", '
             'clinic."address_ID" AS address, '
             'clinic."working_hours" '
-            'FROM data_blood.clinic AS clinic, '
-            'data_blood."address" AS address '
-            'WHERE clinic."address_ID" = address."ID" AND '
-            '(clinic."address_ID" = %s OR address."city_ID" = %s OR address."region_ID" = %s)'
+            'FROM data_blood.clinic AS clinic '
         )
-        self.cursor.execute(query, (address_id, city_id, region_id))
+        self.cursor.execute(query)
         data = self.cursor.fetchmany(n)
 
         for i, data_component in enumerate(data, start=0):
@@ -406,7 +401,7 @@ class DatabaseController(metaclass=Singleton):
 
         return Review(data=data) if data is not None else None
 
-    def get_reviews(self, n: int = -1, donor_id: int | str = -1, clinic_id: int | str = -1) -> list[Review] | None:
+    def get_reviews(self, n: int = -1) -> list[Review] | None:
 
         query = (
             'SELECT '
@@ -417,9 +412,8 @@ class DatabaseController(metaclass=Singleton):
             'review."comment",'
             'review.date_added '
             'FROM data_blood."reviews" AS review '
-            'WHERE (review."donor_ID" = %s OR review."clinic_ID" = %s)'
         )
-        self.cursor.execute(query, (donor_id, clinic_id))
+        self.cursor.execute(query)
         data = self.cursor.fetchmany(n)
 
         for i, data_component in enumerate(data, start=0):

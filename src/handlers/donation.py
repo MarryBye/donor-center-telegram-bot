@@ -113,7 +113,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
 
         await bot.answer(
             user_id=user_id,
-            text="DONATION_SELECT_CLINIC",
+            text="DONATION_INCORRECT_DATA",
             keyboard_name=KeyboardName.DONATION,
             keyboard_type=KeyboardType.REPLY,
             language_name=user_language
@@ -203,7 +203,7 @@ async def main_handler(msg: Message):
         street = address.get_street().get_street_name()
         area = address.get_area().get_area_name()
         house = address.get_house_number()
-        clinics_text = message_translate(message_name="DONATION_CENTERS", language_name=user_language) % (
+        clinics_text += message_translate(message_name="DONATION_CENTERS", language_name=user_language) % (
             clinic.get_id(), clinic.get_clinic_name(), city, region, street, area, house
         )
 

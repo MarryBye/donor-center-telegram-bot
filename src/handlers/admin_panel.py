@@ -28,7 +28,7 @@ async def main_handler(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
-    if await state.get_state() is not None:
+    if await state.get_state() is None:
         await state.set_state(FormAdmin.input_login)
 
         await bot.answer(
@@ -218,3 +218,6 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
         text="ADMIN_SUCCESSFULL",
         language_name=user_language
     )
+
+
+hnd.add_router(router)

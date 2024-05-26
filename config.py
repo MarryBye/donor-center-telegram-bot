@@ -10,9 +10,9 @@ NEED_DEBUG = True
 # PostgresSQL Server Configuration
 
 DATABASE_NAME = "crm"
-IP_ADDRESS = "108.181.157.246"
-PORT = "10066"
-USERNAME = "temshik_shemshik"
+IP_ADDRESS = "localhost"
+PORT = "5432"
+USERNAME = "postgres"
 PASSWORD = "3211234545"
 
 # Database integration
