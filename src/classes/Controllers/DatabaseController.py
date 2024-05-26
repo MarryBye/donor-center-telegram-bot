@@ -3,6 +3,8 @@ import psycopg2.extras as psql_extra
 import config as cfg
 import json
 
+import datetime
+
 from src.classes.Singleton import Singleton
 
 from src.classes.Datatypes.City import City
@@ -915,6 +917,23 @@ class DatabaseController(metaclass=Singleton):
 
     def get_notifications_list(self):
         return self.notifications_cache
+
+    def set_admin_authenticated(self, user_id: int | str, admin_id: int | str):
+        self.admins_cache[str(user_id)] = (admin_id, datetime.datetime.now())
+        json.dump(self.admins_cache, open("bot/cache/user_admins.json", "w", encoding="UTF-8"))
+
+    def get_admin_authenticated(self, user_id) -> Admin | bool:
+
+        if user_id not in self.admins_cache:
+            return False
+
+        need_deauth = datetime.datetime.now() >= self.admins_cache[str(user_id)][1] + datetime.timedelta(minutes=1)
+
+        if need_deauth:
+            del self.admins_cache[str(user_id)]
+            return False
+
+        return self.get_admin_account(db_id=self.admins_cache[str(user_id)][0])
 
     def setup_database(self):
 
