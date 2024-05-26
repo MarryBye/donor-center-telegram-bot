@@ -271,7 +271,7 @@ async def main_handler(msg: Message, state: FSMContext):
 
     await bot.answer(
         user_id=user_id,
-        text="ADMIN_MENU_SEND_NOTIFICATIONS",
+        text="ADMIN_SENDED_NOTIFICATIONS",
         language_name=user_language
     )
 
