@@ -28,13 +28,9 @@ async def main_handler(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
-    if db.get_admin_authenticated(user_id=user_id):
+    admin = db.get_admin_authenticated(user_id=user_id)
 
-        await bot.edit_message_reply_markup(
-            chat_id=msg.from_user.id,
-            message_id=msg.message.message_id,
-            reply_markup=None
-        )
+    if admin:
 
         await bot.answer(
             user_id=user_id,
@@ -43,6 +39,8 @@ async def main_handler(msg: Message, state: FSMContext):
             keyboard_type=KeyboardType.REPLY,
             language_name=user_language
         )
+
+        return True
 
     if await state.get_state() is None:
         await state.set_state(FormAdmin.input_login)
@@ -253,6 +251,8 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
         text="ADMIN_SUCCESSFULL",
         language_name=user_language
     )
+
+    db.set_admin_authenticated(user_id=user_id, admin_id=admin.get_id())
 
 
 hnd.add_router(router)

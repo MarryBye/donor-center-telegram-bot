@@ -919,18 +919,26 @@ class DatabaseController(metaclass=Singleton):
         return self.notifications_cache
 
     def set_admin_authenticated(self, user_id: int | str, admin_id: int | str):
-        self.admins_cache[str(user_id)] = (admin_id, datetime.datetime.now())
+        self.admins_cache[str(user_id)] = (admin_id, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         json.dump(self.admins_cache, open("bot/cache/user_admins.json", "w", encoding="UTF-8"))
 
-    def get_admin_authenticated(self, user_id) -> Admin | bool:
+    def get_admin_authenticated(self, user_id: int | str) -> Admin | bool:
 
-        if user_id not in self.admins_cache:
+        if str(user_id) not in self.admins_cache:
+            debug_print("UserID not in admin cache!")
             return False
 
-        need_deauth = datetime.datetime.now() >= self.admins_cache[str(user_id)][1] + datetime.timedelta(minutes=1)
+        time_now = datetime.datetime.now()
+        auth_time = datetime.datetime.strptime(self.admins_cache[str(user_id)][1], "%Y-%m-%d %H:%M:%S") + datetime.timedelta(minutes=1)
+
+        debug_print(time_now, auth_time, time_now >= auth_time)
+
+        need_deauth = datetime.datetime.now() >= datetime.datetime.strptime(self.admins_cache[str(user_id)][1], "%Y-%m-%d %H:%M:%S") + datetime.timedelta(minutes=1)
 
         if need_deauth:
+            debug_print("User need to be deauthenticated!")
             del self.admins_cache[str(user_id)]
+            json.dump(self.admins_cache, open("bot/cache/user_admins.json", "w", encoding="UTF-8"))
             return False
 
         return self.get_admin_account(db_id=self.admins_cache[str(user_id)][0])
