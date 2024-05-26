@@ -62,7 +62,7 @@ async def update_profile(call: CallbackQuery, state: FSMContext):
 
 
 @router.message(UserSettings.name)
-async def check_name(msg: Message):
+async def check_name(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
     donor = db.get_donor(telegram_id=user_id)
@@ -74,6 +74,7 @@ async def check_name(msg: Message):
         await msg.answer(
             message_translate("PROFILE_NAME_CHANGED", language_name=user_language)
         )
+        await state.clear()
     else:
         await msg.answer(
             message_translate("PROFILE_NAME_ERROR", language_name=user_language)
@@ -188,7 +189,7 @@ async def update_profile(call: CallbackQuery, state: FSMContext):
 
 
 @router.callback_query(UserSettings.gender)
-async def check_name(call: Message):
+async def check_name(call: Message, state: FSMContext):
     user_id = call.from_user.id
     user_language = db.get_user_language(user_id=user_id)
     donor = db.get_donor(telegram_id=user_id)
@@ -206,6 +207,8 @@ async def check_name(call: Message):
         text=new_text,
         reply_markup=None,
     )
+
+    await state.clear()
 
 
 @router.callback_query(lambda q: q.data == "edit_email")
@@ -228,7 +231,7 @@ async def update_profile(call: CallbackQuery, state: FSMContext):
 
 
 @router.message(UserSettings.email)
-async def check_name(msg: Message):
+async def check_name(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
     donor = db.get_donor(telegram_id=user_id)
@@ -241,6 +244,7 @@ async def check_name(msg: Message):
         await msg.answer(
             message_translate("PROFILE_EMAIL_CHANGED", language_name=user_language)
         )
+        await state.clear()
     else:
         await msg.answer(
             message_translate("PROFILE_EMAIL_ERROR", language_name=user_language)
