@@ -12,3 +12,4 @@ from src.keyboards.cities import *
 from src.keyboards.regions import *
 from src.keyboards.edit_profile import *
 from src.keyboards.profile_settings import *
+from src.keyboards.admin import *

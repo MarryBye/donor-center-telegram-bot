@@ -11,7 +11,7 @@ from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType, Keyboard
 from src.classes.Form import FormAdmin
 
-from src.funcs.core import message_translate
+from src.funcs.core import message_translate, pressed_button, button_translate
 from src.funcs.debug_print import debug_print
 
 bot = CRMBot()
@@ -35,7 +35,7 @@ async def main_handler(msg: Message, state: FSMContext):
         await bot.answer(
             user_id=user_id,
             text="ADMIN_ALREADY_AUTHENTICATED",
-            keyboard_name=KeyboardName.MAIN,
+            keyboard_name=KeyboardName.ADMIN,
             keyboard_type=KeyboardType.REPLY,
             language_name=user_language
         )
@@ -249,10 +249,45 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     await bot.answer(
         user_id=user_id,
         text="ADMIN_SUCCESSFULL",
+        keyboard_name=KeyboardName.ADMIN,
+        keyboard_type=KeyboardType.REPLY,
         language_name=user_language
     )
 
     db.set_admin_authenticated(user_id=user_id, admin_id=admin.get_id())
 
+
+@router.message(pressed_button(button_name="ADMIN_MENU_SEND_NOTIFICATIONS"))
+async def main_handler(msg: Message):
+    user_id = msg.from_user.id
+    user_language = db.get_user_language(user_id=user_id)
+
+    admin = db.get_admin_authenticated(user_id=user_id)
+
+    if not admin:
+        return False
+
+    await bot.answer(
+        user_id=user_id,
+        text="ADMIN_SUCCESSFULL",
+        language_name=user_language
+    )
+
+
+@router.message(pressed_button(button_name="ADMIN_MENU_GET_CLINIC_INFO"))
+async def main_handler(msg: Message):
+    user_id = msg.from_user.id
+    user_language = db.get_user_language(user_id=user_id)
+
+    admin = db.get_admin_authenticated(user_id=user_id)
+
+    if not admin:
+        return False
+
+    await bot.answer(
+        user_id=user_id,
+        text="ADMIN_SUCCESSFULL",
+        language_name=user_language
+    )
 
 hnd.add_router(router)

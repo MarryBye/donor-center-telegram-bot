@@ -25,6 +25,7 @@ class KeyboardName:
     REGIONS = "REGIONS"
     EDIT_PROFILE = "EDIT_PROFILE"
     PROFILE_SETTINGS = "PROFILE_SETTINGS"
+    ADMIN = "ADMIN"
 
 
 class Keyboard:

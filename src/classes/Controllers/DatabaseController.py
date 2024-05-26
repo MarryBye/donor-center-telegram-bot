@@ -929,7 +929,7 @@ class DatabaseController(metaclass=Singleton):
             return False
 
         time_now = datetime.datetime.now()
-        auth_time = datetime.datetime.strptime(self.admins_cache[str(user_id)][1], "%Y-%m-%d %H:%M:%S") + datetime.timedelta(minutes=1)
+        auth_time = datetime.datetime.strptime(self.admins_cache[str(user_id)][1], "%Y-%m-%d %H:%M:%S") + datetime.timedelta(minutes=30)
 
         debug_print(time_now, auth_time, time_now >= auth_time)
 
