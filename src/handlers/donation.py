@@ -233,8 +233,8 @@ async def main_handler(msg: Message):
             house = address.get_house_number()
             clinic_name = clinic.get_clinic_name()
             status_name = appointment.get_status().get_name_status()
-            registration_date = appointment.get_registration_date()
-            appointment_date = appointment.get_appointment_date()
+            registration_date = appointment.get_registration_date().strftime("%d-%m-%Y")
+            appointment_date = appointment.get_appointment_date().strftime("%d-%m-%Y")
             history_text += message_translate(message_name="DONATION_HISTORY", language_name=user_language) % (
                 appointment.get_id(), registration_date, appointment_date, clinic_name, city, region, street, area, house, status_name
             )

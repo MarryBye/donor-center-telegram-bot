@@ -212,7 +212,7 @@ class DatabaseController(metaclass=Singleton):
             'address."city_ID" AS city, '
             'address."region_ID" AS region, '
             'address."street_ID" AS street, '
-            'address."house_number" AS house '
+            'address."house_number" '
             'FROM data_blood.address AS address '
             'WHERE address."ID" = %s'
         )

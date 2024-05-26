@@ -288,18 +288,24 @@ async def main_handler(msg: Message, state: FSMContext):
     user_language = db.get_user_language(user_id=user_id)
 
     photos = None
-    text = msg.caption
+    text = None
 
     if msg.photo is not None:
         photos = [photo for photo in msg.photo]
+        text = msg.caption
+    else:
+        text = msg.text
 
-    for user_id in db.get_notifications_list():
-        if photos is not None:
-            await bot.send_photo(user_id, photo=photos[-1].file_id, caption=text)
-        else:
-            await bot.send_message(user_id, text)
-        # Чтобы не получить рейт лимит, каждые 1 сообщение каждые 3 секунды
-        await asyncio.sleep(3)
+    notif_list = db.get_notifications_list()
+
+    for user_id in notif_list:
+        if notif_list[user_id]:
+            if photos is not None:
+                await bot.send_photo(user_id, photo=photos[-1].file_id, caption=text)
+            else:
+                await bot.send_message(user_id, text)
+            # Чтобы не получить рейт лимит, каждые 1 сообщение каждые 3 секунды
+            await asyncio.sleep(3)
 
     debug_print("Admin", user_id, "has notified all users!")
 
