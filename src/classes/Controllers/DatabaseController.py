@@ -19,6 +19,7 @@ from src.classes.Datatypes.Review import Review
 from src.classes.Datatypes.HasBlood import HasBlood
 from src.classes.Datatypes.Gender import Gender
 from src.classes.Datatypes.Language import Language
+from src.classes.Datatypes.Admin import Admin
 
 from src.classes.Crypto import CryptoSHA256
 from src.classes.TerminalColors import TerminalColors
@@ -619,7 +620,6 @@ class DatabaseController(metaclass=Singleton):
             'donors."gender_ID" AS gender,'
             'donors."email",'
             'donors."telegram_ID",'
-            'donors."password",'
             'donors."language_ID" AS language, '
             'numbers."ID" AS "telephone" '
             'FROM donor.donor as donors, '
@@ -818,6 +818,19 @@ class DatabaseController(metaclass=Singleton):
 
         self.connection.commit()
 
+    def register_admin(self, admin: Admin):
+        pass
+
+    def get_admin_account(self, db_id: int | str = -1, name_admin: str = "-1", password: str = "-1", clinic_id: int = -1) -> Admin | None:
+
+        query = (
+            'SELECT '
+            'admin."ID",'
+            'admin."clinic_ID" AS clinic '
+            'FROM admin.admin AS admin '
+            'WHERE admin."ID" = %s OR (admin."name_admin" = %s AND admin."password" = %s AND admin."clinic_ID" = %s) '
+        )
+
     def add_feedback_request(self, user_id: int | str, note: str) -> None:
         """
         Добавляет запрос на поддержку в базу данных.
@@ -879,38 +892,38 @@ class DatabaseController(metaclass=Singleton):
 
     def setup_database(self):
 
-        print("\t\tНАСТРОЙКА БАЗЫ ДАННЫХ")
-        print("Выполняется заполнение таблиц стандартными значениями")
+        debug_print("\t\tНАСТРОЙКА БАЗЫ ДАННЫХ")
+        debug_print("Выполняется заполнение таблиц стандартными значениями")
 
         self.add_bloods()
-        print("Таблица крови заполнена!")
+        debug_print("Таблица крови заполнена!")
 
         self.add_languages()
-        print("Таблица языков заполнена!")
+        debug_print("Таблица языков заполнена!")
 
         self.add_statuses()
-        print("Таблица статусов заполнена!")
+        debug_print("Таблица статусов заполнена!")
 
         self.add_streets()
-        print("Таблица улиц заполнена!")
+        debug_print("Таблица улиц заполнена!")
 
         self.add_areas()
-        print("Таблица ХЗ запонена!")
+        debug_print("Таблица ХЗ запонена!")
 
         self.add_regions()
-        print("Таблица регионов заполнена!")
+        debug_print("Таблица регионов заполнена!")
 
         self.add_cities()
-        print("Таблица городов заполнена!")
+        debug_print("Таблица городов заполнена!")
 
         self.add_addresses()
-        print("Таблица адресов заполнена!")
+        debug_print("Таблица адресов заполнена!")
 
         self.add_clinics()
-        print("Таблица клиник заполнена!")
+        debug_print("Таблица клиник заполнена!")
 
         self.add_genders()
-        print("Таблица гендеров заполнена!")
+        debug_print("Таблица гендеров заполнена!")
 
         self.add_admins()
-        print("Таблица админов заполнена!")
+        debug_print("Таблица админов заполнена!")
