@@ -32,7 +32,7 @@ async def main_handler(msg: Message, state: FSMContext):
     user_language = db.get_user_language(user_id=user_id)
 
     donor = db.get_donor(telegram_id=user_id)
-    last_appointment = db.get_donor_appointment(donor=donor, only_last=True)
+    last_appointment = db.get_appointment(donor=donor, only_last=True)
 
     if last_appointment is not None and last_appointment.get_status().get_name_status() == "Waiting":
 
@@ -221,7 +221,7 @@ async def main_handler(msg: Message):
     user_language = db.get_user_language(user_id=user_id)
 
     donor = db.get_donor(telegram_id=user_id)
-    all_appointments = db.get_donor_appointment(donor=donor, only_last=False)
+    all_appointments = db.get_appointment(donor=donor, only_last=False)
 
     history_text = ""
     quantity_appointments = 0

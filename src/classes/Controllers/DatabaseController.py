@@ -718,8 +718,7 @@ class DatabaseController(metaclass=Singleton):
 
             return False
 
-    def get_donor_appointment(self, donor: Donor, only_last: bool = True, n: int = -1) -> Appointment | list[
-        Appointment] | None:
+    def get_appointment(self, donor: Donor, only_last: bool = True, n: int = -1) -> Appointment | list[Appointment] | None:
 
         """
         Сформировать объект ``Appointment`` по данным из БД, если донор существует. В качестве параметра принимает:
