@@ -199,7 +199,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     user_id = call.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
-    clinic = db.get_clinic(clinic_id=call.data)
+    clinic = db.get_clinic(db_id=call.data)
 
     data = await state.get_data()
     admin_login = data["login"]

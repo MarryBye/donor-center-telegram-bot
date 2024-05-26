@@ -66,7 +66,7 @@ async def main_handler(msg: Message, state: FSMContext):
 async def main_handler(call: CallbackQuery, state: FSMContext):
 
     user_id = call.from_user.id
-    user_language = db.get_language(language_id=call.data)
+    user_language = db.get_language(db_id=call.data)
 
     db.set_user_language(user_id=user_id, language=user_language.get_lang_name(), only_cache=True)
 
@@ -171,7 +171,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     user_language = db.get_user_language(user_id=user_id)
     user_gender = call.data
 
-    await state.update_data(gender=db.get_gender(gender_id=user_gender))
+    await state.update_data(gender=db.get_gender(db_id=user_gender))
     await state.set_state(Form.registerUser_email)
 
     await bot.edit_message_reply_markup(

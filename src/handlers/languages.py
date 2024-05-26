@@ -25,7 +25,7 @@ async def language_handler(call: CallbackQuery, state: FSMContext):
     user_id = call.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
-    language = db.get_language(language_id=call.data)
+    language = db.get_language(db_id=call.data)
 
     db.set_user_language(user_id=user_id, language=language.get_lang_name())
 

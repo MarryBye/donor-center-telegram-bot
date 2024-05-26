@@ -153,7 +153,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
 
     data = await state.get_data()
 
-    clinic = db.get_clinic(clinic_id=call.data)
+    clinic = db.get_clinic(db_id=call.data)
     donor = data["donor"]
 
     register_date = datetime.now()
@@ -162,7 +162,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     new_appointment = Appointment()
     new_appointment.set_id(db.get_next_row_id("data_blood.appointment"))
     new_appointment.set_clinic(clinic=clinic)
-    new_appointment.set_status(status=db.get_status(status_id=3))
+    new_appointment.set_status(status=db.get_status(db_id=3))
     new_appointment.set_donor(donor=donor)
     new_appointment.set_registration_date(registration_date=register_date)
     new_appointment.set_appointment_date(appointment_date=appointment_date)

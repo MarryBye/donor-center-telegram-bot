@@ -16,7 +16,7 @@ class HasBlood(CRMBaseDataType):
         self.data["clinic"] = clinic
 
     def get_clinic(self) -> Datatypes.Clinic:
-        return Db.DatabaseController().get_clinic(clinic_id=self.get_from_data(key_name="clinic"))
+        return Db.DatabaseController().get_clinic(db_id=self.get_from_data(key_name="clinic"))
 
     def set_quantity(self, quantity: int):
         self.data["quantity"] = quantity
