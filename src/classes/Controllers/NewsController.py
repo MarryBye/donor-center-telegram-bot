@@ -35,7 +35,7 @@ class NewsDatabase(DatabaseController):
     def fetch_news(self, limit: int = None) -> list[News]:
         """Получает все новости, сортируя их по типу и дате публикации. Ограничивает количество возвращаемых новостей."""
         try:
-            with self._DatabaseController__connection.cursor(
+            with self.connection.cursor(
                 cursor_factory=psql_extra.RealDictCursor
             ) as cur:
                 query = """
@@ -82,7 +82,7 @@ class NewsDatabase(DatabaseController):
     ) -> None:
         """Добавляет новость в базу данных."""
         try:
-            with self._DatabaseController__connection.cursor(
+            with self.connection.cursor(
                 cursor_factory=psql_extra.RealDictCursor
             ) as cur:
                 query = """
@@ -103,11 +103,11 @@ class NewsDatabase(DatabaseController):
                     ),
                 )
                 news_id = cur.fetchone()["ID"]
-                self._DatabaseController__connection.commit()
+                self.connection.commit()
                 print(f"Новость успешно добавлена с ID {news_id}.")
         except Exception as e:
             print(f"Ошибка при добавлении новости: {e}")
-            self._DatabaseController__connection.rollback()
+            self.connection.rollback()
 
     def escape_markdown_v2(self, text: str) -> str:
         """Экранирует специальные символы для Markdown V2."""

@@ -4,8 +4,6 @@ from aiogram.fsm.context import FSMContext
 
 from src.classes.CRMBot import CRMBot
 from src.classes.Controllers.DatabaseController import DatabaseController
-from src.classes.Controllers.DonorsDatabaseController import DonorsDatabaseController
-from src.classes.Controllers.AppointmentsDatabaseController import AppointmentsDatabaseController
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType, Keyboard
 from src.classes.Form import FormAppointment
@@ -17,8 +15,6 @@ from src.funcs.core import pressed_button, message_translate
 bot = CRMBot()
 
 db = DatabaseController()
-db_donors = DonorsDatabaseController()
-db_appointments = AppointmentsDatabaseController()
 hnd = HandlersController()
 kb = KeyboardController()
 

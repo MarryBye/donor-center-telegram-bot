@@ -7,7 +7,6 @@ from aiogram.types import Message, CallbackQuery
 from src.classes.CRMBot import CRMBot
 from src.classes.Form import UserSettings
 from src.classes.Controllers.DatabaseController import DatabaseController
-from src.classes.Controllers.DonorsDatabaseController import DonorsDatabaseController
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
 
@@ -17,7 +16,6 @@ from src.funcs.core import message_translate, gender_name_to_id
 bot = CRMBot()
 
 db = DatabaseController()
-db_donor = DonorsDatabaseController()
 hnd = HandlersController()
 kb = KeyboardController()
 
@@ -67,11 +65,11 @@ async def update_profile(call: CallbackQuery, state: FSMContext):
 async def check_name(msg: Message):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
-    donor = db_donor.get_donor_by(telegram_id=user_id)
+    donor = db.get_donor(telegram_id=user_id)
 
     pattern = r"^[a-zA-Zа-яА-ЯёЁ]+$"
     if match(pattern, msg.text):
-        db_donor.update_donor_field(donor, "name_donor", msg.text)
+        db.update_donor_field(donor, "name_donor", msg.text)
 
         await msg.answer(
             message_translate("PROFILE_NAME_CHANGED", language_name=user_language)
@@ -105,11 +103,11 @@ async def update_profile(call: CallbackQuery, state: FSMContext):
 async def check_name(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
-    donor = db_donor.get_donor_by(telegram_id=user_id)
+    donor = db.get_donor(telegram_id=user_id)
 
     pattern = r"^\+\d{12}$"
     if match(pattern, msg.text):
-        db_donor.update_donor_field(donor, "number", msg.text)
+        db.update_donor_field(donor, "number", msg.text)
 
         await msg.answer(
             message_translate("PROFILE_NUMBER_CHANGED", language_name=user_language)
@@ -145,14 +143,14 @@ async def update_profile(call: CallbackQuery, state: FSMContext):
 async def check_name(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
-    donor = db_donor.get_donor_by(telegram_id=user_id)
+    donor = db.get_donor(telegram_id=user_id)
 
     birthday_pattern = (
         r"^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(19[4-9][0-9]|20[0-9]{2})$"
     )
 
     if match(birthday_pattern, msg.text):
-        db_donor.update_donor_field(donor, "date_of_birth", msg.text)
+        db.update_donor_field(donor, "date_of_birth", msg.text)
 
         await msg.answer(
             message_translate("PROFILE_BDATE_CHANGED", language_name=user_language)
@@ -193,11 +191,11 @@ async def update_profile(call: CallbackQuery, state: FSMContext):
 async def check_name(call: Message):
     user_id = call.from_user.id
     user_language = db.get_user_language(user_id=user_id)
-    donor = db_donor.get_donor_by(telegram_id=user_id)
+    donor = db.get_donor(telegram_id=user_id)
 
     gender_id = gender_name_to_id(call.data)
 
-    db_donor.update_donor_field(donor, "gender_ID", gender_id)
+    db.update_donor_field(donor, "gender_ID", gender_id)
 
     await bot.answer_callback_query(call.id)
     new_text = message_translate("PROFILE_GENDER_CHANGED", language_name=user_language)
@@ -213,7 +211,7 @@ async def check_name(call: Message):
 @router.callback_query(lambda q: q.data == "edit_email")
 async def update_profile(call: CallbackQuery, state: FSMContext):
     user_id = call.from_user.id
-    user_language = db_donor.get_user_language(user_id=user_id)
+    user_language = db.get_user_language(user_id=user_id)
 
     await bot.answer_callback_query(call.id)
 
@@ -233,12 +231,12 @@ async def update_profile(call: CallbackQuery, state: FSMContext):
 async def check_name(msg: Message):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
-    donor = db_donor.get_donor_by(telegram_id=user_id)
+    donor = db.get_donor(telegram_id=user_id)
 
     pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
 
     if match(pattern, msg.text):
-        db_donor.update_donor_field(donor, "email", msg.text)
+        db.update_donor_field(donor, "email", msg.text)
 
         await msg.answer(
             message_translate("PROFILE_EMAIL_CHANGED", language_name=user_language)

@@ -10,7 +10,6 @@ from aiogram.fsm.context import FSMContext
 
 from src.classes.CRMBot import CRMBot
 from src.classes.Controllers.DatabaseController import DatabaseController
-from src.classes.Controllers.DonorsDatabaseController import DonorsDatabaseController
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
 from src.classes.Form import Form
@@ -22,7 +21,6 @@ from src.funcs.core import language_name_to_id, gender_name_to_id
 bot = CRMBot()
 
 db = DatabaseController()
-donors_db = DonorsDatabaseController()
 hnd = HandlersController()
 kb = KeyboardController()
 
