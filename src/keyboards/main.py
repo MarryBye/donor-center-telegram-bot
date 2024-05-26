@@ -6,7 +6,6 @@ kb_scheme = [
     [{"MAIN_MENU_DONATION": {}}],
     [{"MAIN_MENU_INFO": {}}],
     [{"MAIN_MENU_PROFILE": {}}],
-    [{"MAIN_MENU_EVENTS": {}}],
     [{"MAIN_MENU_FEEDBACK": {}}],
     [{"MAIN_MENU_SETTINGS": {}}]
 ]

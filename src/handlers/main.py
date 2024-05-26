@@ -5,6 +5,7 @@ from aiogram.types import Message
 from aiogram.enums import ParseMode
 from aiogram.fsm.context import FSMContext
 
+from src.classes.CRMBot import CRMBot
 from src.classes.Form import Feedback
 from src.classes.Controllers.NewsController import NewsDatabase
 from src.classes.Controllers.DatabaseController import DatabaseController
@@ -12,6 +13,8 @@ from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
 
 from src.funcs.core import pressed_button, message_translate, button_translate
+
+bot = CRMBot()
 
 db = DatabaseController()
 hnd = HandlersController()
@@ -88,9 +91,15 @@ async def events_and_promo_handler(msg: Message):
     user_language = db.get_user_language(user_id=user_id)
     news_list = nb.fetch_news(limit=5)
 
-    await msg.answer(
-        nb.format_news_for_telegram(news_list, lang=user_language),
-        parse_mode=ParseMode.MARKDOWN_V2,
+    text = nb.format_news_for_telegram(news_list, lang=user_language) or "."
+
+    await bot.answer(
+        user_id=user_id,
+        text=text,
+        keyboard_name=KeyboardName.MAIN,
+        keyboard_type=KeyboardType.REPLY,
+        language_name=user_language,
+        need_translation=False
     )
 
 
