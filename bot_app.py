@@ -2,8 +2,6 @@ from handlers_imports import *
 from keyboards_imports import *
 
 from src.classes.Controllers.DatabaseController import DatabaseController
-from src.classes.Controllers.DonorsDatabaseController import DonorsDatabaseController
-from src.classes.Controllers.AppointmentsDatabaseController import AppointmentsDatabaseController
 
 # id_my = 482613937
 

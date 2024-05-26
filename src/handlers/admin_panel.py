@@ -324,10 +324,37 @@ async def main_handler(msg: Message):
     if not admin:
         return False
 
+    clinic = admin.get_clinic()
+
+    appointments = db.get_appointments()
+
+    all_appointments = len(appointments)
+    success_appointments, waiting_appointments, unsuccess_appointments = 0, 0, 0
+
+    for appointment in appointments:
+        if appointment.get_status().get_name_status() == "Success":
+            success_appointments += 1
+        if appointment.get_status().get_name_status() == "Unsuccess":
+            unsuccess_appointments += 1
+        if appointment.get_status().get_name_status() == "Waiting":
+            waiting_appointments += 1
+
+    all_blood = db.get_has_blood(clinic_id=clinic.get_id())
+
+    bloods_text = ""
+
+    for blood in all_blood:
+        bloods_text += blood.get_blood().get_blood_and_comp_name() + ": " + str(blood.get_quantity()) + "litres\n"
+
+    message_text = message_translate(message_name="ADMIN_CLINIC_INFO", language_name=user_language) % (
+        clinic.get_id(), clinic.get_clinic_name(), waiting_appointments, success_appointments, unsuccess_appointments, bloods_text
+    )
+
     await bot.answer(
         user_id=user_id,
-        text="ADMIN_MENU_GET_CLINIC_INFO",
-        language_name=user_language
+        text=message_text,
+        language_name=user_language,
+        need_translation=False
     )
 
 hnd.add_router(router)
