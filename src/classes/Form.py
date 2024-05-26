@@ -23,6 +23,10 @@ class FormAdmin(StatesGroup):
     input_clinic = State()
 
 
+class AdminFunc(StatesGroup):
+    sending_notifications = State()
+
+
 class ChooseNotifications(StatesGroup):
     choose_notification = State()
 

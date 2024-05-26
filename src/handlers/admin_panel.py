@@ -9,7 +9,7 @@ from src.classes.CRMBot import CRMBot
 from src.classes.Controllers.DatabaseController import DatabaseController
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType, Keyboard
-from src.classes.Form import FormAdmin
+from src.classes.Form import FormAdmin, AdminFunc
 
 from src.funcs.core import message_translate, pressed_button, button_translate
 from src.funcs.debug_print import debug_print
@@ -258,7 +258,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
 
 
 @router.message(pressed_button(button_name="ADMIN_MENU_SEND_NOTIFICATIONS"))
-async def main_handler(msg: Message):
+async def main_handler(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
@@ -267,11 +267,51 @@ async def main_handler(msg: Message):
     if not admin:
         return False
 
+    await state.set_state(AdminFunc.sending_notifications)
+
     await bot.answer(
         user_id=user_id,
-        text="ADMIN_SUCCESSFULL",
+        text="ADMIN_MENU_SEND_NOTIFICATIONS",
         language_name=user_language
     )
+
+
+@router.message(AdminFunc.sending_notifications)
+async def main_handler(msg: Message, state: FSMContext):
+
+    user_id = msg.from_user.id
+    user_language = db.get_user_language(user_id=user_id)
+
+    await state.clear()
+
+    user_id = msg.from_user.id
+    user_language = db.get_user_language(user_id=user_id)
+
+    photos = None
+    text = msg.caption
+
+    if msg.photo is not None:
+        photos = [photo for photo in msg.photo]
+
+    for user_id in db.get_notifications_list():
+        if photos is not None:
+            await bot.send_photo(user_id, photo=photos[-1].file_id, caption=text)
+        else:
+            await bot.send_message(user_id, text)
+        # Чтобы не получить рейт лимит, каждые 1 сообщение каждые 3 секунды
+        await asyncio.sleep(3)
+
+    debug_print("Admin", user_id, "has notified all users!")
+
+    await bot.answer(
+        user_id=user_id,
+        text="ADMIN_SUCCES_SEND_NOTIFICATIONS",
+        keyboard_name=KeyboardName.MAIN,
+        keyboard_type=KeyboardType.REPLY,
+        language_name=user_language
+    )
+
+    await msg.delete()
 
 
 @router.message(pressed_button(button_name="ADMIN_MENU_GET_CLINIC_INFO"))
@@ -286,7 +326,7 @@ async def main_handler(msg: Message):
 
     await bot.answer(
         user_id=user_id,
-        text="ADMIN_SUCCESSFULL",
+        text="ADMIN_MENU_GET_CLINIC_INFO",
         language_name=user_language
     )
 
