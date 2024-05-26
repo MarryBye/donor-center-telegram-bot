@@ -110,7 +110,6 @@ async def main_handler(msg: Message, state: FSMContext):
 
 @router.callback_query(FormAdmin.input_city)
 async def main_handler(call: CallbackQuery, state: FSMContext):
-
     user_id = call.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
@@ -134,7 +133,6 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
 
 @router.callback_query(FormAdmin.input_region)
 async def main_handler(call: CallbackQuery, state: FSMContext):
-
     user_id = call.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
@@ -195,31 +193,28 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
         language_name=user_language
     )
 
-@router.message(FormAdmin.input_clinic)
-async def main_handler(msg: Message, state: FSMContext):
-    user_id = msg.from_user.id
+
+@router.callback_query(FormAdmin.input_clinic)
+async def main_handler(call: CallbackQuery, state: FSMContext):
+    user_id = call.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
-    if msg.text is None:
-        bot_msg = await bot.answer(
-            user_id=user_id,
-            text="ADMIN_INCORRECT_DATA",
-            language_name=user_language
-        )
+    clinic = db.get_clinic(clinic_id=call.data)
 
-        await asyncio.sleep(5)
-        await bot_msg.delete()
-        await msg.delete()
+    data = await state.get_data()
+    admin_login = data["login"]
+    admin_password = data["password"]
 
-        return False
+    await state.clear()
 
-    await state.update_data(password=msg.text)
-    await state.set_state(FormAdmin.input_clinic)
+    await bot.edit_message_reply_markup(
+        chat_id=call.from_user.id,
+        message_id=call.message.message_id,
+        reply_markup=None
+    )
 
     await bot.answer(
         user_id=user_id,
-        text="ADMIN_INPUT_CLINIC",
+        text="ADMIN_SUCCESSFULL",
         language_name=user_language
     )
-
-    await msg.delete()
