@@ -620,6 +620,7 @@ class DatabaseController(metaclass=Singleton):
             'donors."gender_ID" AS gender,'
             'donors."email",'
             'donors."telegram_ID",'
+            'donors."password",'
             'donors."language_ID" AS language, '
             'numbers."ID" AS "telephone" '
             'FROM donor.donor as donors, '
@@ -814,7 +815,17 @@ class DatabaseController(metaclass=Singleton):
 
         query = ('INSERT INTO admin.admin ("ID", "name_admin", "password", "clinic_ID") VALUES (%s, %s, '
                  '%s, %s)')
-        self.cursor.executemany(query, cfg.ADMINS)
+
+        standard_admins = (
+            (admin[0],
+             admin[1],
+             CryptoSHA256.crypt(string=admin[2], salt=admin[1]),
+             admin[3]
+             )
+            for admin in cfg.ADMINS
+        )
+
+        self.cursor.executemany(query, standard_admins)
 
         self.connection.commit()
 
@@ -825,11 +836,26 @@ class DatabaseController(metaclass=Singleton):
 
         query = (
             'SELECT '
-            'admin."ID",'
+            'admin."ID", '
+            'admin."name_admin", '
+            'admin."password", '
             'admin."clinic_ID" AS clinic '
             'FROM admin.admin AS admin '
-            'WHERE admin."ID" = %s OR (admin."name_admin" = %s AND admin."password" = %s AND admin."clinic_ID" = %s) '
+            'WHERE admin."ID" = %s OR (admin."name_admin" = %s AND admin."password" = %s AND admin."clinic_ID" = %s)'
         )
+        self.cursor.execute(query, (
+            db_id,
+            name_admin,
+            CryptoSHA256.crypt(string=password, salt=name_admin),
+            clinic_id)
+        )
+
+        data = self.cursor.fetchone()
+
+        if data is not None:
+            data["clinic"] = self.get_clinic(db_id=data["clinic"])
+
+            return Admin(data=data)
 
     def add_feedback_request(self, user_id: int | str, note: str) -> None:
         """

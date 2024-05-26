@@ -161,7 +161,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
 
         await bot.answer(
             user_id=user_id,
-            text="ADMIN_INCORRECT",
+            text="ADMIN_INCORRECT_DATA",
             keyboard_name=KeyboardName.MAIN,
             keyboard_type=KeyboardType.REPLY,
             language_name=user_language
@@ -205,7 +205,26 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     admin_login = data["login"]
     admin_password = data["password"]
 
+    admin = db.get_admin_account(name_admin=admin_login, password=admin_password, clinic_id=clinic.get_id())
+
     await state.clear()
+
+    if admin is None:
+        await bot.edit_message_reply_markup(
+            chat_id=call.from_user.id,
+            message_id=call.message.message_id,
+            reply_markup=None
+        )
+
+        await bot.answer(
+            user_id=user_id,
+            text="ADMIN_INCORRECT",
+            keyboard_name=KeyboardName.MAIN,
+            keyboard_type=KeyboardType.REPLY,
+            language_name=user_language
+        )
+
+        return False
 
     await bot.edit_message_reply_markup(
         chat_id=call.from_user.id,
