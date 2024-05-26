@@ -96,8 +96,6 @@ async def events_and_promo_handler(msg: Message):
 
 @router.message(pressed_button(button_name="MAIN_MENU_PROFILE"))
 async def profile_handler(msg: Message):
-    genders = {i: j for i, j in cfg.GENDERS}
-
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
@@ -108,15 +106,13 @@ async def profile_handler(msg: Message):
         name = donor.get_name()
         phone = donor.get_telephone().get_number()
         bdate = donor.get_birthdate()
-        gender = button_translate(
-            button_name=genders[gender], language_name=user_language
-        )
+        gender = donor.get_gender().get_gender_name()
 
         bot_message = message_translate("PROFILE", language_name=user_language) % (
             name,
             phone,
             bdate.strftime("%d-%m-%Y"),
-            gender,
+            button_translate(button_name=gender, language_name=user_language),
         )
 
         keyboard = kb.get_keyboard(

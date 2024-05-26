@@ -193,7 +193,7 @@ async def check_name(call: Message):
     user_language = db.get_user_language(user_id=user_id)
     donor = db.get_donor(telegram_id=user_id)
 
-    gender_id = gender_name_to_id(call.data)
+    gender_id = call.data
 
     db.update_donor_field(donor, "gender_ID", gender_id)
 
