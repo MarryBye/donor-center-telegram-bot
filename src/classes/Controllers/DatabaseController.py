@@ -931,9 +931,9 @@ class DatabaseController(metaclass=Singleton):
         time_now = datetime.datetime.now()
         auth_time = datetime.datetime.strptime(self.admins_cache[str(user_id)][1], "%Y-%m-%d %H:%M:%S") + datetime.timedelta(minutes=30)
 
-        debug_print(time_now, auth_time, time_now >= auth_time)
+        need_deauth = time_now >= auth_time
 
-        need_deauth = datetime.datetime.now() >= datetime.datetime.strptime(self.admins_cache[str(user_id)][1], "%Y-%m-%d %H:%M:%S") + datetime.timedelta(minutes=1)
+        debug_print(time_now, auth_time, time_now >= auth_time)
 
         if need_deauth:
             debug_print("User need to be deauthenticated!")

@@ -344,15 +344,17 @@ async def main_handler(msg: Message):
     bloods_text = ""
 
     for blood in all_blood:
-        bloods_text += blood.get_blood().get_blood_and_comp_name() + ": " + str(blood.get_quantity()) + "litres\n"
+        bloods_text += blood.get_blood().get_blood_and_comp_name() + ": " + str(blood.get_quantity()) + " litres\n"
 
     message_text = message_translate(message_name="ADMIN_CLINIC_INFO", language_name=user_language) % (
-        clinic.get_id(), clinic.get_clinic_name(), waiting_appointments, success_appointments, unsuccess_appointments, bloods_text
+        clinic.get_id(), clinic.get_clinic_name(), all_appointments, waiting_appointments, success_appointments, unsuccess_appointments, bloods_text
     )
 
     await bot.answer(
         user_id=user_id,
         text=message_text,
+        keyboard_name=KeyboardName.MAIN,
+        keyboard_type=KeyboardType.REPLY,
         language_name=user_language,
         need_translation=False
     )
