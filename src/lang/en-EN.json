@@ -85,7 +85,6 @@
         "PROFILE_EMAIL_ERROR": "Error occurred! The email should look like mail@example.com"
 
     },
-
     "BUTTONS": {
         "MAIN_MENU_DONATION": "🩸 Donation",
         "MAIN_MENU_SETTINGS": "⚙️ Settings",
@@ -134,6 +133,5 @@
         "FEMALE": "Female",
         "OTHER": "Other",
         "NODATA": "Prefer not to disclose"
-
     }
 }

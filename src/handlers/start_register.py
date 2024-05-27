@@ -108,7 +108,12 @@ async def main_handler(msg: Message, state: FSMContext):
 
         return False
 
-    user_telephone = Telephone(data={"number": user_contact.phone_number})
+    t = str(user_contact.phone_number)
+    if not t.startswith("+"):
+        t = f"+{t}"
+    print(t)
+
+    user_telephone = Telephone(data={"number": t})
     user_firstname = user_contact.first_name or "NODATA"
     user_lastname = user_contact.last_name or "NODATA"
 
