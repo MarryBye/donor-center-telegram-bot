@@ -9,6 +9,7 @@ from src.classes.CRMBot import CRMBot
 from src.classes.Form import Feedback
 from src.classes.Controllers.NewsController import NewsDatabase
 from src.classes.Controllers.DatabaseController import DatabaseController
+from src.classes.Controllers.BloodController import BloodController
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
 
@@ -19,6 +20,7 @@ bot = CRMBot()
 db = DatabaseController()
 hnd = HandlersController()
 kb = KeyboardController()
+bc = BloodController()
 
 router = Router(name="MAIN ROUTER")
 
@@ -64,7 +66,7 @@ async def feedback_handler(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
-    if db_donor.get_donor(telegram_id=user_id):
+    if db.get_donor(telegram_id=user_id):
         await state.set_state(Feedback.name)
 
         new_keyboard = kb.get_keyboard(
@@ -130,7 +132,8 @@ async def stat_handler(msg: Message):
     user_id = msg.from_user.id
     lang = db.get_user_language(user_id=user_id)
 
-    appointments = ad.get_all_appointments(need_status="1") or 0
+    appointments = db.get_all_appointments(need_status="1") or 0
+    
     if isinstance(appointments, list):
         appointments = len(appointments)
     else:
