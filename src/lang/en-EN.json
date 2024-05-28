@@ -82,8 +82,9 @@
         "PROFILE_GENDER_ERROR": "Error occurred! That gender does not exist.",
         "PROFILE_EMAIL_REQUEST": "Please enter your new email.",
         "PROFILE_EMAIL_CHANGED": "Email successfully changed, you can check it in your profile for confirmation.",
-        "PROFILE_EMAIL_ERROR": "Error occurred! The email should look like mail@example.com"
+        "PROFILE_EMAIL_ERROR": "Error occurred! The email should look like mail@example.com",
 
+        "STAT_MESSAGE": "*Statistic*\nAll donations: %s\n*Blood supplies %s*:\n\nFirst group: %s\nSecond group: %s\nThird group: %s\nFourth group: %s"
     },
     "BUTTONS": {
         "MAIN_MENU_DONATION": "🩸 Donation",
@@ -92,6 +93,10 @@
         "MAIN_MENU_EVENTS": "🎈 Events",
         "MAIN_MENU_FEEDBACK": "📞 Feedback",
         "MAIN_MENU_INFO": "❓ What happens to my data?",
+        "MAIN_MENU_STAT": "⌛ Statistic",
+
+        "RHESUS +": "Positive rhesus",
+        "RHESUS -": "Negative rhesus",
 
         "SEND_CONTACT": "💽 Send Contact",
 
