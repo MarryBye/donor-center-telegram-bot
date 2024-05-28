@@ -777,6 +777,54 @@ class DatabaseController(metaclass=Singleton):
 
         return None
 
+    def get_all_appointments(
+        self,
+        need_status: int = None,
+        need_registration_date: str = None,
+        need_appointment_date: str = None,
+        only_last: bool = True,
+    ) -> list[Appointment] | Appointment | bool:
+        """
+        Сформировать объект `Appointment` по данным из БД для всех доноров. В качестве параметров принимает:
+        - `need_status` - с каким статусом искать приемы. Если не указано, то возвращаются все приемы;
+        - `only_last` - получить только последнюю запись из БД;
+        - `need_appointment_date` - получить только с определенной датой встречи;
+        - `need_registration_date` - получить только с определенной датой регистрации встречи.\n
+        Метод возвращает `False` если нет ни одной записи.
+        """
+
+        additional_filters = ""
+        additional_filters_args = []
+
+        if need_status is not None:
+            additional_filters += ' AND appointments."status_ID" = %s'
+            additional_filters_args.append(need_status)
+        if need_registration_date is not None:
+            additional_filters += " AND appointments.registration_date = %s"
+            additional_filters_args.append(need_registration_date)
+        if need_appointment_date is not None:
+            additional_filters += " AND appointments.appointment_date = %s"
+            additional_filters_args.append(need_appointment_date)
+
+        query = (
+            "SELECT "
+            "appointments.* "
+            "FROM "
+            "data_blood.appointment as appointments "
+            'JOIN number_telephone.donor_number as numbers ON appointments."donor_number_ID" = numbers."ID" '
+            'JOIN donor.donor as donors ON numbers."donor_ID" = donors."ID" '
+            "WHERE 1=1"
+        )
+
+        self.cursor.execute(query + additional_filters, additional_filters_args)
+
+        if only_last:
+            data = self.cursor.fetchone()
+            return Appointment(data=data) if data is not None else False
+        else:
+            data = self.cursor.fetchall()
+            return [Appointment(data=d) for d in data] if data else []
+    
     def get_appointments(self, n: int = -1) -> list[Appointment] | None:
 
         query = (
