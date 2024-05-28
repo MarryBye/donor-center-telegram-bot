@@ -64,42 +64,31 @@ async def feedback_handler(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
-    if db.get_donor(telegram_id=user_id):
-
-        new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.FEEDBACK, keyboard_type=KeyboardType.REPLY,
-                                       language_name=user_language)
-        bot_message = message_translate(message_name="FEEDBACK_MENU_OPEN",
-                                        language_name=user_language) % button_translate(
-            button_name="MAIN_MENU_FEEDBACK", language_name=user_language)
-
-        await msg.reply(bot_message, reply_markup=new_keyboard)
-
-    else:
+    if db_donor.get_donor(telegram_id=user_id):
         await state.set_state(Feedback.name)
 
-        new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.MENUBACK, keyboard_type=KeyboardType.REPLY,
-                                       language_name=user_language)
-        bot_message = message_translate(message_name="NAME_SENT", language_name=user_language)
+        new_keyboard = kb.get_keyboard(
+            keyboard_name=KeyboardName.MENUBACK,
+            keyboard_type=KeyboardType.REPLY,
+            language_name=user_language,
+        )
+        bot_message = message_translate(
+            message_name="NAME_SENT", language_name=user_language
+        )
 
         await msg.answer(bot_message, reply_markup=new_keyboard)
-        
+
+
 @router.message(pressed_button(button_name="MAIN_MENU_EVENTS"))
 async def events_and_promo_handler(msg: Message):
     nb = NewsDatabase()
 
-    user_id = msg.from_user.id
-    user_language = db.get_user_language(user_id=user_id)
-    news_list = nb.fetch_news(limit=5)
+    news_list = nb.get_news(limit=5)
+    formatted_text = nb.format_news_for_telegram(news_list)
 
-    text = nb.format_news_for_telegram(news_list, lang=user_language) or "."
-
-    await bot.answer(
-        user_id=user_id,
-        text=text,
-        keyboard_name=KeyboardName.MAIN,
-        keyboard_type=KeyboardType.REPLY,
-        language_name=user_language,
-        need_translation=False
+    await msg.answer(
+        formatted_text,
+        parse_mode=ParseMode.MARKDOWN_V2,
     )
 
 
@@ -113,15 +102,19 @@ async def profile_handler(msg: Message):
     if donor:
         gender = donor.get_gender()
         name = donor.get_name()
-        phone = donor.get_telephone().get_number()
+        phone = donor.get_telephone()
         bdate = donor.get_birthdate()
-        gender = donor.get_gender().get_gender_name()
+        email = donor.get_email()
+        gender = button_translate(
+            button_name=gender.get_gender_name(), language_name=user_language
+        )
 
         bot_message = message_translate("PROFILE", language_name=user_language) % (
             name,
-            phone,
-            bdate.strftime("%d-%m-%Y"),
-            button_translate(button_name=gender, language_name=user_language),
+            phone.get_number(),
+            email,
+            bdate.strftime("%d.%m.%Y"),
+            gender,
         )
 
         keyboard = kb.get_keyboard(
@@ -130,5 +123,34 @@ async def profile_handler(msg: Message):
             language_name=user_language,
         )
         await msg.answer(bot_message, reply_markup=keyboard)
+
+
+@router.message(pressed_button(button_name="MAIN_MENU_STAT"))
+async def stat_handler(msg: Message):
+    user_id = msg.from_user.id
+    lang = db.get_user_language(user_id=user_id)
+
+    appointments = ad.get_all_appointments(need_status="1") or 0
+    if isinstance(appointments, list):
+        appointments = len(appointments)
+    else:
+        appointments = 1
+
+    A = bc.get("A", "+", "list") or 0
+    B = bc.get("B", "+", "list") or 0
+    AB = bc.get("AB", "+", "list") or 0
+    O = bc.get("O", "+", "list") or 0
+
+    message = message_translate("STAT_MESSAGE", lang) % (
+        appointments, "RH\+", A, B, AB, O
+    )
+
+    keyboard = kb.get_keyboard(
+        keyboard_name=KeyboardName.STATISTIC,
+        keyboard_type=KeyboardType.INLINE,
+        language_name=lang,
+    )
+    
+    await msg.answer(message, reply_markup=keyboard, parse_mode=ParseMode.MARKDOWN_V2)
 
 hnd.add_router(router)
