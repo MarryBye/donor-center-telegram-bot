@@ -98,7 +98,6 @@ async def process_phone(msg: Message, state: FSMContext):
             print(phone, name)
 
             db.add_feedback_request(user_id=user_id, note=f"Telegram: {name} | {phone}")
-            print("все ок")
         else:
             await msg.answer(
                 message_translate(
