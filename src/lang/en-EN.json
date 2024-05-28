@@ -67,7 +67,7 @@
         "FEEDBACK_AFTER_NAME_MESSAGE": "Name accepted. Now you can choose one of the methods for feedback.",
         "CANCELLED_STATE": "You canceled the last action.",
 
-        "PROFILE": "Your information:\nName: %s\nNumber: %s\nDate of Birth: %s\nGender: %s",
+        "PROFILE": "Your information:\nName: %s\nNumber: %s\nMail: %s\nDate of Birth: %s\nGender: %s",
         "PROFILE_NAME_REQUEST": "Please enter your new name. (For example, Ivan)",
         "PROFILE_NAME_CHANGED": "Name successfully changed, you can check it in your profile for confirmation.",
         "PROFILE_NAME_ERROR": "Error occurred! The name should only include lowercase and uppercase letters.",
