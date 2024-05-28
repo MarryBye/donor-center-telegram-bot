@@ -81,7 +81,9 @@
         "PROFILE_GENDER_ERROR": "Виникла помилка! Такого гендеру немає.",
         "PROFILE_EMAIL_REQUEST": "Введіть, будь ласка, свою нову пошту.",
         "PROFILE_EMAIL_CHANGED": "Пошту успішно змінено, для впевненості можете перевірити в профілі.",
-        "PROFILE_EMAIL_ERROR": "Виникла помилка! Пошта повинна виглядати як mail@example.com"
+        "PROFILE_EMAIL_ERROR": "Виникла помилка! Пошта повинна виглядати як mail@example.com",
+
+        "STAT_MESSAGE": "*Статистика*\n\nВсього донацій: %s\n\n*Залишки крові %s*:\nПерша: %s\nДруга: %s\nТретя: %s\nЧетверта: %s"
     },
 
     "BUTTONS": {
@@ -91,7 +93,11 @@
         "MAIN_MENU_EVENTS": "🎈 Події та акції",
         "MAIN_MENU_FEEDBACK": "📞 Підтримка",
         "MAIN_MENU_INFO": "❓ Що буде з моїми даними?",
+        "MAIN_MENU_STAT": "⌛ Статистика",
 
+        "RHESUS +": "Резус позитивний",
+        "RHESUS -": "Резус негативний",
+        
         "SEND_CONTACT": "💽 Надіслати контактні дані",
 
         "DONATION_MENU_REGISTER": "🙋 Запис на пожуртвування",
