@@ -10,3 +10,4 @@ from src.handlers.start_register import *
 from src.handlers.start_register import *
 from src.handlers.profile import *
 from src.handlers.admin_panel import *
+from src.handlers.statistic import *
