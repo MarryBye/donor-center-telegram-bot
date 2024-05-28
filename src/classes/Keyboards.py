@@ -26,6 +26,7 @@ class KeyboardName:
     EDIT_PROFILE = "EDIT_PROFILE"
     PROFILE_SETTINGS = "PROFILE_SETTINGS"
     ADMIN = "ADMIN"
+    STATISTIC = "STATISTIC"
 
 
 class Keyboard:
