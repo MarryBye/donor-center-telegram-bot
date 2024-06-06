@@ -431,7 +431,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     user_id = call.from_user.id
     user_language = db.get_user_language(user_id=user_id)
 
-    clinic = db.get_status(db_id=call.data)
+    status = db.get_status(db_id=call.data)
 
     data = await state.get_data()
     appointment_id = data["appointment_id"]
@@ -448,13 +448,19 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
         message_id=call.message.message_id,
         reply_markup=None
     )
+    
+    message_text = message_translate(
+        message_name="ADMIN_SUCCESSFULLY_CHANGED_STATUS",
+        language_name=user_language
+    ) % (appointment_id, status.get_name_status())
 
     await bot.answer(
         user_id=user_id,
-        text="ADMIN_SUCCESSFULLY_CHANGED_STATUS",
+        text=message_text,
         language_name=user_language,
         keyboard_name=KeyboardName.MAIN,
-        keyboard_type=KeyboardType.REPLY
+        keyboard_type=KeyboardType.REPLY,
+        need_translation=False
     )
 
 hnd.add_router(router)
