@@ -173,13 +173,19 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
         message_id=call.message.message_id,
         reply_markup=None
     )
+    
+    message_text = message_translate(
+        message_name="DONATION_REGISTERED_APPOINTMENT", 
+        language_name=user_language
+    ) % new_appointment.get_id()
 
     await bot.answer(
         user_id=user_id,
-        text="DONATION_REGISTERED_APPOINTMENT",
+        text=message_text,
         keyboard_name=KeyboardName.DONATION,
         keyboard_type=KeyboardType.REPLY,
-        language_name=user_language
+        language_name=user_language,
+        need_translation=False
     )
 
 

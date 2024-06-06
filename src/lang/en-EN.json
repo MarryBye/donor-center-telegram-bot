@@ -27,7 +27,7 @@
         "DONATION_SELECT_CITY": "Select the city where it's easier for you to go to the center from the options below:",
         "DONATION_SELECT_REGION": "Select the region where it's easier for you to go to the center from the options below:",
         "DONATION_SELECT_CLINIC": "Based on the data you received earlier, I have selected clinics for you. Choose which one you want to go to:",
-        "DONATION_REGISTERED_APPOINTMENT": "You are registered for an appointment!",
+        "DONATION_REGISTERED_APPOINTMENT": "You are registered for an appointment!\n\nAppointment number: %s.",
         "DONATION_HISTORY": "#%s\nRegistration date: %s\nAppointment date: %s\nCenter: %s, Address: %s, %s, %s, %s, Building No. %s\nStatus: %s\n\n",
         "DONATION_CENTERS": "#%s: %s\nAddress: %s, %s, %s, %s, Building No. %s\n\n",
         "DONATION_INCORRECT_DATA": "No centers found with the provided data! Please try again.",
@@ -48,6 +48,11 @@
         "ADMIN_SENDED_NOTIFICATIONS": "You are trying to send notifications. Please write a message and attach an image if necessary, then send it to me and I will forward it to everyone subscribed to notifications in the bot.",
         "ADMIN_SUCCES_SEND_NOTIFICATIONS": "You have successfully sent notifications!",
         "ADMIN_CLINIC_INFO": "Information about your clinic No.%s, '%s':\n\nTotal donations: %s\nCurrently waiting: %s\nSuccessful: %s\nUnsuccessful: %s\n\nAmount of blood at the center: %s\n",
+        "ADMIN_INPUT_APPOINTMENT_ID": "Введіть номер прийому, який потрібно змінити.",
+        "ADMIN_INPUT_STATUS": "Оберіть статус, який потрібно встановити для прийому",
+        "ADMIN_INCORRECT_APPOINTMENT_ID": "Неправильно введено номер прийому! Це мають бути цифри.",
+        "ADMIN_SUCCESSFULLY_CHANGED_STATUS": "Статус прийому №%s успішно змінено на %s!",
+        "ADMIN_UNSUCCESSFULL_CHANGED_STATUS": "Змінити статус прийому не вийшло, спробуйте че раз.",
 
         "CANNOT_REGISTER": "You are already registered for an appointment!",
         "INFO_REGISTER": "Your data will not be shared.",
@@ -130,6 +135,7 @@
 
         "ADMIN_MENU_SEND_NOTIFICATIONS": "📢 Send Notifications",
         "ADMIN_MENU_GET_CLINIC_INFO": "🏥 Clinic Information",
+        "ADMIN_MENU_SET_STATUS": "💈 Change donor status",
 
         "BUTTON_HOME": "🏠 Home",
         "BUTTON_BACK": "⬅️ Back",

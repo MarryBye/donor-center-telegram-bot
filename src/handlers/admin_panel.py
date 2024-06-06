@@ -1,5 +1,7 @@
 import asyncio
 
+from re import match
+
 from aiogram import Router
 from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command
@@ -363,6 +365,96 @@ async def main_handler(msg: Message):
         keyboard_type=KeyboardType.REPLY,
         language_name=user_language,
         need_translation=False
+    )
+
+@router.message(pressed_button(button_name="ADMIN_MENU_SET_STATUS"))
+async def main_handler(msg: Message, state: FSMContext):
+    user_id = msg.from_user.id
+    user_language = db.get_user_language(user_id=user_id)
+
+    admin = db.get_admin_authenticated(user_id=user_id)
+
+    if not admin:
+        return False
+
+    await state.set_state(AdminFunc.input_appointment_id)
+ 
+    await bot.answer(
+        user_id=user_id,
+        text="ADMIN_INPUT_APPOINTMENT_ID",
+        language_name=user_language
+    )
+
+    await msg.delete()
+    
+
+@router.message(AdminFunc.input_appointment_id)
+async def main_handler(msg: Message, state: FSMContext):
+    user_id = msg.from_user.id
+    user_language = db.get_user_language(user_id=user_id)
+    
+    admin = db.get_admin_authenticated(user_id=user_id)
+    
+    id_pattern = r"\d+"
+    
+    if not admin:
+        return False
+    
+    if msg.text is None or not match(id_pattern, msg.text):
+
+            bot_msg = await bot.answer(
+                user_id=user_id,
+                text="ADMIN_INCORRECT_APPOINTMENT_ID",
+                language_name=user_language
+            )
+
+            await asyncio.sleep(5)
+            await bot_msg.delete()
+
+            return False
+    
+    await state.update_data(appointment_id=msg.text)
+    await state.set_state(AdminFunc.input_status)
+    
+    await bot.answer(
+        user_id=user_id,
+        text="ADMIN_INPUT_STATUS",
+        language_name=user_language,
+        keyboard_name=KeyboardName.STATUSES,
+        keyboard_type=KeyboardType.INLINE
+    )
+
+    await msg.delete()
+    
+@router.callback_query(AdminFunc.input_status)
+async def main_handler(call: CallbackQuery, state: FSMContext):
+    user_id = call.from_user.id
+    user_language = db.get_user_language(user_id=user_id)
+
+    clinic = db.get_status(db_id=call.data)
+
+    data = await state.get_data()
+    appointment_id = data["appointment_id"]
+
+    admin = db.get_admin_authenticated(user_id=user_id)
+    
+    if not admin:
+        return False
+    
+    # TODO Изменить статус
+
+    await bot.edit_message_reply_markup(
+        chat_id=call.from_user.id,
+        message_id=call.message.message_id,
+        reply_markup=None
+    )
+
+    await bot.answer(
+        user_id=user_id,
+        text="ADMIN_SUCCESSFULLY_CHANGED_STATUS",
+        language_name=user_language,
+        keyboard_name=KeyboardName.MAIN,
+        keyboard_type=KeyboardType.REPLY
     )
 
 hnd.add_router(router)

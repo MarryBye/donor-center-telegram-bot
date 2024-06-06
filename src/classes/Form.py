@@ -25,6 +25,8 @@ class FormAdmin(StatesGroup):
 
 class AdminFunc(StatesGroup):
     sending_notifications = State()
+    input_appointment_id = State()
+    input_status = State()
 
 
 class ChooseNotifications(StatesGroup):
