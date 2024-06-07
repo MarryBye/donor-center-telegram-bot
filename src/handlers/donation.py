@@ -1,5 +1,8 @@
+import os
+import asyncio
+
 from aiogram import Router
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import Message, CallbackQuery, FSInputFile
 from aiogram.fsm.context import FSMContext
 
 from src.classes.CRMBot import CRMBot
@@ -9,6 +12,7 @@ from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
 from src.classes.Form import FormAppointment
 from src.classes.Datatypes.Appointment import Appointment
 from datetime import datetime, timedelta
+from src.classes.Form import DonationFunc
 
 from src.funcs.core import pressed_button, message_translate
 
@@ -28,31 +32,32 @@ async def main_handler(msg: Message, state: FSMContext):
     user_language = db.get_user_language(user_id=user_id)
 
     donor = db.get_donor(telegram_id=user_id)
-    last_appointment = db.get_appointment(donor=donor, only_last=True)
-    print(last_appointment.get_id())
 
-    if last_appointment is not None and last_appointment.get_status().get_name_status() == "Waiting":
+    if donor:
+        last_appointment = db.get_appointment(donor=donor, only_last=True)
+
+        if last_appointment is not None and last_appointment.get_status().get_name_status() == "Waiting":
+
+            await bot.answer(
+                user_id=user_id,
+                text="CANNOT_REGISTER",
+                keyboard_name=KeyboardName.DONATION,
+                keyboard_type=KeyboardType.REPLY,
+                language_name=user_language
+            )
+
+            return False
+
+        await state.update_data(donor=donor)
+        await state.set_state(FormAppointment.registerAppointment_city)
 
         await bot.answer(
             user_id=user_id,
-            text="CANNOT_REGISTER",
-            keyboard_name=KeyboardName.DONATION,
-            keyboard_type=KeyboardType.REPLY,
+            text="DONATION_SELECT_CITY",
+            keyboard_name=KeyboardName.CITIES,
+            keyboard_type=KeyboardType.INLINE,
             language_name=user_language
         )
-
-        return False
-
-    await state.update_data(donor=donor)
-    await state.set_state(FormAppointment.registerAppointment_city)
-
-    await bot.answer(
-        user_id=user_id,
-        text="DONATION_SELECT_CITY",
-        keyboard_name=KeyboardName.CITIES,
-        keyboard_type=KeyboardType.INLINE,
-        language_name=user_language
-    )
 
 
 @router.callback_query(FormAppointment.registerAppointment_city)
@@ -191,15 +196,85 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
 
 
 @router.message(pressed_button(button_name="DONATION_MENU_FIND_CENTER"))
-async def main_handler(msg: Message):
+async def main_handler(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
+    donor = db.get_donor(telegram_id=user_id)
 
-    clinics = [clinic for clinic in db.get_clinics()]
+    if donor:
+        await state.set_state(DonationFunc.input_city)
+        
+        await bot.answer(
+            user_id=user_id,
+            text="DONATION_SELECT_CITY",
+            keyboard_name=KeyboardName.CITIES,
+            keyboard_type=KeyboardType.INLINE,
+            language_name=user_language
+        )
+    
+@router.callback_query(DonationFunc.input_city)
+async def main_handler(call: CallbackQuery, state: FSMContext):
+    user_id = call.from_user.id
+    user_language = db.get_user_language(user_id=user_id)
 
+    await state.update_data(city_id=call.data)
+    await state.set_state(DonationFunc.input_region)
+
+    await bot.edit_message_reply_markup(
+        chat_id=call.from_user.id,
+        message_id=call.message.message_id,
+        reply_markup=None
+    )
+
+    await bot.answer(
+        user_id=user_id,
+        text="DONATION_SELECT_REGION",
+        keyboard_name=KeyboardName.REGIONS,
+        keyboard_type=KeyboardType.INLINE,
+        language_name=user_language
+    )
+
+
+@router.callback_query(DonationFunc.input_region)
+async def main_handler(call: CallbackQuery, state: FSMContext):
+    user_id = call.from_user.id
+    user_language = db.get_user_language(user_id=user_id)
+
+    await state.update_data(region_id=call.data)
+
+    data = await state.get_data()
+
+    all_clinics = db.get_clinics()
+    regional_clinics = []
+
+    for clinic in all_clinics:
+        clinic_address = clinic.get_address()
+        clinic_region, clinic_city = clinic_address.get_region(), clinic_address.get_city()
+
+        if str(clinic_region.get_id()) == data["region_id"] and str(clinic_city.get_id()) == data["city_id"]:
+            regional_clinics.append(clinic)
+
+    if len(regional_clinics) == 0:
+        await state.clear()
+        await bot.edit_message_reply_markup(
+            chat_id=call.from_user.id,
+            message_id=call.message.message_id,
+            reply_markup=None
+        )
+
+        await bot.answer(
+            user_id=user_id,
+            text="DONATION_CANT_FIND_CENTERS",
+            keyboard_name=KeyboardName.MAIN,
+            keyboard_type=KeyboardType.REPLY,
+            language_name=user_language
+        )
+
+        return False
+    
     clinics_text = ""
 
-    for clinic in clinics:
+    for clinic in regional_clinics:
         address = clinic.get_address()
         region = address.get_region().get_region_name()
         city = address.get_city().get_city_name()
@@ -209,50 +284,84 @@ async def main_handler(msg: Message):
         clinics_text += message_translate(message_name="DONATION_CENTERS", language_name=user_language) % (
             clinic.get_id(), clinic.get_clinic_name(), city, region, street, area, house
         )
+    
+    bot_message = message_translate(
+        message_name="DONATION_FIND_CENTERS_MESSAGE", 
+        language_name=user_language
+    ) % (call.from_user.username, clinics_text)
 
-    new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.DONATION, keyboard_type=KeyboardType.REPLY,
-                                   language_name=user_language)
-    bot_message = message_translate(message_name="DONATION_FIND_CENTERS_MESSAGE", language_name=user_language) % (
-        msg.from_user.username, clinics_text)
+    await bot.edit_message_reply_markup(
+        chat_id=call.from_user.id,
+        message_id=call.message.message_id,
+        reply_markup=None
+    )
 
-    await msg.reply(text=bot_message, reply_markup=new_keyboard)
-
+    await bot.answer(
+        user_id=user_id,
+        text=bot_message,
+        keyboard_name=KeyboardName.DONATION,
+        keyboard_type=KeyboardType.REPLY,
+        language_name=user_language,
+        need_translation=False
+    )
 
 @router.message(pressed_button(button_name="DONATION_MENU_HISTORY"))
 async def main_handler(msg: Message):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
-
     donor = db.get_donor(telegram_id=user_id)
-    all_appointments = db.get_appointment(donor=donor, only_last=False)
 
-    history_text = ""
-    quantity_appointments = 0
+    if donor:
+        donor = db.get_donor(telegram_id=user_id)
+        all_appointments = db.get_appointment(donor=donor, only_last=False)
 
-    if all_appointments:
-        for appointment in all_appointments:
-            clinic = appointment.get_clinic()
-            address = clinic.get_address()
-            region = address.get_region().get_region_name()
-            city = address.get_city().get_city_name()
-            street = address.get_street().get_street_name()
-            area = address.get_area().get_area_name()
-            house = address.get_house_number()
-            clinic_name = clinic.get_clinic_name()
-            status_name = appointment.get_status().get_name_status()
-            registration_date = appointment.get_registration_date().strftime("%d-%m-%Y")
-            appointment_date = appointment.get_appointment_date().strftime("%d-%m-%Y")
-            history_text += message_translate(message_name="DONATION_HISTORY", language_name=user_language) % (
-                appointment.get_id(), registration_date, appointment_date, clinic_name, city, region, street, area, house, status_name
-            )
-        quantity_appointments = len(all_appointments)
+        history_text = ""
+        quantity_appointments = 0
 
-    new_keyboard = kb.get_keyboard(keyboard_name=KeyboardName.DONATION, keyboard_type=KeyboardType.REPLY,
-                                   language_name=user_language)
-    bot_message = message_translate(message_name="DONATION_HISTORY_MESSAGE", language_name=user_language) % (
-        msg.from_user.username, quantity_appointments, history_text)
+        if all_appointments:
+            for appointment in all_appointments:
+                clinic = appointment.get_clinic()
+                address = clinic.get_address()
+                region = address.get_region().get_region_name()
+                city = address.get_city().get_city_name()
+                street = address.get_street().get_street_name()
+                area = address.get_area().get_area_name()
+                house = address.get_house_number()
+                clinic_name = clinic.get_clinic_name()
+                status_name = appointment.get_status().get_name_status()
+                registration_date = appointment.get_registration_date().strftime("%d-%m-%Y")
+                appointment_date = appointment.get_appointment_date().strftime("%d-%m-%Y")
+                history_text += message_translate(message_name="DONATION_HISTORY", language_name=user_language) % (
+                    appointment.get_id(), registration_date, appointment_date, clinic_name, city, region, street, area, house, status_name
+                )
+            quantity_appointments = len(all_appointments)
 
-    await msg.reply(text=bot_message, reply_markup=new_keyboard)
+        new_keyboard = kb.get_keyboard(
+            keyboard_name=KeyboardName.DONATION, 
+            keyboard_type=KeyboardType.REPLY,
+            language_name=user_language
+        )
+        
+        history_message = message_translate(
+            message_name="DONATION_HISTORY_MESSAGE", 
+            language_name=user_language
+        ) % (msg.from_user.username, quantity_appointments, history_text)
+        
+        bot_message = message_translate(
+            message_name="DONATION_SENDED_HISTORY_FILE", 
+            language_name=user_language
+        )
 
+        donor_history_file = open(f"History_ID{donor.get_id()}.txt", "w", encoding="UTF-8")
+        donor_history_file.write(history_message)
+        donor_history_file.close()
+        
+        file = FSInputFile(path=f"History_ID{donor.get_id()}.txt", filename=f"History_ID{donor.get_id()}.txt")
 
+        await bot.send_document(user_id, file, caption=bot_message, reply_markup=new_keyboard)
+        
+        os.remove(donor_history_file.name)
+        
+        await asyncio.sleep(5)
+    
 hnd.add_router(router)

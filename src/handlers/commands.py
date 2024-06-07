@@ -31,15 +31,15 @@ async def main_handler(msg: Message, state: FSMContext):
     if await state.get_state() is not None:
         await state.clear()
 
-        await bot.answer(
-            user_id=user_id,
-            text="CANCELLED_STATE",
-            keyboard_name=KeyboardName.MAIN,
-            keyboard_type=KeyboardType.REPLY,
-            language_name=user_language
-        )
+    await bot.answer(
+        user_id=user_id,
+        text="CANCELLED_STATE",
+        keyboard_name=KeyboardName.MAIN,
+        keyboard_type=KeyboardType.REPLY,
+        language_name=user_language
+    )
 
-        debug_print("User", user_id, "has cancelled last command!")
+    debug_print("User", user_id, "has cancelled last command!")
 
 
 hnd.add_router(router)

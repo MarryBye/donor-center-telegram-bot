@@ -58,18 +58,20 @@ async def feedback_phone_handler(msg: Message, state: FSMContext):
 
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
+    donor = db.get_donor(telegram_id=user_id)
 
-    new_keyboard = kb.get_keyboard(
-        keyboard_name=KeyboardName.MENUBACK,
-        keyboard_type=KeyboardType.REPLY,
-        language_name=user_language,
-    )
-    bot_message = message_translate(
-        message_name="FEEDBACK_PHONE_MESSAGE", language_name=user_language
-    )
+    if donor:
+        new_keyboard = kb.get_keyboard(
+            keyboard_name=KeyboardName.MENUBACK,
+            keyboard_type=KeyboardType.REPLY,
+            language_name=user_language,
+        )
+        bot_message = message_translate(
+            message_name="FEEDBACK_PHONE_MESSAGE", language_name=user_language
+        )
 
-    await state.set_state(Feedback.phone)
-    await msg.answer(bot_message, reply_markup=new_keyboard)
+        await state.set_state(Feedback.phone)
+        await msg.answer(bot_message, reply_markup=new_keyboard)
 
 
 @router.message(Feedback.phone)
@@ -119,19 +121,21 @@ async def feedback_mail_handler(msg: Message, state: FSMContext):
 
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
+    donor = db.get_donor(telegram_id=user_id)
 
-    new_keyboard = kb.get_keyboard(
-        keyboard_name=KeyboardName.MENUBACK,
-        keyboard_type=KeyboardType.REPLY,
-        language_name=user_language,
-    )
+    if donor:
+        new_keyboard = kb.get_keyboard(
+            keyboard_name=KeyboardName.MENUBACK,
+            keyboard_type=KeyboardType.REPLY,
+            language_name=user_language,
+        )
 
-    bot_message = message_translate(
-        message_name="FEEDBACK_MAIL_MESSAGE", language_name=user_language
-    )
+        bot_message = message_translate(
+            message_name="FEEDBACK_MAIL_MESSAGE", language_name=user_language
+        )
 
-    await state.set_state(Feedback.mail)
-    await msg.answer(bot_message, reply_markup=new_keyboard)
+        await state.set_state(Feedback.mail)
+        await msg.answer(bot_message, reply_markup=new_keyboard)
 
 
 @router.message(Feedback.mail)

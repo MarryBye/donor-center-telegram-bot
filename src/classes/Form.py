@@ -28,6 +28,10 @@ class AdminFunc(StatesGroup):
     input_appointment_id = State()
     input_status = State()
 
+class DonationFunc(StatesGroup):
+    input_city = State()
+    input_region = State()
+    input_clinic = State()
 
 class ChooseNotifications(StatesGroup):
     choose_notification = State()
