@@ -28,6 +28,7 @@ class KeyboardName:
     ADMIN = "ADMIN"
     STATISTIC = "STATISTIC"
     STATUSES = "STATUSES"
+    BLOODS = "BLOODS"
 
 
 class Keyboard:

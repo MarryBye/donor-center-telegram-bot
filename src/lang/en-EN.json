@@ -138,6 +138,7 @@
         "ADMIN_MENU_SEND_NOTIFICATIONS": "📢 Send Notifications",
         "ADMIN_MENU_GET_CLINIC_INFO": "🏥 Clinic Information",
         "ADMIN_MENU_SET_STATUS": "💈 Change donor status",
+        "ADMIN_UPDATE_BLOOD": "🩸 Update Blood Quantity",
 
         "BUTTON_HOME": "🏠 Home",
         "BUTTON_BACK": "⬅️ Back",

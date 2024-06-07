@@ -139,6 +139,7 @@
         "ADMIN_MENU_SEND_NOTIFICATIONS": "\uD83D\uDD14 Розіслати повідомлення",
         "ADMIN_MENU_GET_CLINIC_INFO": "\uD83C\uDF10 Інформація про клініку",
         "ADMIN_MENU_SET_STATUS": "💈 Змінити статус донора",
+        "ADMIN_UPDATE_BLOOD": "🩸 Змінити кількість крові",
 
         "BUTTON_HOME": "🏠 Головне меню",
         "BUTTON_BACK": "⬅️ Повернутись",

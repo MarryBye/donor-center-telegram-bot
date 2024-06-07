@@ -138,6 +138,7 @@
         "ADMIN_MENU_SEND_NOTIFICATIONS": "\uD83D\uDD14 Benachrichtigungen senden",
         "ADMIN_MENU_GET_CLINIC_INFO": "\uD83C\uDF10 Informationen über die Klinik",
         "ADMIN_MENU_SET_STATUS": "💈 Spenderstatus ändern",
+        "ADMIN_UPDATE_BLOOD": "🩸 Blutmenge aktualisieren",
         
         "BUTTON_HOME": "🏠 Hauptmenü",
         "BUTTON_BACK": "⬅️ Zurück",

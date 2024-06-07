@@ -15,3 +15,4 @@ from src.keyboards.profile_settings import *
 from src.keyboards.admin import *
 from src.keyboards.statistic import *
 from src.keyboards.statuses import *
+from keyboards.bloods import *

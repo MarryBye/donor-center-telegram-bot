@@ -138,6 +138,7 @@
         "ADMIN_MENU_SEND_NOTIFICATIONS": "\uD83D\uDD14 发送通知",
         "ADMIN_MENU_GET_CLINIC_INFO": "\uD83C\uDF10 诊所信息",
         "ADMIN_MENU_SET_STATUS": "💈 更改捐献者状态",
+        "ADMIN_UPDATE_BLOOD": "🩸 更新血液数量",
         
         "BUTTON_HOME": "🏠 主菜单",
         "BUTTON_BACK": "⬅️ 返回",
