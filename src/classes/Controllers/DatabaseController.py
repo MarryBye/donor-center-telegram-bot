@@ -715,7 +715,7 @@ class DatabaseController(metaclass=Singleton):
 
             return False
 
-    def get_appointment(self, donor: Donor, only_last: bool = True, n: int = -1) -> Appointment | list[Appointment] | None:
+    def get_appointment(self, donor: Donor, only_last: bool = True, db_id: int | str = -1, n: int = -1) -> Appointment | list[Appointment] | None:
 
         """
         Сформировать объект ``Appointment`` по данным из БД, если донор существует. В качестве параметра принимает:
@@ -746,10 +746,16 @@ class DatabaseController(metaclass=Singleton):
             'AND '
             'numbers."donor_ID" = donors."ID" '
             'AND '
-            '(donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s)'
+            '(appointments."ID" = %s OR donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s) '
         )
+        
+        if only_last:
+            query += 'ORDER BY appointments."ID" DESC'
+        
         self.cursor.execute(query, (
-        donor.get_id(), donor.get_telegram_id(), donor.get_telephone().get_number(), donor.get_email()))
+                db_id, donor.get_id(), donor.get_telegram_id(), donor.get_telephone().get_number(), donor.get_email()
+            )
+        )
 
         if only_last:
             data = self.cursor.fetchone()
@@ -857,6 +863,27 @@ class DatabaseController(metaclass=Singleton):
             data[i] = Appointment(data=data_component)
 
         return data if data is not None else None
+    
+    def update_appointment_status(self, db_id: int | str, status_id: int | str) -> bool:
+        
+        try:
+            query = (
+                'UPDATE '
+                'data_blood.appointment AS appointment '
+                'SET '
+                '"status_ID" = %s '
+                'WHERE '
+                'appointment."ID" = %s'
+            )
+            self.cursor.execute(query, (status_id, db_id))
+            
+            self.connection.commit()
+
+            debug_print(f"Admin has updated status of appointment #{db_id}. Now, its status is {status_id} - {self.get_status(db_id=status_id).get_name_status()}")
+            return True
+        except Exception as e:
+            debug_print(f"Cannot update status of appointment. Error: \n{e}", color=TerminalColors.FAIL)
+            return False
 
     def add_admins(self):
 

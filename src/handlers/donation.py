@@ -29,6 +29,7 @@ async def main_handler(msg: Message, state: FSMContext):
 
     donor = db.get_donor(telegram_id=user_id)
     last_appointment = db.get_appointment(donor=donor, only_last=True)
+    print(last_appointment.get_id())
 
     if last_appointment is not None and last_appointment.get_status().get_name_status() == "Waiting":
 
