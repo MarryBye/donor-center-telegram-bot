@@ -29,6 +29,7 @@ class AdminFunc(StatesGroup):
     input_status = State()
     input_blood = State()
     input_quantity = State()
+    input_operation = State()
 
 class DonationFunc(StatesGroup):
     input_city = State()

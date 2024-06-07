@@ -884,6 +884,35 @@ class DatabaseController(metaclass=Singleton):
         except Exception as e:
             debug_print(f"Cannot update status of appointment. Error: \n{e}", color=TerminalColors.FAIL)
             return False
+        
+    def update_clinic_blood_quantity(self, clinic_id: int, blood_id: int, quantity: int, operation: int = 1) -> bool:
+        
+        try:
+            print(self.get_has_blood(clinic_id=clinic_id, blood_id=blood_id)[blood_id - 1].get_blood().get_blood_and_comp_name())
+            old_kol = self.get_has_blood(clinic_id=clinic_id, blood_id=blood_id)[blood_id - 1].get_quantity()
+            
+            if operation == 1:
+                kol = old_kol + quantity
+            else:
+                kol = old_kol - quantity if old_kol - quantity > 0 else 0
+                
+            print(kol, old_kol - quantity)
+            
+            query = (
+                'UPDATE '
+                'data_blood.clinic_has_blood_and_comp AS clinic_blood '
+                'SET '
+                '"kol" = %s '
+                'WHERE '
+                '(clinic_blood."blood_and_comp_ID" = %s AND clinic_blood."clinic_ID" = %s)'
+            )
+            self.cursor.execute(query, (kol, blood_id, clinic_id))
+            
+            self.connection.commit()
+            return True
+        except Exception as e:
+            debug_print(f"Cannot update quantity of blood in clinic. Error: \n{e}", color=TerminalColors.FAIL)
+            return False
 
     def add_admins(self):
 

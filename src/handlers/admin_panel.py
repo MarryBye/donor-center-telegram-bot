@@ -355,7 +355,7 @@ async def main_handler(msg: Message):
     bloods_text = ""
 
     for blood in all_blood:
-        bloods_text += blood.get_blood().get_blood_and_comp_name() + ": " + str(blood.get_quantity()) + " litres\n"
+        bloods_text += "\n" + blood.get_blood().get_blood_and_comp_name() + ": " + str(blood.get_quantity()) + " litres"
 
     message_text = message_translate(message_name="ADMIN_CLINIC_INFO", language_name=user_language) % (
         clinic.get_id(), clinic.get_clinic_name(), all_appointments, waiting_appointments, success_appointments, unsuccess_appointments, bloods_text
@@ -484,5 +484,136 @@ async def main_handler(msg: Message, state: FSMContext):
     
     if not admin:
         return False
+    
+    all_bloods = db.get_bloods()
+    
+    kb_scheme = []
+    kb_scheme_row = []
+    for i, blood in enumerate(all_bloods, start=0):
+        kb_scheme_row.append({blood.get_blood_and_comp_name(): {"callback_data": str(blood.get_id())}})
+        if i % 3 == 0 or i >= len(all_bloods) - 1:
+            kb_scheme.append(kb_scheme_row)
+            kb_scheme_row = []
+
+    keyboard = Keyboard(keyboard_scheme=kb_scheme, need_translation=False)
+    
+    await state.set_state(AdminFunc.input_blood)
+
+    await bot.answer(
+        user_id=user_id,
+        text="ADMIN_INPUT_BLOOD",
+        keyboard_name=keyboard,
+        keyboard_type=KeyboardType.INLINE,
+        language_name=user_language
+    )
+
+@router.callback_query(AdminFunc.input_blood)
+async def main_handler(call: CallbackQuery, state: FSMContext):
+    user_id = call.from_user.id
+    user_language = db.get_user_language(user_id=user_id)
+    
+    admin = db.get_admin_authenticated(user_id=user_id)
+    
+    if not admin:
+        return False
+    
+    await state.set_state(AdminFunc.input_operation)
+    await state.update_data(blood_id=str(call.data))
+    
+    kb_scheme = [
+        [{"+": {"callback_data": "1"}}, {"-": {"callback_data": "2"}}]
+    ]
+    
+    keyboard = Keyboard(keyboard_scheme=kb_scheme, need_translation=False)
+    
+    await bot.edit_message_reply_markup(
+        chat_id=call.from_user.id,
+        message_id=call.message.message_id,
+        reply_markup=None
+    )
+    
+    await bot.answer(
+        user_id=user_id,
+        text="ADMIN_INPUT_OPERATION",
+        keyboard_name=keyboard,
+        keyboard_type=KeyboardType.INLINE,
+        language_name=user_language
+    )
+
+@router.callback_query(AdminFunc.input_operation)
+async def main_handler(call: CallbackQuery, state: FSMContext):
+    user_id = call.from_user.id
+    user_language = db.get_user_language(user_id=user_id)
+    
+    admin = db.get_admin_authenticated(user_id=user_id)
+    
+    if not admin:
+        return False
+    
+    await state.set_state(AdminFunc.input_quantity)
+    await state.update_data(operation=str(call.data))
+    
+    await bot.edit_message_reply_markup(
+        chat_id=call.from_user.id,
+        message_id=call.message.message_id,
+        reply_markup=None
+    )
+    
+    await bot.answer(
+        user_id=user_id,
+        text="ADMIN_INPUT_QUANTITY",
+        language_name=user_language
+    )
+    
+@router.message(AdminFunc.input_quantity)
+async def main_handler(msg: Message, state: FSMContext):
+    user_id = msg.from_user.id
+    user_language = db.get_user_language(user_id=user_id)
+    
+    admin = db.get_admin_authenticated(user_id=user_id)
+    
+    quantity_pattern = r"\d+"
+    
+    if not admin:
+        return False
+    
+    if msg.text is None or not match(quantity_pattern, msg.text):
+
+        bot_msg = await bot.answer(
+            user_id=user_id,
+            text="ADMIN_INPUT_QUANTITY_ERROR",
+            language_name=user_language
+        )
+
+        await asyncio.sleep(5)
+        await bot_msg.delete()
+
+        return False
+    
+    data = await state.get_data()
+    blood_id = int(data["blood_id"])
+    operation = int(data["operation"])
+    quantity = int(msg.text)
+    
+    debug_print(blood_id, operation, quantity)
+    
+    success = db.update_clinic_blood_quantity(clinic_id=admin.get_clinic().get_id(), blood_id=blood_id, quantity=quantity, operation=operation)
+    
+    if success:
+        await bot.answer(
+            user_id=user_id,
+            text="ADMIN_BLOOD_CHANGE_SUCCESS",
+            language_name=user_language,
+            keyboard_name=KeyboardName.MAIN,
+            keyboard_type=KeyboardType.REPLY
+        )
+    else:
+        await bot.answer(
+            user_id=user_id,
+            text="ADMIN_BLOOD_CHANGE_UNSUCCESS",
+            language_name=user_language,
+            keyboard_name=KeyboardName.MAIN,
+            keyboard_type=KeyboardType.REPLY
+        )
 
 hnd.add_router(router)
