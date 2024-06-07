@@ -3,36 +3,36 @@
 
         "REGISTER_START": "Hello user!\n\nBefore we start the registration process, I'd like to know in which language you prefer to communicate with me.\n\nPlease note that this choice will affect our further communication. After registration, your profile will indicate that you speak this language.",
         "REGISTER_START_FAILURE": "You haven't selected a language for communication!",
-
+        
         "REGISTER_STEP_1": "Thank you! Now I can speak with you in your preferred language.\n\nMy name is CRM BOT, I assist in matters of our blood organization. To use me, you need to register an account. Your data will be kept confidential, and things like passwords will be encrypted and never shared. Let's start the registration process!\n\nFirst step. Send me your Telegram contact, so we can speed up the registration process significantly.",
         "REGISTER_STEP_1_FAILURE": "This is not your contact! Please press the button below.",
-
+        
         "REGISTER_STEP_2": "Second step. Enter your date of birth in the format DD-MM-YYYY. You'll have another attempt in case of a mistake.",
         "REGISTER_STEP_2_FAILURE": "Incorrect date of birth! It must be written in the format DD-MM-YYYY.",
-
+        
         "REGISTER_STEP_3": "Third step. Choose your gender.",
         "REGISTER_STEP_3_FAILURE": "Incorrect gender selected! Please choose one of the options above.",
-
+        
         "REGISTER_STEP_4": "Fourth step. Enter your email in the format mail@mail.com",
         "REGISTER_STEP_4_FAILURE": "Email entered in incorrect format! Please write it as mail@mail.com.",
-
+        
         "REGISTER_STEP_5": "Fifth step. Enter the password for your future account. The password will not be shared anywhere and will be encrypted.\n\nThe password must consist of numbers, uppercase and lowercase letters of the Latin alphabet. The use of special characters, except underscore, is prohibited.",
         "REGISTER_STEP_5_FAILURE": "The password does not meet the requirements! Please create a password that meets the requirements above.",
-
+        
         "SUCCESSFULL_REGISTER": "Great! We have registered you in the system, now you can use all the functionality!",
         "ALREADY_REGISTERED": "You are already registered in the system!",
-
-        "DONATION_HISTORY_MESSAGE": "%s, Ви пожертвували %s разів свою кров! Детальна історія нижче:\n\n%s",
-        "DONATION_FIND_CENTERS_MESSAGE": "%s, Ви можете знайти центри для пожертвувань за наступними адресами:\n\n%s",
-        "DONATION_SELECT_CITY": "Оберіть своє місто:",
-        "DONATION_SELECT_REGION": "Оберіть свою область:",
-        "DONATION_SELECT_CLINIC": "За допомогою отриманих раніше даних я підібрав для вас клініки. Оберіть до якої бажаєте прийти:",
-        "DONATION_REGISTERED_APPOINTMENT": "Ви зареєстровані на прийом!\n\nНомер прийому: %s.",
-        "DONATION_HISTORY": "№%s\nДата реєстрації: %s\nДата прийому: %s\nЦентр: %s, Адреса: м. %s, %s, вул. %s, площа %s, будинок №%s'\nСтатус: %s\n\n",
-        "DONATION_CENTERS": "#%s: %s\nАдреса: м. %s, %s, вул. %s, площа %s, будинок №%s\n\n",
-        "DONATION_INCORRECT_DATA": "Немає центрів за вказаними даними! Спробуйте ще раз.",
-        "DONATION_SENDED_HISTORY_FILE": "Ваша історія сформована! Усі записи можете побачити у файлі, наведеному нижче.",
-        "DONATION_CANT_FIND_CENTERS": "Не вийшло знайти центри у вашому місті та регіоні.",
+        
+        "DONATION_HISTORY_MESSAGE": "%s, you have donated blood %s times! Detailed history below:\n\n%s",
+        "DONATION_FIND_CENTERS_MESSAGE": "%s, you can find donation centers at the following addresses:\n\n%s",
+        "DONATION_SELECT_CITY": "Select your city:",
+        "DONATION_SELECT_REGION": "Select your region:",
+        "DONATION_SELECT_CLINIC": "Using the data provided earlier, I have selected clinics for you. Choose the one you would like to visit:",
+        "DONATION_REGISTERED_APPOINTMENT": "You are registered for an appointment!\n\nAppointment number: %s.",
+        "DONATION_HISTORY": "№%s\nRegistration date: %s\nAppointment date: %s\nCenter: %s, Address: %s, %s, %s, %s, Building №%s\nStatus: %s\n\n",
+        "DONATION_CENTERS": "#%s: %s\nAddress: %s, %s, %s, %s, Building №%s\n\n",
+        "DONATION_INCORRECT_DATA": "No centers found with the provided data! Please try again.",
+        "DONATION_SENDED_HISTORY_FILE": "Your history has been generated! You can see all the records in the file provided below.",
+        "DONATION_CANT_FIND_CENTERS": "Failed to find centers in your city and region.",
 
         "ADMIN_LOGIN": "You are trying to log in to the bot's admin panel. To do this, you need to enter your admin account login and password.\n\nOnce you log in, you will be authorized for 30 minutes, after which you will need to log in again.",
         "ADMIN_INPUT_LOGIN": "Please enter your admin account login:",
@@ -46,15 +46,15 @@
         "ADMIN_SUCCESSFULL": "You have logged into the administrator account!",
         "ADMIN_DEAUTH": "30 minutes have passed and you have been automatically logged out. Please log in again.",
         "ADMIN_ALREADY_AUTHENTICATED": "You are already logged in and can use the functions!",
-
+        
         "ADMIN_SENDED_NOTIFICATIONS": "You are trying to send notifications. Please write a message and attach an image if necessary, then send it to me and I will forward it to everyone subscribed to notifications in the bot.",
         "ADMIN_SUCCES_SEND_NOTIFICATIONS": "You have successfully sent notifications!",
         "ADMIN_CLINIC_INFO": "Information about your clinic No.%s, '%s':\n\nTotal donations: %s\nCurrently waiting: %s\nSuccessful: %s\nUnsuccessful: %s\n\nAmount of blood at the center: %s\n",
-        "ADMIN_INPUT_APPOINTMENT_ID": "Введіть номер прийому, який потрібно змінити.",
-        "ADMIN_INPUT_STATUS": "Оберіть статус, який потрібно встановити для прийому",
-        "ADMIN_INCORRECT_APPOINTMENT_ID": "Неправильно введено номер прийому! Це мають бути цифри.",
-        "ADMIN_SUCCESSFULLY_CHANGED_STATUS": "Статус прийому №%s успішно змінено на %s!",
-        "ADMIN_UNSUCCESSFULL_CHANGED_STATUS": "Змінити статус прийому не вийшло, спробуйте че раз.",
+        "ADMIN_INPUT_APPOINTMENT_ID": "Enter the appointment number you want to change.",
+        "ADMIN_INPUT_STATUS": "Select the status you want to set for the appointment",
+        "ADMIN_INCORRECT_APPOINTMENT_ID": "Incorrect appointment number entered! It should be digits.",
+        "ADMIN_SUCCESSFULLY_CHANGED_STATUS": "Appointment status No.%s successfully changed to %s!",
+        "ADMIN_UNSUCCESSFULL_CHANGED_STATUS": "Failed to change appointment status, please try again.",
 
         "CANNOT_REGISTER": "You are already registered for an appointment!",
         "INFO_REGISTER": "Your data will not be shared.",
