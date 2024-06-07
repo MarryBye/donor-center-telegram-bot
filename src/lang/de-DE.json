@@ -54,6 +54,12 @@
         "ADMIN_INCORRECT_APPOINTMENT_ID": "Falsch eingegebene Terminnummer! Es müssen Zahlen sein.",
         "ADMIN_SUCCESSFULLY_CHANGED_STATUS": "Der Status des Termins Nr.%s wurde erfolgreich auf %s geändert!",
         "ADMIN_UNSUCCESSFULL_CHANGED_STATUS": "Der Terminstatus konnte nicht geändert werden, bitte versuchen Sie es erneut.",
+        "ADMIN_INPUT_BLOOD": "Bluttyp auswählen:",
+        "ADMIN_INPUT_OPERATION": "Blutmenge erhöhen oder verringern?",
+        "ADMIN_INPUT_QUANTITY": "Um wie viel?",
+        "ADMIN_BLOOD_CHANGE_SUCCESS": "Operation erfolgreich durchgeführt!",
+        "ADMIN_BLOOD_CHANGE_UNSUCCESS": "Operation fehlgeschlagen!",
+        "ADMIN_INPUT_QUANTITY_ERROR": "Falsche Menge eingegeben!",
 
         "CANNOT_REGISTER": "Sie sind bereits für einen Termin registriert!",
         "INFO_REGISTER": "Ihre Daten werden nicht weitergegeben.",

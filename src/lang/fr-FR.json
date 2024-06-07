@@ -53,6 +53,12 @@
         "ADMIN_INCORRECT_APPOINTMENT_ID": "Le numéro de rendez-vous saisi est incorrect ! Il doit être composé de chiffres.",
         "ADMIN_SUCCESSFULLY_CHANGED_STATUS": "Le statut du rendez-vous n°%s a été modifié avec succès en %s !",
         "ADMIN_UNSUCCESSFULL_CHANGED_STATUS": "Impossible de modifier le statut du rendez-vous, veuillez réessayer.",
+        "ADMIN_INPUT_BLOOD": "Sélectionnez le type de sang :",
+        "ADMIN_INPUT_OPERATION": "Augmenter ou diminuer la quantité de sang ?",
+        "ADMIN_INPUT_QUANTITY": "De combien ?",
+        "ADMIN_BLOOD_CHANGE_SUCCESS": "Opération exécutée avec succès !",
+        "ADMIN_BLOOD_CHANGE_UNSUCCESS": "Opération échouée !",
+        "ADMIN_INPUT_QUANTITY_ERROR": "Quantité incorrecte !",
 
         "CANNOT_REGISTER": "Vous êtes déjà enregistré pour un rendez-vous !",
         "INFO_REGISTER": "Aucune action ne sera entreprise avec vos données.",

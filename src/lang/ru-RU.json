@@ -55,6 +55,12 @@
         "ADMIN_INCORRECT_APPOINTMENT_ID": "Неправильно введен номер приема! Это должны быть цифры.",
         "ADMIN_SUCCESSFULLY_CHANGED_STATUS": "Статус приема №%s успешно изменен на %s!",
         "ADMIN_UNSUCCESSFULL_CHANGED_STATUS": "Изменить статус приема не удалось, попробуйте еще раз.",
+        "ADMIN_INPUT_BLOOD": "Выберите кровь:",
+        "ADMIN_INPUT_OPERATION": "Увеличить или уменьшить количество крови?",
+        "ADMIN_INPUT_QUANTITY": "На сколько?",
+        "ADMIN_BLOOD_CHANGE_SUCCESS": "Операция выполнена успешно!",
+        "ADMIN_BLOOD_CHANGE_UNSUCCESS": "Не удалось выполнить операцию!",
+        "ADMIN_INPUT_QUANTITY_ERROR": "Неправильно введено количество!",
 
         "CANNOT_REGISTER": "Вы уже зарегистрированы на прием!",
         "INFO_REGISTER": "С вашими данными ничего не будет.",

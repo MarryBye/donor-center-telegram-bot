@@ -55,6 +55,12 @@
         "ADMIN_INCORRECT_APPOINTMENT_ID": "Incorrect appointment number entered! It should be digits.",
         "ADMIN_SUCCESSFULLY_CHANGED_STATUS": "Appointment status No.%s successfully changed to %s!",
         "ADMIN_UNSUCCESSFULL_CHANGED_STATUS": "Failed to change appointment status, please try again.",
+        "ADMIN_INPUT_BLOOD": "Select blood type:",
+        "ADMIN_INPUT_OPERATION": "Increase or decrease blood quantity?",
+        "ADMIN_INPUT_QUANTITY": "By how much?",
+        "ADMIN_BLOOD_CHANGE_SUCCESS": "Operation successfully executed!",
+        "ADMIN_BLOOD_CHANGE_UNSUCCESS": "Operation unsuccessful!",
+        "ADMIN_INPUT_QUANTITY_ERROR": "Incorrect quantity entered!",
 
         "CANNOT_REGISTER": "You are already registered for an appointment!",
         "INFO_REGISTER": "Your data will not be shared.",
