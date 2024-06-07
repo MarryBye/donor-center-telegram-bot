@@ -27,6 +27,8 @@ class AdminFunc(StatesGroup):
     sending_notifications = State()
     input_appointment_id = State()
     input_status = State()
+    input_blood = State()
+    input_quantity = State()
 
 class DonationFunc(StatesGroup):
     input_city = State()

@@ -474,5 +474,15 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
             keyboard_name=KeyboardName.MAIN,
             keyboard_type=KeyboardType.REPLY
         )
+        
+@router.message(pressed_button(button_name="ADMIN_UPDATE_BLOOD"))
+async def main_handler(msg: Message, state: FSMContext):
+    user_id = msg.from_user.id
+    user_language = db.get_user_language(user_id=user_id)
+    
+    admin = db.get_admin_authenticated(user_id=user_id)
+    
+    if not admin:
+        return False
 
 hnd.add_router(router)
