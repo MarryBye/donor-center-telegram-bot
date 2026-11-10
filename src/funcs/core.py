@@ -2,13 +2,14 @@ from aiogram import F
 
 import config as cfg
 from src.classes.Controllers.DatabaseController import DatabaseController
-from src.classes.Keyboards import ReplyKeyboardMarkup, KeyboardButton
+from src.classes.Keyboards import KeyboardButton, ReplyKeyboardMarkup
 from src.lang.languages import LANGUAGES
 
 db = DatabaseController()
 
 
 # Language translations for buttons and messages
+
 
 def get_command_variations(button_name: str):
     """Возвращает кортеж с возможными написаниями команды на разных языках, предусмотренных в боте"""
@@ -39,6 +40,7 @@ def button_translate(button_name: str, language_name: str):
 
 
 # Data tranformation
+
 
 def month_name_to_id(month_name: str):
     for i in range(12):
@@ -77,7 +79,7 @@ def generate_keyboard_days(month: int, year: int):
         9: 30,
         10: 31,
         11: 30,
-        12: 31
+        12: 31,
     }
 
     days_count = months_days[month]

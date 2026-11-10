@@ -1,16 +1,12 @@
-import asyncio
-
 from aiogram import Router
-from aiogram.types import Message
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
+from aiogram.types import Message
 
-from src.classes.CRMBot import CRMBot
 from src.classes.Controllers.DatabaseController import DatabaseController
+from src.classes.CRMBot import CRMBot
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
-
-from src.funcs.core import message_translate
 from src.funcs.debug_print import debug_print
 
 bot = CRMBot()
@@ -36,7 +32,7 @@ async def main_handler(msg: Message, state: FSMContext):
         text="CANCELLED_STATE",
         keyboard_name=KeyboardName.MAIN,
         keyboard_type=KeyboardType.REPLY,
-        language_name=user_language
+        language_name=user_language,
     )
 
     debug_print("User", user_id, "has cancelled last command!")

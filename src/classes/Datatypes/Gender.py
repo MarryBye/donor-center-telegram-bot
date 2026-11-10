@@ -2,7 +2,6 @@ from src.classes.Datatypes.CRMBaseDataType import CRMBaseDataType
 
 
 class Gender(CRMBaseDataType):
-
     def set_gender_name(self, gender_name: str):
         self.data["gender_name"] = gender_name
 

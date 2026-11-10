@@ -2,7 +2,6 @@ from src.classes.Datatypes.CRMBaseDataType import CRMBaseDataType
 
 
 class Status(CRMBaseDataType):
-
     def set_name_status(self, name_status: str):
         self.data["name_status"] = name_status
 

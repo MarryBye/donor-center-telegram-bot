@@ -1,5 +1,9 @@
-from typing import Union
-from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, KeyboardButton, InlineKeyboardButton
+from aiogram.types import (
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    KeyboardButton,
+    ReplyKeyboardMarkup,
+)
 
 from src.classes.Singleton import Singleton
 from src.lang.languages import LANGUAGES
@@ -49,7 +53,9 @@ class Keyboard:
                     button_text = LANGUAGES[language_name]["BUTTONS"][button_name]
                 else:
                     button_text = button_name
-                scheme_buttons_row.append(InlineKeyboardButton(text=button_text, **button_dictionary[button_name]))
+                scheme_buttons_row.append(
+                    InlineKeyboardButton(text=button_text, **button_dictionary[button_name])
+                )
 
             self.scheme.append(scheme_buttons_row)
 
@@ -68,7 +74,8 @@ class Keyboard:
                 else:
                     button_text = button_name
                 scheme_buttons_row.append(
-                    KeyboardButton(text=button_text, **button_dictionary[button_name]))
+                    KeyboardButton(text=button_text, **button_dictionary[button_name])
+                )
 
             self.scheme.append(scheme_buttons_row)
 
@@ -82,7 +89,16 @@ class KeyboardController(metaclass=Singleton):
     def add_keyboard(self, keyboard_name: KeyboardName | str, keyboard: Keyboard):
         self.keyboards[keyboard_name] = keyboard
 
-    def get_keyboard(self, keyboard_name: KeyboardName | str, keyboard_type: KeyboardType | int, language_name: str) -> Union[InlineKeyboardMarkup, ReplyKeyboardMarkup]:
-        return self.keyboards[keyboard_name].regenerate_reply_keyboard(
-            language_name=language_name) if keyboard_type == KeyboardType.REPLY else self.keyboards[
-            keyboard_name].regenerate_inline_keyboard(language_name=language_name)
+    def get_keyboard(
+        self,
+        keyboard_name: KeyboardName | str,
+        keyboard_type: KeyboardType | int,
+        language_name: str,
+    ) -> InlineKeyboardMarkup | ReplyKeyboardMarkup:
+        return (
+            self.keyboards[keyboard_name].regenerate_reply_keyboard(language_name=language_name)
+            if keyboard_type == KeyboardType.REPLY
+            else self.keyboards[keyboard_name].regenerate_inline_keyboard(
+                language_name=language_name
+            )
+        )

@@ -1,12 +1,11 @@
-from src.classes.Datatypes.CRMBaseDataType import CRMBaseDataType
 from src.classes.Datatypes.Area import Area
 from src.classes.Datatypes.City import City
-from src.classes.Datatypes.Street import Street
+from src.classes.Datatypes.CRMBaseDataType import CRMBaseDataType
 from src.classes.Datatypes.Region import Region
+from src.classes.Datatypes.Street import Street
 
 
 class Address(CRMBaseDataType):
-
     def set_area(self, area: Area):
         self.data["area"] = area
 

@@ -1,20 +1,18 @@
-import os
 import asyncio
+import os
+from datetime import datetime, timedelta
 
 from aiogram import Router
-from aiogram.types import Message, CallbackQuery, FSInputFile
 from aiogram.fsm.context import FSMContext
+from aiogram.types import CallbackQuery, FSInputFile, Message
 
-from src.classes.CRMBot import CRMBot
 from src.classes.Controllers.DatabaseController import DatabaseController
-from src.classes.HandlersController import HandlersController
-from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType, Keyboard
-from src.classes.Form import FormAppointment
+from src.classes.CRMBot import CRMBot
 from src.classes.Datatypes.Appointment import Appointment
-from datetime import datetime, timedelta
-from src.classes.Form import DonationFunc
-
-from src.funcs.core import pressed_button, message_translate
+from src.classes.Form import DonationFunc, FormAppointment
+from src.classes.HandlersController import HandlersController
+from src.classes.Keyboards import Keyboard, KeyboardController, KeyboardName, KeyboardType
+from src.funcs.core import message_translate, pressed_button
 
 bot = CRMBot()
 
@@ -36,14 +34,16 @@ async def main_handler(msg: Message, state: FSMContext):
     if donor:
         last_appointment = db.get_appointment(donor=donor, only_last=True)
 
-        if last_appointment is not None and last_appointment.get_status().get_name_status() == "Waiting":
-
+        if (
+            last_appointment is not None
+            and last_appointment.get_status().get_name_status() == "Waiting"
+        ):
             await bot.answer(
                 user_id=user_id,
                 text="CANNOT_REGISTER",
                 keyboard_name=KeyboardName.DONATION,
                 keyboard_type=KeyboardType.REPLY,
-                language_name=user_language
+                language_name=user_language,
             )
 
             return False
@@ -56,7 +56,7 @@ async def main_handler(msg: Message, state: FSMContext):
             text="DONATION_SELECT_CITY",
             keyboard_name=KeyboardName.CITIES,
             keyboard_type=KeyboardType.INLINE,
-            language_name=user_language
+            language_name=user_language,
         )
 
 
@@ -70,9 +70,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     await state.set_state(FormAppointment.registerAppointment_region)
 
     await bot.edit_message_reply_markup(
-        chat_id=call.from_user.id,
-        message_id=call.message.message_id,
-        reply_markup=None
+        chat_id=call.from_user.id, message_id=call.message.message_id, reply_markup=None
     )
 
     await bot.answer(
@@ -80,7 +78,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
         text="DONATION_SELECT_REGION",
         keyboard_name=KeyboardName.REGIONS,
         keyboard_type=KeyboardType.INLINE,
-        language_name=user_language
+        language_name=user_language,
     )
 
 
@@ -102,15 +100,16 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
         clinic_address = clinic.get_address()
         clinic_region, clinic_city = clinic_address.get_region(), clinic_address.get_city()
 
-        if str(clinic_region.get_id()) == data["region_id"] and str(clinic_city.get_id()) == data["city_id"]:
+        if (
+            str(clinic_region.get_id()) == data["region_id"]
+            and str(clinic_city.get_id()) == data["city_id"]
+        ):
             regional_clinics.append(clinic)
 
     if len(regional_clinics) == 0:
         await state.clear()
         await bot.edit_message_reply_markup(
-            chat_id=call.from_user.id,
-            message_id=call.message.message_id,
-            reply_markup=None
+            chat_id=call.from_user.id, message_id=call.message.message_id, reply_markup=None
         )
 
         await bot.answer(
@@ -118,7 +117,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
             text="DONATION_INCORRECT_DATA",
             keyboard_name=KeyboardName.DONATION,
             keyboard_type=KeyboardType.REPLY,
-            language_name=user_language
+            language_name=user_language,
         )
 
         return False
@@ -134,9 +133,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     keyboard = Keyboard(keyboard_scheme=kb_scheme, need_translation=False)
 
     await bot.edit_message_reply_markup(
-        chat_id=call.from_user.id,
-        message_id=call.message.message_id,
-        reply_markup=None
+        chat_id=call.from_user.id, message_id=call.message.message_id, reply_markup=None
     )
 
     await bot.answer(
@@ -144,7 +141,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
         text="DONATION_SELECT_CLINIC",
         keyboard_name=keyboard,
         keyboard_type=KeyboardType.INLINE,
-        language_name=user_language
+        language_name=user_language,
     )
 
 
@@ -168,22 +165,24 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     new_appointment.set_donor(donor=donor)
     new_appointment.set_registration_date(registration_date=register_date)
     new_appointment.set_appointment_date(appointment_date=appointment_date)
-    new_appointment.set_analysis_file_path(analysis_file_path=f"{donor.get_id()}%{clinic.get_id()}%{register_date.day}{register_date.month}{register_date.year}.txt")
+    new_appointment.set_analysis_file_path(
+        analysis_file_path=f"{donor.get_id()}%{clinic.get_id()}%{register_date.day}{register_date.month}{register_date.year}.txt"
+    )
 
     db.register_appointment(donor=donor, appointment=new_appointment)
 
     await state.clear()
 
     await bot.edit_message_reply_markup(
-        chat_id=call.from_user.id,
-        message_id=call.message.message_id,
-        reply_markup=None
+        chat_id=call.from_user.id, message_id=call.message.message_id, reply_markup=None
     )
-    
-    message_text = message_translate(
-        message_name="DONATION_REGISTERED_APPOINTMENT", 
-        language_name=user_language
-    ) % new_appointment.get_id()
+
+    message_text = (
+        message_translate(
+            message_name="DONATION_REGISTERED_APPOINTMENT", language_name=user_language
+        )
+        % new_appointment.get_id()
+    )
 
     await bot.answer(
         user_id=user_id,
@@ -191,7 +190,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
         keyboard_name=KeyboardName.DONATION,
         keyboard_type=KeyboardType.REPLY,
         language_name=user_language,
-        need_translation=False
+        need_translation=False,
     )
 
 
@@ -203,15 +202,16 @@ async def main_handler(msg: Message, state: FSMContext):
 
     if donor:
         await state.set_state(DonationFunc.input_city)
-        
+
         await bot.answer(
             user_id=user_id,
             text="DONATION_SELECT_CITY",
             keyboard_name=KeyboardName.CITIES,
             keyboard_type=KeyboardType.INLINE,
-            language_name=user_language
+            language_name=user_language,
         )
-    
+
+
 @router.callback_query(DonationFunc.input_city)
 async def main_handler(call: CallbackQuery, state: FSMContext):
     user_id = call.from_user.id
@@ -221,9 +221,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     await state.set_state(DonationFunc.input_region)
 
     await bot.edit_message_reply_markup(
-        chat_id=call.from_user.id,
-        message_id=call.message.message_id,
-        reply_markup=None
+        chat_id=call.from_user.id, message_id=call.message.message_id, reply_markup=None
     )
 
     await bot.answer(
@@ -231,7 +229,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
         text="DONATION_SELECT_REGION",
         keyboard_name=KeyboardName.REGIONS,
         keyboard_type=KeyboardType.INLINE,
-        language_name=user_language
+        language_name=user_language,
     )
 
 
@@ -251,15 +249,16 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
         clinic_address = clinic.get_address()
         clinic_region, clinic_city = clinic_address.get_region(), clinic_address.get_city()
 
-        if str(clinic_region.get_id()) == data["region_id"] and str(clinic_city.get_id()) == data["city_id"]:
+        if (
+            str(clinic_region.get_id()) == data["region_id"]
+            and str(clinic_city.get_id()) == data["city_id"]
+        ):
             regional_clinics.append(clinic)
 
     if len(regional_clinics) == 0:
         await state.clear()
         await bot.edit_message_reply_markup(
-            chat_id=call.from_user.id,
-            message_id=call.message.message_id,
-            reply_markup=None
+            chat_id=call.from_user.id, message_id=call.message.message_id, reply_markup=None
         )
 
         await bot.answer(
@@ -267,11 +266,11 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
             text="DONATION_CANT_FIND_CENTERS",
             keyboard_name=KeyboardName.MAIN,
             keyboard_type=KeyboardType.REPLY,
-            language_name=user_language
+            language_name=user_language,
         )
 
         return False
-    
+
     clinics_text = ""
 
     for clinic in regional_clinics:
@@ -281,19 +280,16 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
         street = address.get_street().get_street_name()
         area = address.get_area().get_area_name()
         house = address.get_house_number()
-        clinics_text += message_translate(message_name="DONATION_CENTERS", language_name=user_language) % (
-            clinic.get_id(), clinic.get_clinic_name(), city, region, street, area, house
-        )
-    
+        clinics_text += message_translate(
+            message_name="DONATION_CENTERS", language_name=user_language
+        ) % (clinic.get_id(), clinic.get_clinic_name(), city, region, street, area, house)
+
     bot_message = message_translate(
-        message_name="DONATION_FIND_CENTERS_MESSAGE", 
-        language_name=user_language
+        message_name="DONATION_FIND_CENTERS_MESSAGE", language_name=user_language
     ) % (call.from_user.username, clinics_text)
 
     await bot.edit_message_reply_markup(
-        chat_id=call.from_user.id,
-        message_id=call.message.message_id,
-        reply_markup=None
+        chat_id=call.from_user.id, message_id=call.message.message_id, reply_markup=None
     )
 
     await bot.answer(
@@ -302,8 +298,9 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
         keyboard_name=KeyboardName.DONATION,
         keyboard_type=KeyboardType.REPLY,
         language_name=user_language,
-        need_translation=False
+        need_translation=False,
     )
+
 
 @router.message(pressed_button(button_name="DONATION_MENU_HISTORY"))
 async def main_handler(msg: Message):
@@ -331,37 +328,49 @@ async def main_handler(msg: Message):
                 status_name = appointment.get_status().get_name_status()
                 registration_date = appointment.get_registration_date().strftime("%d-%m-%Y")
                 appointment_date = appointment.get_appointment_date().strftime("%d-%m-%Y")
-                history_text += message_translate(message_name="DONATION_HISTORY", language_name=user_language) % (
-                    appointment.get_id(), registration_date, appointment_date, clinic_name, city, region, street, area, house, status_name
+                history_text += message_translate(
+                    message_name="DONATION_HISTORY", language_name=user_language
+                ) % (
+                    appointment.get_id(),
+                    registration_date,
+                    appointment_date,
+                    clinic_name,
+                    city,
+                    region,
+                    street,
+                    area,
+                    house,
+                    status_name,
                 )
             quantity_appointments = len(all_appointments)
 
         new_keyboard = kb.get_keyboard(
-            keyboard_name=KeyboardName.DONATION, 
+            keyboard_name=KeyboardName.DONATION,
             keyboard_type=KeyboardType.REPLY,
-            language_name=user_language
+            language_name=user_language,
         )
-        
+
         history_message = message_translate(
-            message_name="DONATION_HISTORY_MESSAGE", 
-            language_name=user_language
+            message_name="DONATION_HISTORY_MESSAGE", language_name=user_language
         ) % (msg.from_user.username, quantity_appointments, history_text)
-        
+
         bot_message = message_translate(
-            message_name="DONATION_SENDED_HISTORY_FILE", 
-            language_name=user_language
+            message_name="DONATION_SENDED_HISTORY_FILE", language_name=user_language
         )
 
         donor_history_file = open(f"History_ID{donor.get_id()}.txt", "w", encoding="UTF-8")
         donor_history_file.write(history_message)
         donor_history_file.close()
-        
-        file = FSInputFile(path=f"History_ID{donor.get_id()}.txt", filename=f"History_ID{donor.get_id()}.txt")
+
+        file = FSInputFile(
+            path=f"History_ID{donor.get_id()}.txt", filename=f"History_ID{donor.get_id()}.txt"
+        )
 
         await bot.send_document(user_id, file, caption=bot_message, reply_markup=new_keyboard)
-        
+
         os.remove(donor_history_file.name)
-        
+
         await asyncio.sleep(5)
-    
+
+
 hnd.add_router(router)

@@ -1,5 +1,6 @@
 import os
 from hashlib import sha256
+
 from src.classes.Singleton import Singleton
 
 
@@ -10,7 +11,7 @@ class CryptoRSA(metaclass=Singleton):
 
     def __init__(self, key_path: str = "RSA"):
         if os.path.exists(key_path):
-            rsa_file = list(map(int, open(key_path, "r", encoding="UTF-8").readlines()))
+            rsa_file = list(map(int, open(key_path, encoding="UTF-8").readlines()))
             self.__p = rsa_file[0]
             self.__q = rsa_file[1]
             self.__n = rsa_file[2]
@@ -38,13 +39,15 @@ class CryptoRSA(metaclass=Singleton):
 class CryptoSHA256(metaclass=Singleton):
     @staticmethod
     def crypt(string: str, salt: str = "StandardSalt"):
-        string_number = int("".join([str(ord(symbol) * i) for i, symbol in enumerate(string, start=1)]))
+        string_number = int(
+            "".join([str(ord(symbol) * i) for i, symbol in enumerate(string, start=1)])
+        )
         salt_number = int("".join([str(ord(symbol) * i) for i, symbol in enumerate(salt, start=1)]))
 
         string_salted_text = str(string_number + salt_number)
 
         hash_string = string_salted_text
-        for i in range(512):
+        for _ in range(512):
             hash_string = sha256(hash_string.encode()).hexdigest()
 
         return hash_string

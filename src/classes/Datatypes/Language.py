@@ -2,7 +2,6 @@ from src.classes.Datatypes.CRMBaseDataType import CRMBaseDataType
 
 
 class Language(CRMBaseDataType):
-
     def set_lang_name(self, lang_name: str):
         self.data["lang_name"] = lang_name
 

@@ -2,7 +2,6 @@ from src.classes.Datatypes.CRMBaseDataType import CRMBaseDataType
 
 
 class Region(CRMBaseDataType):
-
     def set_region_name(self, region_name: str):
         self.data["region_name"] = region_name
 

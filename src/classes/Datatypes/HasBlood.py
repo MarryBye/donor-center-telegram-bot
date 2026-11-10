@@ -1,11 +1,9 @@
-import src.classes.Datatypes as Datatypes
 import src.classes.Controllers.DatabaseController as Db
-
+import src.classes.Datatypes as Datatypes
 from src.classes.Datatypes.CRMBaseDataType import CRMBaseDataType
 
 
 class HasBlood(CRMBaseDataType):
-
     def set_blood(self, blood: Datatypes.Blood.Blood):
         self.data["blood"] = blood
 

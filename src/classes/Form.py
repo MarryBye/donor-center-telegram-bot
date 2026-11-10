@@ -31,10 +31,12 @@ class AdminFunc(StatesGroup):
     input_quantity = State()
     input_operation = State()
 
+
 class DonationFunc(StatesGroup):
     input_city = State()
     input_region = State()
     input_clinic = State()
+
 
 class ChooseNotifications(StatesGroup):
     choose_notification = State()

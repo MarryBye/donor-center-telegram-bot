@@ -1,5 +1,5 @@
-from src.classes.Datatypes.CRMBaseDataType import CRMBaseDataType
 from src.classes.Datatypes.Clinic import Clinic
+from src.classes.Datatypes.CRMBaseDataType import CRMBaseDataType
 from src.classes.Datatypes.Donor import Donor
 from src.classes.Datatypes.Status import Status
 

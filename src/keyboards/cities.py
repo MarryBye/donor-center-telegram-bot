@@ -1,5 +1,5 @@
-from src.classes.Keyboards import Keyboard, KeyboardController, KeyboardName
 from src.classes.Controllers.DatabaseController import DatabaseController
+from src.classes.Keyboards import Keyboard, KeyboardController, KeyboardName
 
 kb = KeyboardController()
 db = DatabaseController()

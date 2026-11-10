@@ -1,19 +1,17 @@
 import asyncio
-
 from re import match
 
 from aiogram import Router
-from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
+from aiogram.types import CallbackQuery, Message
 
-from src.classes.CRMBot import CRMBot
 from src.classes.Controllers.DatabaseController import DatabaseController
+from src.classes.CRMBot import CRMBot
+from src.classes.Form import AdminFunc, FormAdmin
 from src.classes.HandlersController import HandlersController
-from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType, Keyboard
-from src.classes.Form import FormAdmin, AdminFunc
-
-from src.funcs.core import message_translate, pressed_button, button_translate
+from src.classes.Keyboards import Keyboard, KeyboardController, KeyboardName, KeyboardType
+from src.funcs.core import message_translate, pressed_button
 from src.funcs.debug_print import debug_print
 
 bot = CRMBot()
@@ -33,13 +31,12 @@ async def main_handler(msg: Message, state: FSMContext):
     admin = db.get_admin_authenticated(user_id=user_id)
 
     if admin:
-
         await bot.answer(
             user_id=user_id,
             text="ADMIN_ALREADY_AUTHENTICATED",
             keyboard_name=KeyboardName.ADMIN,
             keyboard_type=KeyboardType.REPLY,
-            language_name=user_language
+            language_name=user_language,
         )
 
         return True
@@ -47,17 +44,9 @@ async def main_handler(msg: Message, state: FSMContext):
     if await state.get_state() is None:
         await state.set_state(FormAdmin.input_login)
 
-        await bot.answer(
-            user_id=user_id,
-            text="ADMIN_LOGIN",
-            language_name=user_language
-        )
+        await bot.answer(user_id=user_id, text="ADMIN_LOGIN", language_name=user_language)
 
-        await bot.answer(
-            user_id=user_id,
-            text="ADMIN_INPUT_LOGIN",
-            language_name=user_language
-        )
+        await bot.answer(user_id=user_id, text="ADMIN_INPUT_LOGIN", language_name=user_language)
 
         debug_print("User", user_id, "has started login as administator!")
 
@@ -69,9 +58,7 @@ async def main_handler(msg: Message, state: FSMContext):
 
     if msg.text is None:
         bot_msg = await bot.answer(
-            user_id=user_id,
-            text="ADMIN_INCORRECT_DATA",
-            language_name=user_language
+            user_id=user_id, text="ADMIN_INCORRECT_DATA", language_name=user_language
         )
 
         await asyncio.sleep(5)
@@ -83,11 +70,7 @@ async def main_handler(msg: Message, state: FSMContext):
     await state.update_data(login=msg.text)
     await state.set_state(FormAdmin.input_password)
 
-    await bot.answer(
-        user_id=user_id,
-        text="ADMIN_INPUT_PASSWORD",
-        language_name=user_language
-    )
+    await bot.answer(user_id=user_id, text="ADMIN_INPUT_PASSWORD", language_name=user_language)
 
     await msg.delete()
 
@@ -99,9 +82,7 @@ async def main_handler(msg: Message, state: FSMContext):
 
     if msg.text is None:
         bot_msg = await bot.answer(
-            user_id=user_id,
-            text="ADMIN_INCORRECT_DATA",
-            language_name=user_language
+            user_id=user_id, text="ADMIN_INCORRECT_DATA", language_name=user_language
         )
 
         await asyncio.sleep(5)
@@ -118,7 +99,7 @@ async def main_handler(msg: Message, state: FSMContext):
         text="ADMIN_INPUT_CLINIC_CITY",
         keyboard_name=KeyboardName.CITIES,
         keyboard_type=KeyboardType.INLINE,
-        language_name=user_language
+        language_name=user_language,
     )
 
     await msg.delete()
@@ -133,9 +114,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     await state.set_state(FormAdmin.input_region)
 
     await bot.edit_message_reply_markup(
-        chat_id=call.from_user.id,
-        message_id=call.message.message_id,
-        reply_markup=None
+        chat_id=call.from_user.id, message_id=call.message.message_id, reply_markup=None
     )
 
     await bot.answer(
@@ -143,7 +122,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
         text="ADMIN_INPUT_CLINIC_REGION",
         keyboard_name=KeyboardName.REGIONS,
         keyboard_type=KeyboardType.INLINE,
-        language_name=user_language
+        language_name=user_language,
     )
 
 
@@ -164,15 +143,16 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
         clinic_address = clinic.get_address()
         clinic_region, clinic_city = clinic_address.get_region(), clinic_address.get_city()
 
-        if str(clinic_region.get_id()) == data["region_id"] and str(clinic_city.get_id()) == data["city_id"]:
+        if (
+            str(clinic_region.get_id()) == data["region_id"]
+            and str(clinic_city.get_id()) == data["city_id"]
+        ):
             regional_clinics.append(clinic)
 
     if len(regional_clinics) == 0:
         await state.clear()
         await bot.edit_message_reply_markup(
-            chat_id=call.from_user.id,
-            message_id=call.message.message_id,
-            reply_markup=None
+            chat_id=call.from_user.id, message_id=call.message.message_id, reply_markup=None
         )
 
         await bot.answer(
@@ -180,7 +160,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
             text="ADMIN_INCORRECT_DATA",
             keyboard_name=KeyboardName.MAIN,
             keyboard_type=KeyboardType.REPLY,
-            language_name=user_language
+            language_name=user_language,
         )
 
         return False
@@ -196,9 +176,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     keyboard = Keyboard(keyboard_scheme=kb_scheme, need_translation=False)
 
     await bot.edit_message_reply_markup(
-        chat_id=call.from_user.id,
-        message_id=call.message.message_id,
-        reply_markup=None
+        chat_id=call.from_user.id, message_id=call.message.message_id, reply_markup=None
     )
 
     await bot.answer(
@@ -206,7 +184,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
         text="DONATION_SELECT_CLINIC",
         keyboard_name=keyboard,
         keyboard_type=KeyboardType.INLINE,
-        language_name=user_language
+        language_name=user_language,
     )
 
 
@@ -221,15 +199,15 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     admin_login = data["login"]
     admin_password = data["password"]
 
-    admin = db.get_admin_account(name_admin=admin_login, password=admin_password, clinic_id=clinic.get_id())
+    admin = db.get_admin_account(
+        name_admin=admin_login, password=admin_password, clinic_id=clinic.get_id()
+    )
 
     await state.clear()
 
     if admin is None:
         await bot.edit_message_reply_markup(
-            chat_id=call.from_user.id,
-            message_id=call.message.message_id,
-            reply_markup=None
+            chat_id=call.from_user.id, message_id=call.message.message_id, reply_markup=None
         )
 
         await bot.answer(
@@ -237,15 +215,13 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
             text="ADMIN_INCORRECT",
             keyboard_name=KeyboardName.MAIN,
             keyboard_type=KeyboardType.REPLY,
-            language_name=user_language
+            language_name=user_language,
         )
 
         return False
 
     await bot.edit_message_reply_markup(
-        chat_id=call.from_user.id,
-        message_id=call.message.message_id,
-        reply_markup=None
+        chat_id=call.from_user.id, message_id=call.message.message_id, reply_markup=None
     )
 
     await bot.answer(
@@ -253,7 +229,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
         text="ADMIN_SUCCESSFULL",
         keyboard_name=KeyboardName.ADMIN,
         keyboard_type=KeyboardType.REPLY,
-        language_name=user_language
+        language_name=user_language,
     )
 
     db.set_admin_authenticated(user_id=user_id, admin_id=admin.get_id())
@@ -272,9 +248,7 @@ async def main_handler(msg: Message, state: FSMContext):
     await state.set_state(AdminFunc.sending_notifications)
 
     await bot.answer(
-        user_id=user_id,
-        text="ADMIN_SENDED_NOTIFICATIONS",
-        language_name=user_language
+        user_id=user_id, text="ADMIN_SENDED_NOTIFICATIONS", language_name=user_language
     )
 
 
@@ -307,7 +281,7 @@ async def main_handler(msg: Message, state: FSMContext):
                     await bot.send_photo(us, photo=photos[-1].file_id, caption=text)
                 else:
                     await bot.send_message(us, text)
-            except:
+            except Exception:
                 continue
             # Чтобы не получить рейт лимит, каждые 1 сообщение каждые 3 секунды
             await asyncio.sleep(3)
@@ -319,7 +293,7 @@ async def main_handler(msg: Message, state: FSMContext):
         text="ADMIN_SUCCES_SEND_NOTIFICATIONS",
         keyboard_name=KeyboardName.MAIN,
         keyboard_type=KeyboardType.REPLY,
-        language_name=user_language
+        language_name=user_language,
     )
 
     await msg.delete()
@@ -355,10 +329,24 @@ async def main_handler(msg: Message):
     bloods_text = ""
 
     for blood in all_blood:
-        bloods_text += "\n" + blood.get_blood().get_blood_and_comp_name() + ": " + str(blood.get_quantity()) + " litres"
+        bloods_text += (
+            "\n"
+            + blood.get_blood().get_blood_and_comp_name()
+            + ": "
+            + str(blood.get_quantity())
+            + " litres"
+        )
 
-    message_text = message_translate(message_name="ADMIN_CLINIC_INFO", language_name=user_language) % (
-        clinic.get_id(), clinic.get_clinic_name(), all_appointments, waiting_appointments, success_appointments, unsuccess_appointments, bloods_text
+    message_text = message_translate(
+        message_name="ADMIN_CLINIC_INFO", language_name=user_language
+    ) % (
+        clinic.get_id(),
+        clinic.get_clinic_name(),
+        all_appointments,
+        waiting_appointments,
+        success_appointments,
+        unsuccess_appointments,
+        bloods_text,
     )
 
     await bot.answer(
@@ -367,8 +355,9 @@ async def main_handler(msg: Message):
         keyboard_name=KeyboardName.MAIN,
         keyboard_type=KeyboardType.REPLY,
         language_name=user_language,
-        need_translation=False
+        need_translation=False,
     )
+
 
 @router.message(pressed_button(button_name="ADMIN_MENU_SET_STATUS"))
 async def main_handler(msg: Message, state: FSMContext):
@@ -381,54 +370,50 @@ async def main_handler(msg: Message, state: FSMContext):
         return False
 
     await state.set_state(AdminFunc.input_appointment_id)
- 
+
     await bot.answer(
-        user_id=user_id,
-        text="ADMIN_INPUT_APPOINTMENT_ID",
-        language_name=user_language
+        user_id=user_id, text="ADMIN_INPUT_APPOINTMENT_ID", language_name=user_language
     )
 
     await msg.delete()
-    
+
 
 @router.message(AdminFunc.input_appointment_id)
 async def main_handler(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
-    
+
     admin = db.get_admin_authenticated(user_id=user_id)
-    
+
     id_pattern = r"\d+"
-    
+
     if not admin:
         return False
-    
+
     if msg.text is None or not match(id_pattern, msg.text):
+        bot_msg = await bot.answer(
+            user_id=user_id, text="ADMIN_INCORRECT_APPOINTMENT_ID", language_name=user_language
+        )
 
-            bot_msg = await bot.answer(
-                user_id=user_id,
-                text="ADMIN_INCORRECT_APPOINTMENT_ID",
-                language_name=user_language
-            )
+        await asyncio.sleep(5)
+        await bot_msg.delete()
 
-            await asyncio.sleep(5)
-            await bot_msg.delete()
+        return False
 
-            return False
-    
     await state.update_data(appointment_id=msg.text)
     await state.set_state(AdminFunc.input_status)
-    
+
     await bot.answer(
         user_id=user_id,
         text="ADMIN_INPUT_STATUS",
         language_name=user_language,
         keyboard_name=KeyboardName.STATUSES,
-        keyboard_type=KeyboardType.INLINE
+        keyboard_type=KeyboardType.INLINE,
     )
 
     await msg.delete()
-    
+
+
 @router.callback_query(AdminFunc.input_status)
 async def main_handler(call: CallbackQuery, state: FSMContext):
     user_id = call.from_user.id
@@ -440,22 +425,19 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     appointment_id = data["appointment_id"]
 
     admin = db.get_admin_authenticated(user_id=user_id)
-    
+
     if not admin:
         return False
-    
+
     seccess = db.update_appointment_status(db_id=appointment_id, status_id=status.get_id())
 
     await bot.edit_message_reply_markup(
-        chat_id=call.from_user.id,
-        message_id=call.message.message_id,
-        reply_markup=None
+        chat_id=call.from_user.id, message_id=call.message.message_id, reply_markup=None
     )
-    
+
     if seccess:
         message_text = message_translate(
-            message_name="ADMIN_SUCCESSFULLY_CHANGED_STATUS",
-            language_name=user_language
+            message_name="ADMIN_SUCCESSFULLY_CHANGED_STATUS", language_name=user_language
         ) % (appointment_id, status.get_name_status())
 
         await bot.answer(
@@ -464,7 +446,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
             language_name=user_language,
             keyboard_name=KeyboardName.MAIN,
             keyboard_type=KeyboardType.REPLY,
-            need_translation=False
+            need_translation=False,
         )
     else:
         await bot.answer(
@@ -472,31 +454,34 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
             text="ADMIN_UNSUCCESSFULL_CHANGED_STATUS",
             language_name=user_language,
             keyboard_name=KeyboardName.MAIN,
-            keyboard_type=KeyboardType.REPLY
+            keyboard_type=KeyboardType.REPLY,
         )
-        
+
+
 @router.message(pressed_button(button_name="ADMIN_UPDATE_BLOOD"))
 async def main_handler(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
-    
+
     admin = db.get_admin_authenticated(user_id=user_id)
-    
+
     if not admin:
         return False
-    
+
     all_bloods = db.get_bloods()
-    
+
     kb_scheme = []
     kb_scheme_row = []
     for i, blood in enumerate(all_bloods, start=0):
-        kb_scheme_row.append({blood.get_blood_and_comp_name(): {"callback_data": str(blood.get_id())}})
+        kb_scheme_row.append(
+            {blood.get_blood_and_comp_name(): {"callback_data": str(blood.get_id())}}
+        )
         if i % 3 == 0 or i >= len(all_bloods) - 1:
             kb_scheme.append(kb_scheme_row)
             kb_scheme_row = []
 
     keyboard = Keyboard(keyboard_scheme=kb_scheme, need_translation=False)
-    
+
     await state.set_state(AdminFunc.input_blood)
 
     await bot.answer(
@@ -504,108 +489,103 @@ async def main_handler(msg: Message, state: FSMContext):
         text="ADMIN_INPUT_BLOOD",
         keyboard_name=keyboard,
         keyboard_type=KeyboardType.INLINE,
-        language_name=user_language
+        language_name=user_language,
     )
+
 
 @router.callback_query(AdminFunc.input_blood)
 async def main_handler(call: CallbackQuery, state: FSMContext):
     user_id = call.from_user.id
     user_language = db.get_user_language(user_id=user_id)
-    
+
     admin = db.get_admin_authenticated(user_id=user_id)
-    
+
     if not admin:
         return False
-    
+
     await state.set_state(AdminFunc.input_operation)
     await state.update_data(blood_id=str(call.data))
-    
-    kb_scheme = [
-        [{"+": {"callback_data": "1"}}, {"-": {"callback_data": "2"}}]
-    ]
-    
+
+    kb_scheme = [[{"+": {"callback_data": "1"}}, {"-": {"callback_data": "2"}}]]
+
     keyboard = Keyboard(keyboard_scheme=kb_scheme, need_translation=False)
-    
+
     await bot.edit_message_reply_markup(
-        chat_id=call.from_user.id,
-        message_id=call.message.message_id,
-        reply_markup=None
+        chat_id=call.from_user.id, message_id=call.message.message_id, reply_markup=None
     )
-    
+
     await bot.answer(
         user_id=user_id,
         text="ADMIN_INPUT_OPERATION",
         keyboard_name=keyboard,
         keyboard_type=KeyboardType.INLINE,
-        language_name=user_language
+        language_name=user_language,
     )
+
 
 @router.callback_query(AdminFunc.input_operation)
 async def main_handler(call: CallbackQuery, state: FSMContext):
     user_id = call.from_user.id
     user_language = db.get_user_language(user_id=user_id)
-    
+
     admin = db.get_admin_authenticated(user_id=user_id)
-    
+
     if not admin:
         return False
-    
+
     await state.set_state(AdminFunc.input_quantity)
     await state.update_data(operation=str(call.data))
-    
+
     await bot.edit_message_reply_markup(
-        chat_id=call.from_user.id,
-        message_id=call.message.message_id,
-        reply_markup=None
+        chat_id=call.from_user.id, message_id=call.message.message_id, reply_markup=None
     )
-    
-    await bot.answer(
-        user_id=user_id,
-        text="ADMIN_INPUT_QUANTITY",
-        language_name=user_language
-    )
-    
+
+    await bot.answer(user_id=user_id, text="ADMIN_INPUT_QUANTITY", language_name=user_language)
+
+
 @router.message(AdminFunc.input_quantity)
 async def main_handler(msg: Message, state: FSMContext):
     user_id = msg.from_user.id
     user_language = db.get_user_language(user_id=user_id)
-    
+
     admin = db.get_admin_authenticated(user_id=user_id)
-    
+
     quantity_pattern = r"\d+"
-    
+
     if not admin:
         return False
-    
-    if msg.text is None or not match(quantity_pattern, msg.text):
 
+    if msg.text is None or not match(quantity_pattern, msg.text):
         bot_msg = await bot.answer(
-            user_id=user_id,
-            text="ADMIN_INPUT_QUANTITY_ERROR",
-            language_name=user_language
+            user_id=user_id, text="ADMIN_INPUT_QUANTITY_ERROR", language_name=user_language
         )
 
         await asyncio.sleep(5)
         await bot_msg.delete()
 
         return False
-    
+
     data = await state.get_data()
     blood_id = int(data["blood_id"])
     operation = int(data["operation"])
     quantity = int(msg.text)
-    
+
     debug_print(blood_id, operation, quantity)
-    
-    success = db.update_clinic_blood_quantity(clinic_id=admin.get_clinic().get_id(), blood_id=blood_id, quantity=quantity, operation=operation)
-    
+
+    success = db.update_clinic_blood_quantity(
+        clinic_id=admin.get_clinic().get_id(),
+        blood_id=blood_id,
+        quantity=quantity,
+        operation=operation,
+    )
+
     if success:
         await bot.answer(
             user_id=user_id,
             text="ADMIN_BLOOD_CHANGE_SUCCESS",
             language_name=user_language,
             keyboard_name=KeyboardName.MAIN,
-            keyboard_type=KeyboardType.REPLY
+            keyboard_type=KeyboardType.REPLY,
         )
     else:
         await bot.answer(
@@ -613,7 +593,8 @@ async def main_handler(msg: Message, state: FSMContext):
             text="ADMIN_BLOOD_CHANGE_UNSUCCESS",
             language_name=user_language,
             keyboard_name=KeyboardName.MAIN,
-            keyboard_type=KeyboardType.REPLY
+            keyboard_type=KeyboardType.REPLY,
         )
+
 
 hnd.add_router(router)

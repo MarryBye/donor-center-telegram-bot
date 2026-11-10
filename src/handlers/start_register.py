@@ -1,22 +1,19 @@
 import asyncio
-import config as cfg
-
 from re import match
 
 from aiogram import Router
-from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
+from aiogram.types import CallbackQuery, Message
 
-from src.classes.CRMBot import CRMBot
+import config as cfg
 from src.classes.Controllers.DatabaseController import DatabaseController
-from src.classes.HandlersController import HandlersController
-from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
-from src.classes.Form import Form
+from src.classes.CRMBot import CRMBot
 from src.classes.Datatypes.Donor import Donor
 from src.classes.Datatypes.Telephone import Telephone
-
-from src.funcs.core import language_name_to_id, gender_name_to_id
+from src.classes.Form import Form
+from src.classes.HandlersController import HandlersController
+from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
 
 bot = CRMBot()
 
@@ -34,13 +31,12 @@ async def main_handler(msg: Message, state: FSMContext):
     user_language = db.get_user_language(user_id=user_id)
 
     if db.get_donor(telegram_id=user_id) is not None:
-
         await bot.answer(
             user_id=user_id,
             text="ALREADY_REGISTERED",
             keyboard_name=KeyboardName.MAIN,
             keyboard_type=KeyboardType.REPLY,
-            language_name=user_language
+            language_name=user_language,
         )
 
         return False
@@ -56,7 +52,7 @@ async def main_handler(msg: Message, state: FSMContext):
         text="REGISTER_START",
         keyboard_name=KeyboardName.LANGUAGES_REGISTER,
         keyboard_type=KeyboardType.INLINE,
-        language_name=user_language
+        language_name=user_language,
     )
 
 
@@ -72,9 +68,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     await state.set_state(Form.registerUser_contact)
 
     await bot.edit_message_reply_markup(
-        chat_id=call.from_user.id,
-        message_id=call.message.message_id,
-        reply_markup=None
+        chat_id=call.from_user.id, message_id=call.message.message_id, reply_markup=None
     )
 
     await bot.answer(
@@ -82,7 +76,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
         text="REGISTER_STEP_1",
         keyboard_name=KeyboardName.MSG_SHARECONTACT,
         keyboard_type=KeyboardType.REPLY,
-        language_name=user_language.get_lang_name()
+        language_name=user_language.get_lang_name(),
     )
 
 
@@ -94,13 +88,12 @@ async def main_handler(msg: Message, state: FSMContext):
     user_contact = msg.contact
 
     if user_contact is None:
-
         bot_msg = await bot.answer(
             user_id=user_id,
             text="REGISTER_STEP_1_FAILURE",
             keyboard_name=KeyboardName.MSG_SHARECONTACT,
             keyboard_type=KeyboardType.REPLY,
-            language_name=user_language
+            language_name=user_language,
         )
 
         await asyncio.sleep(5)
@@ -122,11 +115,7 @@ async def main_handler(msg: Message, state: FSMContext):
     await state.update_data(telephone=user_telephone)
     await state.set_state(Form.registerUser_birthday)
 
-    await bot.answer(
-        user_id=user_id,
-        text="REGISTER_STEP_2",
-        language_name=user_language
-    )
+    await bot.answer(user_id=user_id, text="REGISTER_STEP_2", language_name=user_language)
 
     await msg.delete()
 
@@ -138,14 +127,11 @@ async def main_handler(msg: Message, state: FSMContext):
     user_language = db.get_user_language(user_id=user_id)
     user_birthday = msg.text
 
-    birthday_pattern = r'^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(19[4-9][0-9]|20[0-9]{2})$'
+    birthday_pattern = r"^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(19[4-9][0-9]|20[0-9]{2})$"
 
     if msg.text is None or not match(birthday_pattern, msg.text):
-
         bot_msg = await bot.answer(
-            user_id=user_id,
-            text="REGISTER_STEP_2_FAILURE",
-            language_name=user_language
+            user_id=user_id, text="REGISTER_STEP_2_FAILURE", language_name=user_language
         )
 
         await asyncio.sleep(5)
@@ -161,7 +147,7 @@ async def main_handler(msg: Message, state: FSMContext):
         text="REGISTER_STEP_3",
         keyboard_name=KeyboardName.GENDERS,
         keyboard_type=KeyboardType.INLINE,
-        language_name=user_language
+        language_name=user_language,
     )
 
     await msg.delete()
@@ -178,16 +164,10 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     await state.set_state(Form.registerUser_email)
 
     await bot.edit_message_reply_markup(
-        chat_id=call.from_user.id,
-        message_id=call.message.message_id,
-        reply_markup=None
+        chat_id=call.from_user.id, message_id=call.message.message_id, reply_markup=None
     )
 
-    await bot.answer(
-        user_id=user_id,
-        text="REGISTER_STEP_4",
-        language_name=user_language
-    )
+    await bot.answer(user_id=user_id, text="REGISTER_STEP_4", language_name=user_language)
 
 
 @router.message(Form.registerUser_email)
@@ -197,14 +177,11 @@ async def main_handler(msg: Message, state: FSMContext):
     user_language = db.get_user_language(user_id=user_id)
     user_email = msg.text
 
-    email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    email_pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
 
     if msg.text is None or not match(email_pattern, msg.text):
-
         bot_msg = await bot.answer(
-            user_id=user_id,
-            text="REGISTER_STEP_4_FAILURE",
-            language_name=user_language
+            user_id=user_id, text="REGISTER_STEP_4_FAILURE", language_name=user_language
         )
 
         await asyncio.sleep(5)
@@ -215,11 +192,7 @@ async def main_handler(msg: Message, state: FSMContext):
     await state.update_data(email=user_email)
     await state.set_state(Form.registerUser_password)
 
-    await bot.answer(
-        user_id=user_id,
-        text="REGISTER_STEP_5",
-        language_name=user_language
-    )
+    await bot.answer(user_id=user_id, text="REGISTER_STEP_5", language_name=user_language)
 
     await msg.delete()
 
@@ -231,14 +204,11 @@ async def main_handler(msg: Message, state: FSMContext):
     user_language = db.get_user_language(user_id=user_id)
     user_password = msg.text
 
-    password_pattern = r'^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]{8,}$'
+    password_pattern = r"^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]{8,}$"
 
     if msg.text is None or not match(password_pattern, msg.text):
-
         bot_msg = await bot.answer(
-            user_id=user_id,
-            text="REGISTER_STEP_5_FAILURE",
-            language_name=user_language
+            user_id=user_id, text="REGISTER_STEP_5_FAILURE", language_name=user_language
         )
 
         await asyncio.sleep(5)
@@ -262,7 +232,7 @@ async def main_handler(msg: Message, state: FSMContext):
         text="SUCCESSFULL_REGISTER",
         keyboard_name=KeyboardName.MAIN,
         keyboard_type=KeyboardType.REPLY,
-        language_name=user_language
+        language_name=user_language,
     )
 
     await msg.delete()

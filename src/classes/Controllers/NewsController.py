@@ -1,9 +1,9 @@
 import re
+from datetime import datetime
+
 import psycopg2.extras as psql_extra
 
-from datetime import datetime
 from src.classes.Controllers.DatabaseController import DatabaseController
-
 
 db = DatabaseController()
 
@@ -24,9 +24,7 @@ class News:
         self.title = title
         self.image = image
         self.description = description
-        self.publication_date = (
-            pd.strftime("%d.%m.%Y") if (pd := publication_date) else None
-        )
+        self.publication_date = pd.strftime("%d.%m.%Y") if (pd := publication_date) else None
         self.news_type = news_type
         self.end_publication_date = (
             epd.strftime("%d.%m.%Y") if (epd := end_publication_date) else None
@@ -59,8 +57,7 @@ class NewsDatabase:
                     cur.execute(query)
 
                 rows = cur.fetchall()
-            
-                
+
                 news_list = [
                     News(
                         news_id=row["ID"],
@@ -128,13 +125,12 @@ class NewsDatabase:
         """Форматирует список новостей для вывода в Telegram с использованием Markdown V2."""
         formatted_news = []
 
-        _ = lambda text: self.escape_markdown_v2(text)
+        def _(text):
+            return self.escape_markdown_v2(text)
 
         for news in news_list:
             end_date = (
-                " \- " + f"_{_(news.end_publication_date)}_"
-                if news.end_publication_date
-                else ""
+                r" \- " + f"_{_(news.end_publication_date)}_" if news.end_publication_date else ""
             )
             news_text = f"*{_(news.title)}*\n"
             if news.link:

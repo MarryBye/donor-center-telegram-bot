@@ -1,14 +1,13 @@
 from aiogram import Router
-from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
+from aiogram.types import Message
 
-from src.classes.CRMBot import CRMBot
 from src.classes.Controllers.DatabaseController import DatabaseController
+from src.classes.CRMBot import CRMBot
+from src.classes.Form import ChooseLanguage, ChooseNotifications
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
-from src.classes.Form import ChooseLanguage, ChooseNotifications
-
-from src.funcs.core import pressed_button, message_translate, button_translate
+from src.funcs.core import button_translate, message_translate, pressed_button
 
 bot = CRMBot()
 
@@ -28,7 +27,9 @@ async def main_handler(msg: Message, state: FSMContext):
     if donor:
         await state.set_state(ChooseNotifications.choose_notification)
 
-        text = message_translate("MENU_OPEN", language_name=user_language) % button_translate(button_name="SETTINGS_MENU_NOTIFICATIONS", language_name=user_language)
+        text = message_translate("MENU_OPEN", language_name=user_language) % button_translate(
+            button_name="SETTINGS_MENU_NOTIFICATIONS", language_name=user_language
+        )
 
         await bot.answer(
             user_id=user_id,
@@ -36,7 +37,7 @@ async def main_handler(msg: Message, state: FSMContext):
             keyboard_name=KeyboardName.NOTIFICATIONS,
             keyboard_type=KeyboardType.INLINE,
             language_name=user_language,
-            need_translation=False
+            need_translation=False,
         )
 
 
@@ -49,7 +50,9 @@ async def main_handler(msg: Message, state: FSMContext):
     if donor:
         await state.set_state(ChooseLanguage.choose_language)
 
-        text = message_translate("MENU_OPEN", language_name=user_language) % button_translate(button_name="SETTINGS_MENU_NOTIFICATIONS", language_name=user_language)
+        text = message_translate("MENU_OPEN", language_name=user_language) % button_translate(
+            button_name="SETTINGS_MENU_NOTIFICATIONS", language_name=user_language
+        )
 
         await bot.answer(
             user_id=user_id,
@@ -57,7 +60,7 @@ async def main_handler(msg: Message, state: FSMContext):
             keyboard_name=KeyboardName.LANGUAGES,
             keyboard_type=KeyboardType.INLINE,
             language_name=user_language,
-            need_translation=False
+            need_translation=False,
         )
 
 

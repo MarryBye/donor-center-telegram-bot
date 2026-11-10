@@ -1,19 +1,13 @@
-from re import match
-
 from aiogram import Router
-from aiogram.fsm.context import FSMContext
-from aiogram.types import Message, CallbackQuery
 from aiogram.enums import ParseMode
+from aiogram.types import CallbackQuery
 
-from src.classes.CRMBot import CRMBot
-from src.classes.Form import UserSettings
-from src.classes.Controllers.DatabaseController import DatabaseController
 from src.classes.Controllers.BloodController import BloodController
+from src.classes.Controllers.DatabaseController import DatabaseController
+from src.classes.CRMBot import CRMBot
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
-
-from src.funcs.core import message_translate, gender_name_to_id
-
+from src.funcs.core import message_translate
 
 bot = CRMBot()
 
@@ -31,7 +25,7 @@ async def positive_rhesus(call: CallbackQuery):
     lang = db.get_user_language(user_id=user_id)
 
     appointments = db.get_all_appointments(need_status="1") or 0
-    
+
     if isinstance(appointments, list):
         appointments = len(appointments)
     else:
@@ -45,7 +39,12 @@ async def positive_rhesus(call: CallbackQuery):
     O = bc.get("O", rh, "list") or 0
 
     message = message_translate("STAT_MESSAGE", lang) % (
-        appointments, f"RH\{rh}", A, B, AB, O,
+        appointments,
+        rf"RH\{rh}",
+        A,
+        B,
+        AB,
+        O,
     )
 
     keyboard = kb.get_keyboard(
@@ -70,12 +69,12 @@ async def negative_rhesus(call: CallbackQuery):
     lang = db.get_user_language(user_id=user_id)
 
     appointments = db.get_all_appointments(need_status="1") or 0
-    
+
     if isinstance(appointments, list):
         appointments = len(appointments)
     else:
         appointments = 1
-        
+
     rh = "-"
 
     A = bc.get("A", rh, "list") or 0
@@ -84,7 +83,12 @@ async def negative_rhesus(call: CallbackQuery):
     O = bc.get("O", rh, "list") or 0
 
     message = message_translate("STAT_MESSAGE", lang) % (
-        appointments, f"RH\{rh}", A, B, AB, O,
+        appointments,
+        rf"RH\{rh}",
+        A,
+        B,
+        AB,
+        O,
     )
 
     keyboard = kb.get_keyboard(

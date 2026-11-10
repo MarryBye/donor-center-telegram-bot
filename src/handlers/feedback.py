@@ -1,17 +1,15 @@
 from re import match
+
 from aiocache import Cache
-
 from aiogram import Router
-from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
+from aiogram.types import Message
 
-from src.funcs.core import pressed_button, message_translate
-
-from src.classes.Form import Feedback
 from src.classes.Controllers.DatabaseController import DatabaseController
+from src.classes.Form import Feedback
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
-
+from src.funcs.core import message_translate, pressed_button
 
 cache = Cache()
 
@@ -47,9 +45,7 @@ async def process_name(msg: Message, state: FSMContext):
         await msg.answer(bot_message, reply_markup=new_keyboard)
     else:
         await msg.answer(
-            message_translate(
-                message_name="MAIL_PHONE_ERROR", language_name=user_language
-            )
+            message_translate(message_name="MAIL_PHONE_ERROR", language_name=user_language)
         )
 
 
@@ -87,9 +83,7 @@ async def process_phone(msg: Message, state: FSMContext):
         keyboard_type=KeyboardType.REPLY,
         language_name=user_language,
     )
-    bot_message = message_translate(
-        message_name="PHONE_SENT", language_name=user_language
-    )
+    bot_message = message_translate(message_name="PHONE_SENT", language_name=user_language)
     try:
         if match(r"^\+?(\d{10,15})$", phone):
             await msg.answer(bot_message, reply_markup=new_keyboard)
@@ -102,16 +96,12 @@ async def process_phone(msg: Message, state: FSMContext):
             db.add_feedback_request(user_id=user_id, note=f"Telegram: {name} | {phone}")
         else:
             await msg.answer(
-                message_translate(
-                    message_name="MAIL_PHONE_ERROR", language_name=user_language
-                )
+                message_translate(message_name="MAIL_PHONE_ERROR", language_name=user_language)
             )
             print("phone error")
     except Exception as e:
         await msg.answer(
-            message_translate(
-                message_name="MAIL_PHONE_ERROR", language_name=user_language
-            )
+            message_translate(message_name="MAIL_PHONE_ERROR", language_name=user_language)
         )
         print(f"`process_phone` ERROR:{e}")
 
@@ -151,9 +141,7 @@ async def process_phone(msg: Message, state: FSMContext):
         keyboard_type=KeyboardType.REPLY,
         language_name=user_language,
     )
-    bot_message = message_translate(
-        message_name="MAIL_SENT", language_name=user_language
-    )
+    bot_message = message_translate(message_name="MAIL_SENT", language_name=user_language)
 
     if match(r"^[^@]+@[^@]+\.[^@]+$", mail):
         await msg.answer(bot_message, reply_markup=new_keyboard)
@@ -167,9 +155,7 @@ async def process_phone(msg: Message, state: FSMContext):
         print("все ок")
     else:
         await msg.answer(
-            message_translate(
-                message_name="MAIL_PHONE_ERROR", language_name=user_language
-            )
+            message_translate(message_name="MAIL_PHONE_ERROR", language_name=user_language)
         )
         print("mail error")
 

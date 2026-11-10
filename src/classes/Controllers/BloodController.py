@@ -1,4 +1,5 @@
 from psycopg2 import sql
+
 from src.classes.Controllers.DatabaseController import DatabaseController
 
 
@@ -46,14 +47,12 @@ class BloodController(DatabaseController):
             if group and rh:
                 if not results:
                     return None
-                
+
                 return results[0]["kol"]
             elif output_type == "list":
                 return [result["kol"] for result in results]
             elif output_type == "dict":
-                return {
-                    result["blood_and_comp_name"]: result["kol"] for result in results
-                }
+                return {result["blood_and_comp_name"]: result["kol"] for result in results}
             else:
                 raise ValueError("Invalid output_type. Expected 'list' or 'dict'.")
         except Exception as error:

@@ -5,7 +5,7 @@ kb = KeyboardController()
 kb_scheme = [
     [{"SETTINGS_MENU_NOTIFICATIONS": {}}],
     [{"SETTINGS_MENU_LANGUAGES": {}}],
-    [{"BUTTON_HOME": {}}]
+    [{"BUTTON_HOME": {}}],
 ]
 
 keyboard = Keyboard(keyboard_scheme=kb_scheme)

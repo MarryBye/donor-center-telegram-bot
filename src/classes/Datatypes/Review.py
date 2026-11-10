@@ -1,10 +1,9 @@
+from src.classes.Datatypes.Clinic import Clinic
 from src.classes.Datatypes.CRMBaseDataType import CRMBaseDataType
 from src.classes.Datatypes.Donor import Donor
-from src.classes.Datatypes.Clinic import Clinic
 
 
 class Review(CRMBaseDataType):
-
     def set_donor(self, donor: Donor):
         self.data["donor"] = donor
 

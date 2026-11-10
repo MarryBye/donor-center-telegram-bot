@@ -1,9 +1,8 @@
-from src.classes.Datatypes.CRMBaseDataType import CRMBaseDataType
 from src.classes.Datatypes.Address import Address
+from src.classes.Datatypes.CRMBaseDataType import CRMBaseDataType
 
 
 class Clinic(CRMBaseDataType):
-
     def set_clinic_name(self, clinic_name: str):
         self.data["clinic_name"] = clinic_name
 

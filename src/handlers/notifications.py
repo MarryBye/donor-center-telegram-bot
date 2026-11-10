@@ -1,14 +1,12 @@
 from aiogram import Router
-from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
+from aiogram.types import CallbackQuery
 
-from src.classes.CRMBot import CRMBot
 from src.classes.Controllers.DatabaseController import DatabaseController
+from src.classes.CRMBot import CRMBot
+from src.classes.Form import ChooseNotifications
 from src.classes.HandlersController import HandlersController
 from src.classes.Keyboards import KeyboardController, KeyboardName, KeyboardType
-from src.classes.Form import ChooseNotifications
-
-from src.funcs.core import pressed_button, message_translate, sent_callback
 
 bot = CRMBot()
 
@@ -32,9 +30,7 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
     await state.clear()
 
     await bot.edit_message_reply_markup(
-        chat_id=call.from_user.id,
-        message_id=call.message.message_id,
-        reply_markup=None
+        chat_id=call.from_user.id, message_id=call.message.message_id, reply_markup=None
     )
 
     await bot.answer(
@@ -42,7 +38,8 @@ async def main_handler(call: CallbackQuery, state: FSMContext):
         text="NOTIFICATIONS_ON" if notify_status else "NOTIFICATIONS_OFF",
         keyboard_name=KeyboardName.MAIN,
         keyboard_type=KeyboardType.REPLY,
-        language_name=user_language
+        language_name=user_language,
     )
+
 
 hnd.add_router(router)

@@ -1,32 +1,29 @@
+import datetime
+import json
 import os
+
 import psycopg2 as psql
 import psycopg2.extras as psql_extra
+
 import config as cfg
-import json
-
-import datetime
-
-from src.classes.Singleton import Singleton
-
-from src.classes.Datatypes.City import City
-from src.classes.Datatypes.Region import Region
-from src.classes.Datatypes.Street import Street
-from src.classes.Datatypes.Area import Area
-from src.classes.Datatypes.Address import Address
-from src.classes.Datatypes.Clinic import Clinic
-from src.classes.Datatypes.Blood import Blood
-from src.classes.Datatypes.Status import Status
-from src.classes.Datatypes.Donor import Donor, Telephone
-from src.classes.Datatypes.Appointment import Appointment
-from src.classes.Datatypes.Review import Review
-from src.classes.Datatypes.HasBlood import HasBlood
-from src.classes.Datatypes.Gender import Gender
-from src.classes.Datatypes.Language import Language
-from src.classes.Datatypes.Admin import Admin
-
 from src.classes.Crypto import CryptoSHA256
+from src.classes.Datatypes.Address import Address
+from src.classes.Datatypes.Admin import Admin
+from src.classes.Datatypes.Appointment import Appointment
+from src.classes.Datatypes.Area import Area
+from src.classes.Datatypes.Blood import Blood
+from src.classes.Datatypes.City import City
+from src.classes.Datatypes.Clinic import Clinic
+from src.classes.Datatypes.Donor import Donor, Telephone
+from src.classes.Datatypes.Gender import Gender
+from src.classes.Datatypes.HasBlood import HasBlood
+from src.classes.Datatypes.Language import Language
+from src.classes.Datatypes.Region import Region
+from src.classes.Datatypes.Review import Review
+from src.classes.Datatypes.Status import Status
+from src.classes.Datatypes.Street import Street
+from src.classes.Singleton import Singleton
 from src.classes.TerminalColors import TerminalColors
-
 from src.funcs.debug_print import debug_print
 
 
@@ -42,7 +39,7 @@ class DatabaseController(metaclass=Singleton):
                 pass
             return {}
         try:
-            with open(filepath, "r", encoding="UTF-8") as f:
+            with open(filepath, encoding="UTF-8") as f:
                 return json.load(f)
         except Exception:
             return {}
@@ -61,11 +58,13 @@ class DatabaseController(metaclass=Singleton):
         debug_print("DatabaseController (or his subclasses) has been initialized!")
 
     def connect(self):
-        self.connection = psql.connect(database=cfg.DATABASE_NAME,
-                                       host=cfg.IP_ADDRESS,
-                                       user=cfg.USERNAME,
-                                       password=cfg.PASSWORD,
-                                       port=cfg.PORT)
+        self.connection = psql.connect(
+            database=cfg.DATABASE_NAME,
+            host=cfg.IP_ADDRESS,
+            user=cfg.USERNAME,
+            password=cfg.PASSWORD,
+            port=cfg.PORT,
+        )
         self.cursor = self.connection.cursor(cursor_factory=psql_extra.RealDictCursor)
 
         debug_print("Connected to database!")
@@ -95,7 +94,7 @@ class DatabaseController(metaclass=Singleton):
 
     def add_cities(self):
 
-        query = 'DELETE FROM data_blood.city'
+        query = "DELETE FROM data_blood.city"
         self.cursor.execute(query)
 
         query = 'INSERT INTO data_blood.city ("ID", "city_name") VALUES (%s, %s)'
@@ -113,7 +112,7 @@ class DatabaseController(metaclass=Singleton):
 
     def get_cities(self, n: int = -1) -> list[City] | None:
 
-        query = 'SELECT * FROM data_blood.city'
+        query = "SELECT * FROM data_blood.city"
         self.cursor.execute(query)
         data = self.cursor.fetchmany(n)
 
@@ -124,7 +123,7 @@ class DatabaseController(metaclass=Singleton):
 
     def add_regions(self):
 
-        query = 'DELETE FROM data_blood.region'
+        query = "DELETE FROM data_blood.region"
         self.cursor.execute(query)
 
         query = 'INSERT INTO data_blood.region ("ID", "region_name") VALUES (%s, %s)'
@@ -142,7 +141,7 @@ class DatabaseController(metaclass=Singleton):
 
     def get_regions(self, n: int = -1) -> list[Region] | None:
 
-        query = 'SELECT * FROM data_blood.region'
+        query = "SELECT * FROM data_blood.region"
         self.cursor.execute(query)
         data = self.cursor.fetchmany(n)
 
@@ -153,7 +152,7 @@ class DatabaseController(metaclass=Singleton):
 
     def add_streets(self):
 
-        query = 'DELETE FROM data_blood.street'
+        query = "DELETE FROM data_blood.street"
         self.cursor.execute(query)
 
         query = 'INSERT INTO data_blood.street ("ID", "street_name") VALUES (%s, %s)'
@@ -170,7 +169,7 @@ class DatabaseController(metaclass=Singleton):
 
     def get_streets(self, n: int = -1) -> list[Street] | None:
 
-        query = 'SELECT * FROM data_blood.street'
+        query = "SELECT * FROM data_blood.street"
         self.cursor.execute(query)
         data = self.cursor.fetchmany(n)
 
@@ -181,7 +180,7 @@ class DatabaseController(metaclass=Singleton):
 
     def add_areas(self):
 
-        query = 'DELETE FROM data_blood.area'
+        query = "DELETE FROM data_blood.area"
         self.cursor.execute(query)
 
         query = 'INSERT INTO data_blood.area ("ID", "area_name") VALUES (%s, %s)'
@@ -199,7 +198,7 @@ class DatabaseController(metaclass=Singleton):
 
     def get_areas(self, n: int = -1) -> list[Area] | None:
 
-        query = 'SELECT * FROM data_blood.area'
+        query = "SELECT * FROM data_blood.area"
         self.cursor.execute(query)
         data = self.cursor.fetchmany(n)
 
@@ -210,11 +209,13 @@ class DatabaseController(metaclass=Singleton):
 
     def add_addresses(self):
 
-        query = 'DELETE FROM data_blood.address'
+        query = "DELETE FROM data_blood.address"
         self.cursor.execute(query)
 
-        query = ('INSERT INTO data_blood.address ("ID", "region_ID", "city_ID", "area_ID", "street_ID", '
-                 '"house_number") VALUES (%s, %s, %s, %s, %s, %s)')
+        query = (
+            'INSERT INTO data_blood.address ("ID", "region_ID", "city_ID", "area_ID", "street_ID", '
+            '"house_number") VALUES (%s, %s, %s, %s, %s, %s)'
+        )
         self.cursor.executemany(query, cfg.ADDRESSES)
 
         self.connection.commit()
@@ -222,14 +223,14 @@ class DatabaseController(metaclass=Singleton):
     def get_address(self, db_id: int | str) -> Address | None:
 
         query = (
-            'SELECT '
+            "SELECT "
             'address."ID", '
             'address."area_ID" AS area, '
             'address."city_ID" AS city, '
             'address."region_ID" AS region, '
             'address."street_ID" AS street, '
             'address."house_number" '
-            'FROM data_blood.address AS address '
+            "FROM data_blood.address AS address "
             'WHERE address."ID" = %s'
         )
 
@@ -246,14 +247,14 @@ class DatabaseController(metaclass=Singleton):
     def get_addresses(self, n: int = -1) -> list[Address] | None:
 
         query = (
-            'SELECT '
+            "SELECT "
             'address."ID", '
             'address."area_ID" AS area, '
             'address."city_ID" AS city, '
             'address."region_ID" AS region, '
             'address."street_ID" AS street, '
             'address."house_number" AS house '
-            'FROM data_blood.address AS address '
+            "FROM data_blood.address AS address "
         )
         self.cursor.execute(query)
         data = self.cursor.fetchmany(n)
@@ -270,19 +271,22 @@ class DatabaseController(metaclass=Singleton):
 
     def add_clinics(self):
 
-        query = 'DELETE FROM data_blood.clinic'
+        query = "DELETE FROM data_blood.clinic"
         self.cursor.execute(query)
 
-        query = 'DELETE FROM data_blood.clinic_has_blood_and_comp'
+        query = "DELETE FROM data_blood.clinic_has_blood_and_comp"
         self.cursor.execute(query)
 
-        query = ('INSERT INTO data_blood.clinic ("ID", "clinic_name", "address_ID", "working_hours") VALUES (%s, %s, '
-                 '%s, %s)')
+        query = (
+            'INSERT INTO data_blood.clinic ("ID", "clinic_name", "address_ID", "working_hours") VALUES (%s, %s, '
+            "%s, %s)"
+        )
         self.cursor.executemany(query, cfg.CLINICS)
 
         query = (
             'INSERT INTO data_blood.clinic_has_blood_and_comp ("blood_and_comp_ID", "clinic_ID", "kol") VALUES (%s, %s, '
-            '%s)')
+            "%s)"
+        )
 
         query_args = []
 
@@ -294,15 +298,21 @@ class DatabaseController(metaclass=Singleton):
 
         self.connection.commit()
 
-    def get_clinic(self, db_id: int | str = -1, address_id: int | str = -1, city_id: int | str = -1, region_id: int | str = -1) -> Clinic | None:
+    def get_clinic(
+        self,
+        db_id: int | str = -1,
+        address_id: int | str = -1,
+        city_id: int | str = -1,
+        region_id: int | str = -1,
+    ) -> Clinic | None:
 
         query = (
-            'SELECT '
+            "SELECT "
             'clinic."ID", '
             'clinic."clinic_name", '
             'clinic."address_ID" AS address, '
             'clinic."working_hours" '
-            'FROM data_blood.clinic AS clinic, '
+            "FROM data_blood.clinic AS clinic, "
             'data_blood."address" AS address '
             'WHERE clinic."address_ID" = address."ID" AND '
             '(clinic."ID" = %s OR clinic."address_ID" = %s OR address."city_ID" = %s OR address."region_ID" = %s)'
@@ -319,12 +329,12 @@ class DatabaseController(metaclass=Singleton):
     def get_clinics(self, n: int = -1) -> list[Clinic] | None:
 
         query = (
-            'SELECT '
+            "SELECT "
             'clinic."ID", '
             'clinic."clinic_name", '
             'clinic."address_ID" AS address, '
             'clinic."working_hours" '
-            'FROM data_blood.clinic AS clinic '
+            "FROM data_blood.clinic AS clinic "
         )
         self.cursor.execute(query)
         data = self.cursor.fetchmany(n)
@@ -339,7 +349,7 @@ class DatabaseController(metaclass=Singleton):
 
     def add_bloods(self):
 
-        query = 'DELETE FROM data_blood.blood_and_components'
+        query = "DELETE FROM data_blood.blood_and_components"
         self.cursor.execute(query)
 
         query = 'INSERT INTO data_blood.blood_and_components ("ID", "blood_and_comp_name") VALUES (%s, %s)'
@@ -358,7 +368,7 @@ class DatabaseController(metaclass=Singleton):
 
     def get_bloods(self, n: int = -1) -> list[Blood] | None:
 
-        query = 'SELECT * FROM data_blood.blood_and_components'
+        query = "SELECT * FROM data_blood.blood_and_components"
         self.cursor.execute(query)
         data = self.cursor.fetchmany(n)
 
@@ -369,7 +379,7 @@ class DatabaseController(metaclass=Singleton):
 
     def add_statuses(self):
 
-        query = 'DELETE FROM data_blood.status_appointment'
+        query = "DELETE FROM data_blood.status_appointment"
         self.cursor.execute(query)
 
         query = 'INSERT INTO data_blood.status_appointment ("ID", "name_status") VALUES (%s, %s)'
@@ -379,7 +389,9 @@ class DatabaseController(metaclass=Singleton):
 
     def get_status(self, db_id: int | str) -> Status | None:
 
-        query = 'SELECT status.* FROM data_blood.status_appointment AS status WHERE status."ID" = %s'
+        query = (
+            'SELECT status.* FROM data_blood.status_appointment AS status WHERE status."ID" = %s'
+        )
 
         self.cursor.execute(query, (db_id,))
         data = self.cursor.fetchone()
@@ -388,7 +400,7 @@ class DatabaseController(metaclass=Singleton):
 
     def get_statuses(self, n: int = -1) -> list[Status] | None:
 
-        query = 'SELECT * FROM data_blood.status_appointment'
+        query = "SELECT * FROM data_blood.status_appointment"
         self.cursor.execute(query)
         data = self.cursor.fetchmany(n)
 
@@ -397,16 +409,18 @@ class DatabaseController(metaclass=Singleton):
 
         return data if data is not None else None
 
-    def get_review(self, db_id: int | str = -1, donor_id: int | str = -1, clinic_id: int | str = -1) -> Review | None:
+    def get_review(
+        self, db_id: int | str = -1, donor_id: int | str = -1, clinic_id: int | str = -1
+    ) -> Review | None:
 
         query = (
-            'SELECT '
+            "SELECT "
             'review."ID",'
             'review."donor_ID" AS donor,'
             'review."clinic_ID" AS clinic,'
             'review."rating",'
             'review."comment",'
-            'review.date_added '
+            "review.date_added "
             'FROM data_blood."reviews" AS review '
             'WHERE (review."ID" = %s OR review."donor_ID" = %s OR review."clinic_ID" = %s)'
         )
@@ -423,13 +437,13 @@ class DatabaseController(metaclass=Singleton):
     def get_reviews(self, n: int = -1) -> list[Review] | None:
 
         query = (
-            'SELECT '
+            "SELECT "
             'review."ID",'
             'review."donor_ID" AS donor,'
             'review."clinic_ID" AS clinic,'
             'review."rating",'
             'review."comment",'
-            'review.date_added '
+            "review.date_added "
             'FROM data_blood."reviews" AS review '
         )
         self.cursor.execute(query)
@@ -445,7 +459,7 @@ class DatabaseController(metaclass=Singleton):
 
     def add_genders(self):
 
-        query = 'DELETE FROM donor.gender'
+        query = "DELETE FROM donor.gender"
         self.cursor.execute(query)
 
         query = 'INSERT INTO donor.gender ("ID", "gender_name") VALUES (%s, %s)'
@@ -474,7 +488,7 @@ class DatabaseController(metaclass=Singleton):
 
     def add_languages(self):
 
-        query = 'DELETE FROM donor.language'
+        query = "DELETE FROM donor.language"
         self.cursor.execute(query)
 
         query = 'INSERT INTO donor.language ("ID", "lang_name") VALUES (%s, %s)'
@@ -504,12 +518,12 @@ class DatabaseController(metaclass=Singleton):
     def get_telephone(self, db_id: int | str = -1, donor_id: int | str = -1) -> Telephone | None:
 
         query = (
-            'SELECT '
+            "SELECT "
             'number."ID",'
             'number."donor_ID" AS donor, '
             'number."number" '
             'FROM number_telephone."donor_number" AS number,'
-            'donor.donor AS donor '
+            "donor.donor AS donor "
             'WHERE number."donor_ID" = donor."ID" AND '
             '(number."ID" = %s OR number."donor_ID" = %s)'
         )
@@ -521,7 +535,7 @@ class DatabaseController(metaclass=Singleton):
     def get_telephones(self, n: int = -1) -> list[Telephone] | None:
 
         query = (
-            'SELECT '
+            "SELECT "
             'number."ID",'
             'number."donor_ID" AS donor, '
             'number."number" '
@@ -535,14 +549,16 @@ class DatabaseController(metaclass=Singleton):
 
         return data if data is not None else None
 
-    def get_has_blood(self, blood_id: int | str = -1, clinic_id: int | str = -1) -> list[HasBlood] | None:
+    def get_has_blood(
+        self, blood_id: int | str = -1, clinic_id: int | str = -1
+    ) -> list[HasBlood] | None:
 
         query = (
-            'SELECT '
+            "SELECT "
             'has_blood."blood_and_comp_ID" AS blood,'
             'has_blood."clinic_ID" AS clinic,'
             'has_blood."kol" AS quantity '
-            'FROM data_blood.clinic_has_blood_and_comp AS has_blood '
+            "FROM data_blood.clinic_has_blood_and_comp AS has_blood "
             'WHERE (has_blood."blood_and_comp_ID" = %s OR has_blood."clinic_ID" = %s)'
         )
         self.cursor.execute(query, (blood_id, clinic_id))
@@ -557,7 +573,6 @@ class DatabaseController(metaclass=Singleton):
         return data if data is not None else None
 
     def add_donor(self, donor: Donor) -> bool:
-
         """
         Регистрация донора и добавление его в БД если его в ней нет. В качестве аргумента принимает:
         - ``donor`` - объект ``Donor`` с информацией про нового донора.\n
@@ -568,40 +583,38 @@ class DatabaseController(metaclass=Singleton):
         new_telephone_id = self.get_next_row_id(table="number_telephone.donor_number")
 
         try:
-
             query = (
-                'INSERT INTO '
+                "INSERT INTO "
                 'donor.donor ("ID", "name_donor", "surname_donor", "date_of_birth", "gender_ID", "email", "telegram_ID", "password", "language_ID") '
-                'VALUES '
-                '(%s, %s, %s, %s, %s, %s, %s, %s, %s)'
+                "VALUES "
+                "(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
             )
-            self.cursor.execute(query, (
-                new_donor_id,
-                donor.get_name(),
-                donor.get_surname(),
-                donor.get_birthdate(),
-                donor.get_gender().get_id(),
-                donor.get_email(),
-                donor.get_telegram_id(),
-                CryptoSHA256.crypt(string=donor.get_password(), salt=donor.get_email()),
-                donor.get_language().get_id()
+            self.cursor.execute(
+                query,
+                (
+                    new_donor_id,
+                    donor.get_name(),
+                    donor.get_surname(),
+                    donor.get_birthdate(),
+                    donor.get_gender().get_id(),
+                    donor.get_email(),
+                    donor.get_telegram_id(),
+                    CryptoSHA256.crypt(string=donor.get_password(), salt=donor.get_email()),
+                    donor.get_language().get_id(),
+                ),
             )
-                                )
 
             debug_print("Donor has inserted into database!")
 
             query = (
-                'INSERT INTO '
+                "INSERT INTO "
                 'number_telephone.donor_number ("ID", "donor_ID", "number") '
-                'VALUES '
-                '(%s, %s, %s)'
+                "VALUES "
+                "(%s, %s, %s)"
             )
-            self.cursor.execute(query, (
-                new_telephone_id,
-                new_donor_id,
-                donor.get_telephone().get_number()
+            self.cursor.execute(
+                query, (new_telephone_id, new_donor_id, donor.get_telephone().get_number())
             )
-                                )
 
             self.connection.commit()
 
@@ -612,12 +625,13 @@ class DatabaseController(metaclass=Singleton):
             return True
 
         except Exception as e:
-
             debug_print(f"Donor can`t be registered! Error: \n{e}", color=TerminalColors.FAIL)
 
             return False
 
-    def get_donor(self, db_id: int = -1, telegram_id: int = -1, number: str = "-1", email: str = "-1") -> Donor | None:
+    def get_donor(
+        self, db_id: int = -1, telegram_id: int = -1, number: str = "-1", email: str = "-1"
+    ) -> Donor | None:
         """
         Сформировать объект ``Donor`` по данным из БД. В качестве параметров передается одно из или несколько следующих
         значений:
@@ -630,7 +644,7 @@ class DatabaseController(metaclass=Singleton):
         """
 
         query = (
-            'SELECT '
+            "SELECT "
             'donors."ID",'
             'donors."name_donor",'
             'donors."surname_donor",'
@@ -641,10 +655,10 @@ class DatabaseController(metaclass=Singleton):
             'donors."password",'
             'donors."language_ID" AS language, '
             'numbers."ID" AS "telephone" '
-            'FROM donor.donor as donors, '
-            'number_telephone.donor_number AS numbers '
+            "FROM donor.donor as donors, "
+            "number_telephone.donor_number AS numbers "
             'WHERE donors."ID" = numbers."donor_ID" '
-            'AND '
+            "AND "
             '(donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s)'
         )
         self.cursor.execute(query, (db_id, telegram_id, number, email))
@@ -663,7 +677,7 @@ class DatabaseController(metaclass=Singleton):
     def get_donors(self, n: int = -1) -> list[Donor] | None:
 
         query = (
-            'SELECT '
+            "SELECT "
             'donors."ID",'
             'donors."name_donor",'
             'donors."surname_donor",'
@@ -674,8 +688,8 @@ class DatabaseController(metaclass=Singleton):
             'donors."password",'
             'donors."language_ID" AS language, '
             'numbers."ID" AS "telephone" '
-            'FROM donor.donor as donors, '
-            'number_telephone.donor_number AS numbers '
+            "FROM donor.donor as donors, "
+            "number_telephone.donor_number AS numbers "
             'WHERE donors."ID" = numbers."donor_ID" '
         )
         self.cursor.execute(query)
@@ -691,7 +705,6 @@ class DatabaseController(metaclass=Singleton):
         return data if data is not None else None
 
     def register_appointment(self, appointment: Appointment, donor: Donor):
-
         """
         Зарегистрировать донора на прием. Принимает следующие аргументы:
         - ``appointment`` - принимает объект ``Appointment`` с данными про новый прием;
@@ -699,25 +712,25 @@ class DatabaseController(metaclass=Singleton):
         Метод возвращает ``False`` если донор уже зарегистрирован на прием или нет данных о доноре.
         """
 
-        new_appointment_id = self.get_next_row_id(table="data_blood.appointment")
+        _new_appointment_id = self.get_next_row_id(table="data_blood.appointment")
         donor_number = donor.get_telephone().get_id()
         new_appointment_status = appointment.get_status().get_id()
         new_appointment_clinic = appointment.get_clinic().get_id()
 
         try:
-
-            query = (
-                'INSERT INTO data_blood.appointment ("ID", "clinic_ID", "donor_number_ID", "status_ID", "registration_date", "appointment_date", "analysis_file_path") VALUES (%s, %s, %s, %s, %s, %s, %s)')
-            self.cursor.execute(query, (
-                appointment.get_id(),
-                new_appointment_clinic,
-                donor_number,
-                new_appointment_status,
-                appointment.get_registration_date(),
-                appointment.get_appointment_date(),
-                appointment.get_analysis_file_path()
+            query = 'INSERT INTO data_blood.appointment ("ID", "clinic_ID", "donor_number_ID", "status_ID", "registration_date", "appointment_date", "analysis_file_path") VALUES (%s, %s, %s, %s, %s, %s, %s)'
+            self.cursor.execute(
+                query,
+                (
+                    appointment.get_id(),
+                    new_appointment_clinic,
+                    donor_number,
+                    new_appointment_status,
+                    appointment.get_registration_date(),
+                    appointment.get_appointment_date(),
+                    appointment.get_analysis_file_path(),
+                ),
             )
-                                )
 
             self.connection.commit()
 
@@ -726,13 +739,15 @@ class DatabaseController(metaclass=Singleton):
             return True
 
         except Exception as e:
-
-            debug_print(f"Donor appointment can`t be registered! Error: \n{e}", color=TerminalColors.FAIL)
+            debug_print(
+                f"Donor appointment can`t be registered! Error: \n{e}", color=TerminalColors.FAIL
+            )
 
             return False
 
-    def get_appointment(self, donor: Donor, only_last: bool = True, db_id: int | str = -1, n: int = -1) -> Appointment | list[Appointment] | None:
-
+    def get_appointment(
+        self, donor: Donor, only_last: bool = True, db_id: int | str = -1, n: int = -1
+    ) -> Appointment | list[Appointment] | None:
         """
         Сформировать объект ``Appointment`` по данным из БД, если донор существует. В качестве параметра принимает:
         - ``donor`` - объект ``Donor`` с информацией про донора.\n
@@ -745,7 +760,7 @@ class DatabaseController(metaclass=Singleton):
         """
 
         query = (
-            'SELECT '
+            "SELECT "
             'appointments."ID",'
             'appointments."clinic_ID" AS clinic,'
             'donors."ID" AS donor,'
@@ -753,24 +768,30 @@ class DatabaseController(metaclass=Singleton):
             'appointments."registration_date",'
             'appointments."appointment_date",'
             'appointments."analysis_file_path" '
-            'FROM '
-            'donor.donor as donors, '
-            'number_telephone.donor_number as numbers, '
-            'data_blood.appointment as appointments '
-            'WHERE '
+            "FROM "
+            "donor.donor as donors, "
+            "number_telephone.donor_number as numbers, "
+            "data_blood.appointment as appointments "
+            "WHERE "
             'appointments."donor_number_ID" = numbers."ID" '
-            'AND '
+            "AND "
             'numbers."donor_ID" = donors."ID" '
-            'AND '
+            "AND "
             '(appointments."ID" = %s OR donors."ID" = %s OR donors."telegram_ID" = %s OR numbers.number = %s OR donors.email = %s) '
         )
-        
+
         if only_last:
             query += 'ORDER BY appointments."ID" DESC'
-        
-        self.cursor.execute(query, (
-                db_id, donor.get_id(), donor.get_telegram_id(), donor.get_telephone().get_number(), donor.get_email()
-            )
+
+        self.cursor.execute(
+            query,
+            (
+                db_id,
+                donor.get_id(),
+                donor.get_telegram_id(),
+                donor.get_telephone().get_number(),
+                donor.get_email(),
+            ),
         )
 
         if only_last:
@@ -787,7 +808,6 @@ class DatabaseController(metaclass=Singleton):
             data = self.cursor.fetchmany(n)
 
             if data is not None:
-
                 for i, data_component in enumerate(data, start=0):
                     data_component["clinic"] = self.get_clinic(db_id=data_component["clinic"])
                     data_component["donor"] = self.get_donor(db_id=data_component["donor"])
@@ -846,11 +866,11 @@ class DatabaseController(metaclass=Singleton):
         else:
             data = self.cursor.fetchall()
             return [Appointment(data=d) for d in data] if data else []
-    
+
     def get_appointments(self, n: int = -1) -> list[Appointment] | None:
 
         query = (
-            'SELECT '
+            "SELECT "
             'appointments."ID",'
             'appointments."clinic_ID" AS clinic,'
             'donors."ID" AS donor,'
@@ -858,13 +878,13 @@ class DatabaseController(metaclass=Singleton):
             'appointments."registration_date",'
             'appointments."appointment_date",'
             'appointments."analysis_file_path" '
-            'FROM '
-            'donor.donor as donors, '
-            'number_telephone.donor_number as numbers, '
-            'data_blood.appointment as appointments '
-            'WHERE '
+            "FROM "
+            "donor.donor as donors, "
+            "number_telephone.donor_number as numbers, "
+            "data_blood.appointment as appointments "
+            "WHERE "
             'appointments."donor_number_ID" = numbers."ID" '
-            'AND '
+            "AND "
             'numbers."donor_ID" = donors."ID" '
         )
         self.cursor.execute(query)
@@ -879,71 +899,84 @@ class DatabaseController(metaclass=Singleton):
             data[i] = Appointment(data=data_component)
 
         return data if data is not None else None
-    
+
     def update_appointment_status(self, db_id: int | str, status_id: int | str) -> bool:
-        
+
         try:
             query = (
-                'UPDATE '
-                'data_blood.appointment AS appointment '
-                'SET '
+                "UPDATE "
+                "data_blood.appointment AS appointment "
+                "SET "
                 '"status_ID" = %s '
-                'WHERE '
+                "WHERE "
                 'appointment."ID" = %s'
             )
             self.cursor.execute(query, (status_id, db_id))
-            
+
             self.connection.commit()
 
-            debug_print(f"Admin has updated status of appointment #{db_id}. Now, its status is {status_id} - {self.get_status(db_id=status_id).get_name_status()}")
+            debug_print(
+                f"Admin has updated status of appointment #{db_id}. Now, its status is {status_id} - {self.get_status(db_id=status_id).get_name_status()}"
+            )
             return True
         except Exception as e:
-            debug_print(f"Cannot update status of appointment. Error: \n{e}", color=TerminalColors.FAIL)
+            debug_print(
+                f"Cannot update status of appointment. Error: \n{e}", color=TerminalColors.FAIL
+            )
             return False
-        
-    def update_clinic_blood_quantity(self, clinic_id: int, blood_id: int, quantity: int, operation: int = 1) -> bool:
-        
+
+    def update_clinic_blood_quantity(
+        self, clinic_id: int, blood_id: int, quantity: int, operation: int = 1
+    ) -> bool:
+
         try:
-            print(self.get_has_blood(clinic_id=clinic_id, blood_id=blood_id)[blood_id - 1].get_blood().get_blood_and_comp_name())
-            old_kol = self.get_has_blood(clinic_id=clinic_id, blood_id=blood_id)[blood_id - 1].get_quantity()
-            
+            print(
+                self.get_has_blood(clinic_id=clinic_id, blood_id=blood_id)[blood_id - 1]
+                .get_blood()
+                .get_blood_and_comp_name()
+            )
+            old_kol = self.get_has_blood(clinic_id=clinic_id, blood_id=blood_id)[
+                blood_id - 1
+            ].get_quantity()
+
             if operation == 1:
                 kol = old_kol + quantity
             else:
                 kol = old_kol - quantity if old_kol - quantity > 0 else 0
-                
+
             print(kol, old_kol - quantity)
-            
+
             query = (
-                'UPDATE '
-                'data_blood.clinic_has_blood_and_comp AS clinic_blood '
-                'SET '
+                "UPDATE "
+                "data_blood.clinic_has_blood_and_comp AS clinic_blood "
+                "SET "
                 '"kol" = %s '
-                'WHERE '
+                "WHERE "
                 '(clinic_blood."blood_and_comp_ID" = %s AND clinic_blood."clinic_ID" = %s)'
             )
             self.cursor.execute(query, (kol, blood_id, clinic_id))
-            
+
             self.connection.commit()
             return True
         except Exception as e:
-            debug_print(f"Cannot update quantity of blood in clinic. Error: \n{e}", color=TerminalColors.FAIL)
+            debug_print(
+                f"Cannot update quantity of blood in clinic. Error: \n{e}",
+                color=TerminalColors.FAIL,
+            )
             return False
 
     def add_admins(self):
 
-        query = 'DELETE FROM admin.admin'
+        query = "DELETE FROM admin.admin"
         self.cursor.execute(query)
 
-        query = ('INSERT INTO admin.admin ("ID", "name_admin", "password", "clinic_ID") VALUES (%s, %s, '
-                 '%s, %s)')
+        query = (
+            'INSERT INTO admin.admin ("ID", "name_admin", "password", "clinic_ID") VALUES (%s, %s, '
+            "%s, %s)"
+        )
 
         standard_admins = (
-            (admin[0],
-             admin[1],
-             CryptoSHA256.crypt(string=admin[2], salt=admin[1]),
-             admin[3]
-             )
+            (admin[0], admin[1], CryptoSHA256.crypt(string=admin[2], salt=admin[1]), admin[3])
             for admin in cfg.ADMINS
         )
 
@@ -954,22 +987,26 @@ class DatabaseController(metaclass=Singleton):
     def register_admin(self, admin: Admin):
         pass
 
-    def get_admin_account(self, db_id: int | str = -1, name_admin: str = "-1", password: str = "-1", clinic_id: int = -1) -> Admin | None:
+    def get_admin_account(
+        self,
+        db_id: int | str = -1,
+        name_admin: str = "-1",
+        password: str = "-1",
+        clinic_id: int = -1,
+    ) -> Admin | None:
 
         query = (
-            'SELECT '
+            "SELECT "
             'admin."ID", '
             'admin."name_admin", '
             'admin."password", '
             'admin."clinic_ID" AS clinic '
-            'FROM admin.admin AS admin '
+            "FROM admin.admin AS admin "
             'WHERE admin."ID" = %s OR (admin."name_admin" = %s AND admin."password" = %s AND admin."clinic_ID" = %s)'
         )
-        self.cursor.execute(query, (
-            db_id,
-            name_admin,
-            CryptoSHA256.crypt(string=password, salt=name_admin),
-            clinic_id)
+        self.cursor.execute(
+            query,
+            (db_id, name_admin, CryptoSHA256.crypt(string=password, salt=name_admin), clinic_id),
         )
 
         data = self.cursor.fetchone()
@@ -996,7 +1033,6 @@ class DatabaseController(metaclass=Singleton):
             print("`add_support_request` ERROR:", error)
 
     def set_user_language(self, user_id: int, language: str, only_cache: bool = False):
-
         """
         Устанавливает значение языка в БД и кеше бота чтобы в дальнейшем при запросах языка не обращаться в БД.
         """
@@ -1011,8 +1047,9 @@ class DatabaseController(metaclass=Singleton):
         if real_language is None:
             return False
 
-        if (not str(user_id) in self.languages_cache) or (self.languages_cache[str(user_id)] != language):
-
+        if (str(user_id) not in self.languages_cache) or (
+            self.languages_cache[str(user_id)] != language
+        ):
             if not only_cache:
                 query = 'UPDATE donor.donor AS donors SET "language_ID" = %s WHERE donors."telegram_ID" = %s'
                 self.cursor.execute(query, (real_language[0], user_id))
@@ -1020,26 +1057,44 @@ class DatabaseController(metaclass=Singleton):
                 self.connection.commit()
 
             self.languages_cache[str(user_id)] = real_language[1]
-            json.dump(self.languages_cache, open("bot/cache/user_languages.json", "w", encoding="UTF-8"))
+            json.dump(
+                self.languages_cache, open("bot/cache/user_languages.json", "w", encoding="UTF-8")
+            )
 
             return True
 
     def get_user_language(self, user_id: int | str) -> str:
-        return self.languages_cache[str(user_id)] if str(user_id) in self.languages_cache else cfg.DEFAULT_LANGUAGE
+        return (
+            self.languages_cache[str(user_id)]
+            if str(user_id) in self.languages_cache
+            else cfg.DEFAULT_LANGUAGE
+        )
 
     def set_user_notifications(self, user_id: int | str, option: bool):
-        if (not str(user_id) in self.notifications_cache) or (self.notifications_cache[str(user_id)] != option):
+        if (str(user_id) not in self.notifications_cache) or (
+            self.notifications_cache[str(user_id)] != option
+        ):
             self.notifications_cache[str(user_id)] = option
-            json.dump(self.notifications_cache, open("bot/cache/user_notifications.json", "w", encoding="UTF-8"))
+            json.dump(
+                self.notifications_cache,
+                open("bot/cache/user_notifications.json", "w", encoding="UTF-8"),
+            )
 
     def get_user_notifications(self, user_id: int | str) -> bool:
-        return self.notifications_cache[str(user_id)] if str(user_id) in self.notifications_cache else True
+        return (
+            self.notifications_cache[str(user_id)]
+            if str(user_id) in self.notifications_cache
+            else True
+        )
 
     def get_notifications_list(self):
         return self.notifications_cache
 
     def set_admin_authenticated(self, user_id: int | str, admin_id: int | str):
-        self.admins_cache[str(user_id)] = (admin_id, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        self.admins_cache[str(user_id)] = (
+            admin_id,
+            datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        )
         json.dump(self.admins_cache, open("bot/cache/user_admins.json", "w", encoding="UTF-8"))
 
     def get_admin_authenticated(self, user_id: int | str) -> Admin | bool:
@@ -1049,7 +1104,9 @@ class DatabaseController(metaclass=Singleton):
             return False
 
         time_now = datetime.datetime.now()
-        auth_time = datetime.datetime.strptime(self.admins_cache[str(user_id)][1], "%Y-%m-%d %H:%M:%S") + datetime.timedelta(minutes=30)
+        auth_time = datetime.datetime.strptime(
+            self.admins_cache[str(user_id)][1], "%Y-%m-%d %H:%M:%S"
+        ) + datetime.timedelta(minutes=30)
 
         need_deauth = time_now >= auth_time
 
@@ -1102,7 +1159,6 @@ class DatabaseController(metaclass=Singleton):
         debug_print("Таблица админов заполнена!")
 
     def delete_donor(self, donor: Donor):
-
         """
         Удалить донора из таблицы доноров, а также его номер телефона, который к нему привязан.Принимает следующие
         аргументы:
@@ -1111,16 +1167,18 @@ class DatabaseController(metaclass=Singleton):
         """
 
         try:
-
-            query = ('DELETE FROM donor.donor as donors WHERE donors."ID" = %s OR donors."telegram_ID" = %s OR '
-                     'donors.email = %s')
+            query = (
+                'DELETE FROM donor.donor as donors WHERE donors."ID" = %s OR donors."telegram_ID" = %s OR '
+                "donors.email = %s"
+            )
             self.cursor.execute(query, (donor.get_id(), donor.get_telegram(), donor.get_email()))
 
             debug_print("Donor has successfully deleted!")
 
             query = (
                 'DELETE FROM number_telephone.donor_number AS numbers WHERE numbers.number = %s OR numbers."ID" = %s '
-                'OR numbers."donor_ID" = %s')
+                'OR numbers."donor_ID" = %s'
+            )
             self.cursor.execute(query, (donor.get_number(), donor.get_number_id(), donor.get_id()))
 
             debug_print("Donor telephone has successfully deleted!")
@@ -1135,7 +1193,6 @@ class DatabaseController(metaclass=Singleton):
             return True
 
         except Exception as e:
-
             debug_print(f"Donor can`t be deleted! Error: \n{e}", color=TerminalColors.FAIL)
 
             return False
@@ -1143,7 +1200,6 @@ class DatabaseController(metaclass=Singleton):
     def update_donor_number(self, donor_id, new_phone_number):
 
         try:
-
             query = 'UPDATE number_telephone.donor_number SET number = %s WHERE "donor_ID" = %s'
             self.cursor.execute(query, (new_phone_number, donor_id))
 
@@ -1154,7 +1210,6 @@ class DatabaseController(metaclass=Singleton):
             return True
 
         except Exception as e:
-
             debug_print(f"Donor number can`t be updated! Error: \n{e}", color=TerminalColors.FAIL)
 
             return False
@@ -1168,7 +1223,14 @@ class DatabaseController(metaclass=Singleton):
         """
 
         try:
-            if field_name in ['name_donor', 'email', 'password', 'date_of_birth', 'gender_ID', 'phone_number']:
+            if field_name in [
+                "name_donor",
+                "email",
+                "password",
+                "date_of_birth",
+                "gender_ID",
+                "phone_number",
+            ]:
                 user_id = donor.get_id()
 
                 if field_name == "phone_number":
@@ -1184,7 +1246,8 @@ class DatabaseController(metaclass=Singleton):
                 print(f"{field_name} донора успешно обновлено.")
             else:
                 print(
-                    "Такого названия колонки нет в списке доступных:\n['name_donor', 'email', 'password', 'date_of_birth', 'gender_ID', 'phone_number']")
+                    "Такого названия колонки нет в списке доступных:\n['name_donor', 'email', 'password', 'date_of_birth', 'gender_ID', 'phone_number']"
+                )
         except Exception as e:
             print(f"Ошибка при обновлении {field_name} донора: {e}")
 
@@ -1205,7 +1268,7 @@ class DatabaseController(metaclass=Singleton):
 
         try:
             user_id = donor.get_id()
-            fields = fields.get('fields')
+            fields = fields.get("fields")
 
             set_fields = ", ".join([f'"{field}" = %s' for field in fields.keys()])
 
