@@ -1,3 +1,4 @@
+import os
 import psycopg2 as psql
 import psycopg2.extras as psql_extra
 import config as cfg
@@ -30,12 +31,27 @@ from src.funcs.debug_print import debug_print
 
 
 class DatabaseController(metaclass=Singleton):
-    def __init__(self):
+    @staticmethod
+    def _load_cache(filepath: str) -> dict:
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        if not os.path.exists(filepath):
+            try:
+                with open(filepath, "w", encoding="UTF-8") as f:
+                    json.dump({}, f)
+            except Exception:
+                pass
+            return {}
+        try:
+            with open(filepath, "r", encoding="UTF-8") as f:
+                return json.load(f)
+        except Exception:
+            return {}
 
-        self.languages_cache = json.load(open("bot/cache/user_languages.json", "r", encoding="UTF-8"))
-        self.notifications_cache = json.load(open("bot/cache/user_notifications.json", "r", encoding="UTF-8"))
-        self.phones_cache = json.load(open("bot/cache/user_phones.json", "r", encoding="UTF-8"))
-        self.admins_cache = json.load(open("bot/cache/user_admins.json", "r", encoding="UTF-8"))
+    def __init__(self):
+        self.languages_cache = self._load_cache("bot/cache/user_languages.json")
+        self.notifications_cache = self._load_cache("bot/cache/user_notifications.json")
+        self.phones_cache = self._load_cache("bot/cache/user_phones.json")
+        self.admins_cache = self._load_cache("bot/cache/user_admins.json")
 
         self.connection = None
         self.cursor = None

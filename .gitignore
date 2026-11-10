@@ -1,0 +1,36 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment and sensitive credential files
+.env
+.env.local
+.env.*.local
+TOKEN
+RSA
+
+# Runtime caches and dynamic state
+bot/cache/*.json
+!bot/cache/.gitkeep
+.cache/
+*.log
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Tooling and linter caches
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+
+# IDE and OS artifacts
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
